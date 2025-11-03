@@ -1,0 +1,32 @@
+name: peminjaman_sepeda
+description: Aplikasi peminjaman sepeda kampus berbasis QR Code
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 👇 library yang kita butuhin
+  http: ^1.2.0               # untuk koneksi ke backend Node.js
+  qr_flutter: ^4.1.0         # untuk generate QR Code
+  dio: ^5.4.3               # untuk HTTP request ke Node.js
+  mobile_scanner: ^3.5.7    
+
+  # ikon & widget tambahan
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # kalau nanti lo mau pake gambar atau ikon lokal, aktifin ini:
+  assets:
+    - assets/
