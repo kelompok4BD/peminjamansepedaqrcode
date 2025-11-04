@@ -29,4 +29,4 @@ flutter:
 
   # kalau nanti lo mau pake gambar atau ikon lokal, aktifin ini:
   assets:
-    - assets/
+    - assets/images/
