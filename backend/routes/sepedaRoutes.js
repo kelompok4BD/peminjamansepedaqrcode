@@ -5,6 +5,7 @@ const sepedaController = require("../controllers/sepedaController");
 // Semua endpoint CRUD
 router.get("/", sepedaController.getAllSepeda);
 router.post("/", sepedaController.createSepeda);
+router.put("/edit/:id", sepedaController.updateSepeda);
 router.put("/:id", sepedaController.updateStatus);
 router.delete("/:id", sepedaController.deleteSepeda);
 

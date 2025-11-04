@@ -9,11 +9,14 @@ exports.getAllSepeda = (req, res) => {
       return res.status(500).json({ message: "Gagal ambil data sepeda" });
     }
 
-    // Biar gak kirim null ke Flutter
+    // Map database fields to response format
     const data = results.map((s) => ({
-      id: s.id,
-      nama_sepeda: s.nama_sepeda || "Tidak diketahui",
-      status: s.status || "tersedia",
+      id: s.id_sepeda,
+      merk: s.merk_model || "Tidak diketahui",
+      status: s.status_saat_ini || "Tersedia",
+      tahun: s.tahun_pembelian,
+      kondisi: s.status_perawatan,
+      kode_qr: s.kode_qr_sepeda
     }));
 
     res.json(data);
@@ -22,14 +25,20 @@ exports.getAllSepeda = (req, res) => {
 
 // POST tambah sepeda baru
 exports.createSepeda = (req, res) => {
-  const { nama_sepeda, status } = req.body;
+  const { merk, tahun, status, kondisi, kode_qr } = req.body;
 
-  if (!nama_sepeda || nama_sepeda.trim() === "") {
-    return res.status(400).json({ message: "Nama sepeda wajib diisi!" });
+  if (!merk || merk.trim() === "") {
+    return res.status(400).json({ message: "Merk/model sepeda wajib diisi!" });
   }
 
-  const sql = "INSERT INTO sepeda (nama_sepeda, status) VALUES (?, ?)";
-  db.query(sql, [nama_sepeda, status || "tersedia"], (err, result) => {
+  const sql = "INSERT INTO sepeda (merk_model, tahun_pembelian, status_saat_ini, status_perawatan, kode_qr_sepeda) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [
+    merk, 
+    tahun || new Date().getFullYear(), 
+    status || "Tersedia",
+    kondisi || "Baik",
+    kode_qr || `QR${Date.now()}`
+  ], (err, result) => {
     if (err) {
       console.error("❌ Gagal menambah sepeda:", err);
       return res.status(500).json({ message: "Gagal menambah sepeda" });
@@ -37,8 +46,11 @@ exports.createSepeda = (req, res) => {
 
     res.status(201).json({
       id: result.insertId,
-      nama_sepeda,
-      status: status || "tersedia",
+      merk,
+      tahun,
+      status: status || "Tersedia",
+      kondisi: kondisi || "Baik",
+      kode_qr: kode_qr || `QR${Date.now()}`
     });
   });
 };
@@ -46,14 +58,14 @@ exports.createSepeda = (req, res) => {
 // PUT update status sepeda
 exports.updateStatus = (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, kondisi } = req.body;
 
   if (!status) {
     return res.status(400).json({ message: "Status wajib diisi!" });
   }
 
-  const sql = "UPDATE sepeda SET status = ? WHERE id = ?";
-  db.query(sql, [status, id], (err) => {
+  const sql = "UPDATE sepeda SET status_saat_ini = ?, status_perawatan = ? WHERE id_sepeda = ?";
+  db.query(sql, [status, kondisi || "Baik", id], (err) => {
     if (err) {
       console.error("❌ Gagal update status:", err);
       return res.status(500).json({ message: "Gagal update status" });
@@ -65,7 +77,7 @@ exports.updateStatus = (req, res) => {
 // DELETE hapus sepeda
 exports.deleteSepeda = (req, res) => {
   const { id } = req.params;
-  const sql = "DELETE FROM sepeda WHERE id = ?";
+  const sql = "DELETE FROM sepeda WHERE id_sepeda = ?";
   db.query(sql, [id], (err) => {
     if (err) {
       console.error("❌ Gagal hapus sepeda:", err);
@@ -74,3 +86,38 @@ exports.deleteSepeda = (req, res) => {
     res.json({ message: "Sepeda berhasil dihapus!" });
   });
 };
+
+  // PUT update sepeda (edit all fields)
+  exports.updateSepeda = (req, res) => {
+    const { id } = req.params;
+    const { merk_model, tahun_pembelian, status_saat_ini, status_perawatan, kode_qr_sepeda } = req.body;
+
+    if (!merk_model) {
+      return res.status(400).json({ message: "Merk/Model wajib diisi!" });
+    }
+
+    const sql = `
+      UPDATE sepeda 
+      SET merk_model = ?, 
+          tahun_pembelian = ?, 
+          status_saat_ini = ?, 
+          status_perawatan = ?,
+          kode_qr_sepeda = ?
+      WHERE id_sepeda = ?
+    `;
+  
+    db.query(sql, [
+      merk_model,
+      tahun_pembelian,
+      status_saat_ini || "Tersedia",
+      status_perawatan || "Baik",
+      kode_qr_sepeda,
+      id
+    ], (err) => {
+      if (err) {
+        console.error("❌ Gagal update sepeda:", err);
+        return res.status(500).json({ message: "Gagal update data sepeda" });
+      }
+      res.json({ message: "Data sepeda berhasil diperbarui!" });
+    });
+  };

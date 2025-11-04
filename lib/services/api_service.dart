@@ -54,13 +54,15 @@ class ApiService {
   }
 
   // Tambah sepeda baru
-  Future<bool> tambahSepeda(String nama) async {
+  Future<bool> tambahSepeda(String merk, int tahun) async {
     try {
       final res = await _dio.post(
         '$baseUrl/sepeda',
         data: {
-          'nama_sepeda': nama,
-          'status': 'tersedia',
+          'merk': merk,
+          'tahun': tahun,
+          'status': 'Tersedia',
+          'kondisi': 'Baik',
         },
       );
       print('🟢 Tambah sepeda: ${res.data}');
@@ -82,6 +84,34 @@ class ApiService {
       return res.statusCode == 200;
     } on DioException catch (e) {
       print('❌ Error updateStatusSepeda: ${e.response?.data ?? e.message}');
+      return false;
+    }
+  }
+
+  // Edit data sepeda
+  Future<bool> editSepeda(
+    int id,
+    String merkModel,
+    int tahunPembelian,
+    String statusSaatIni,
+    String statusPerawatan,
+    String kodeQR,
+  ) async {
+    try {
+      final res = await _dio.put(
+        '$baseUrl/sepeda/edit/$id',
+        data: {
+          'merk_model': merkModel,
+          'tahun_pembelian': tahunPembelian,
+          'status_saat_ini': statusSaatIni,
+          'status_perawatan': statusPerawatan,
+          'kode_qr_sepeda': kodeQR,
+        },
+      );
+      print('🟢 Edit sepeda: ${res.data}');
+      return res.statusCode == 200;
+    } on DioException catch (e) {
+      print('❌ Error editSepeda: ${e.response?.data ?? e.message}');
       return false;
     }
   }
