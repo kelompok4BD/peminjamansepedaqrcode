@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'dashboard_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -126,14 +127,17 @@ class _LoginPageState extends State<LoginPage> {
                               width: double.infinity,
                               height: 45,
                               child: loading
-                                  ? const Center(child: CircularProgressIndicator())
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
                                   : ElevatedButton(
                                       onPressed: login,
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF002D72),
+                                        backgroundColor:
+                                            const Color(0xFF002D72),
                                         foregroundColor: Colors.white,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                       ),
                                       child: const Text(
@@ -144,6 +148,21 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                     ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const RegisterPage(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Belum punya akun? Daftar disini',
+                                style: TextStyle(color: Color(0xFF002D72)),
+                              ),
                             ),
                           ],
                         ),

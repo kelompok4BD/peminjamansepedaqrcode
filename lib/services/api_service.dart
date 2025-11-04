@@ -12,8 +12,38 @@ class ApiService {
   );
 
   // ===========================================================
-  // 🔹 LOGIN
+  // 🔹 AUTH (LOGIN & REGISTER)
   // ===========================================================
+
+  // Register new user
+  Future<Map<String, dynamic>> register(
+      String nim, String nama, String password) async {
+    try {
+      print('🔷 Mengirim request registrasi: $nim, $nama');
+      final res = await _dio.post(
+        '$baseUrl/register',
+        data: {
+          'id_NIM_NIP': nim,
+          'nama': nama,
+          'password': password,
+          'role': 'user', // default role
+        },
+      );
+
+      print('🟢 Response Register: ${res.data}');
+      return {
+        'success': res.statusCode == 201,
+        'message': res.data['message'] ?? 'Registrasi berhasil!'
+      };
+    } on DioException catch (e) {
+      print('❌ Register error: ${e.response?.data ?? e.message}');
+      final message = e.response?.data?['message'] ??
+          e.message ??
+          'Terjadi kesalahan saat registrasi';
+      return {'success': false, 'message': message};
+    }
+  }
+
   Future<bool> login(String nim, String password) async {
     try {
       final res = await _dio.post(
