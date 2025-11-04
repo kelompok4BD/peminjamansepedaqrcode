@@ -133,18 +133,59 @@ class ApiService {
   // ===========================================================
 
   // Ambil semua riwayat peminjaman
+  // Ambil semua riwayat peminjaman (masih ada untuk kompatibilitas)
   Future<List<dynamic>> getRiwayat() async {
     try {
       final res = await _dio.get('$baseUrl/peminjaman');
       if (res.statusCode == 200 && res.data is List) {
-        print('📜 Riwayat: ${res.data}');
         return res.data;
-      } else {
-        print('⚠️ Format riwayat tidak sesuai: ${res.data}');
-        return [];
       }
     } catch (e) {
       print('❌ Error getRiwayat: $e');
+    }
+    return [];
+  }
+
+  // Ambil riwayat pemeliharaan (dari tabel riwayat_pemeliharaan)
+  Future<List<dynamic>> getRiwayatPemeliharaan() async {
+    try {
+      final res = await _dio.get('$baseUrl/riwayat_pemeliharaan');
+      if (res.statusCode == 200 && res.data is List) {
+        print('📜 Riwayat pemeliharaan: ${res.data}');
+        return res.data;
+      }
+    } catch (e) {
+      print('❌ Error getRiwayatPemeliharaan: $e');
+    }
+    return [];
+  }
+
+  // 🔹 Ambil pengaturan sistem
+  Future<List<dynamic>> getPengaturan() async {
+    try {
+      final res = await _dio.get('$baseUrl/pengaturan');
+      if (res.statusCode == 200) {
+        return res.data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error getPengaturan: $e');
+      return [];
+    }
+  }
+
+  // 🔹 Ambil daftar stasiun sepeda
+  Future<List<dynamic>> getStasiun() async {
+    try {
+      final res = await _dio.get('$baseUrl/stasiun');
+      if (res.statusCode == 200) {
+        return res.data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error getStasiun: $e');
       return [];
     }
   }

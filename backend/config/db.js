@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'peminjaman_sepeda' // harus sama dengan nama DB kamu di phpMyAdmin
+  database: 'peminjaman_sepeda'
 });
 
 db.connect((err) => {

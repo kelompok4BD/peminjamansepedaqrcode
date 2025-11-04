@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'scan_qr_page.dart';
 import 'peminjaman_page.dart';
 import 'riwayat_page.dart';
+import 'pengaturan_page.dart';
+import 'stasiun_page.dart';
 import 'login_page.dart'; // <-- tambahin ini
 
 class DashboardPage extends StatelessWidget {
@@ -46,7 +48,11 @@ class DashboardPage extends StatelessWidget {
             'Peminjaman',
             const PeminjamanPage(),
           ),
-          _menuCard(context, Icons.history, 'Riwayat', const RiwayatPage()),
+          _menuCard(context, Icons.history, 'Riwayat Pemeliharaan',
+              const RiwayatPage()),
+          _menuCard(
+              context, Icons.settings, 'Pengaturan', const PengaturanPage()),
+          _menuCard(context, Icons.place, 'Stasiun', const StasiunPage()),
         ],
       ),
     );
