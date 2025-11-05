@@ -76,6 +76,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (value == null || value.isEmpty) {
                   return 'NIM/NIP wajib diisi';
                 }
+                if (!RegExp(r'^\d+$').hasMatch(value)) {
+                  // non-digit characters present
+                  return 'NIM/NIP harus berupa angka saja';
+                }
                 if (value.length < 5) {
                   return 'NIM/NIP minimal 5 karakter';
                 }

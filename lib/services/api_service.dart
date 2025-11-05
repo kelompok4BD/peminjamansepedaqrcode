@@ -20,15 +20,13 @@ class ApiService {
       String nim, String nama, String password) async {
     try {
       print('🔷 Mengirim request registrasi: $nim, $nama');
-      final res = await _dio.post(
-        '$baseUrl/register',
-        data: {
-          'id_NIM_NIP': nim,
-          'nama': nama,
-          'password': password,
-          'role': 'user', // default role
-        },
-      );
+      // convert nim to number if possible (DB expects numeric id)
+      final dynamic idValue = int.tryParse(nim) ?? nim;
+      final res = await _dio.post('$baseUrl/register', data: {
+        'id_NIM_NIP': idValue,
+        'nama': nama,
+        'password': password,
+      });
 
       print('🟢 Response Register: ${res.data}');
       return {
@@ -36,10 +34,19 @@ class ApiService {
         'message': res.data['message'] ?? 'Registrasi berhasil!'
       };
     } on DioException catch (e) {
-      print('❌ Register error: ${e.response?.data ?? e.message}');
-      final message = e.response?.data?['message'] ??
-          e.message ??
-          'Terjadi kesalahan saat registrasi';
+      // try to extract meaningful message from server response
+      String message = 'Terjadi kesalahan saat registrasi';
+      try {
+        final resp = e.response?.data;
+        if (resp is Map && resp['message'] != null) {
+          message = resp['message'].toString();
+        } else if (resp is String) {
+          message = resp;
+        }
+      } catch (_) {
+        message = e.toString();
+      }
+      print('❌ Register error: $message');
       return {'success': false, 'message': message};
     }
   }
