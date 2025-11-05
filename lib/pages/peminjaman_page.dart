@@ -11,16 +11,16 @@ class PeminjamanPage extends StatefulWidget {
 class _PeminjamanPageState extends State<PeminjamanPage> {
   final ApiService api = ApiService();
   List<dynamic> sepedaList = [];
-  // Controllers for the add form (top of page)
-  final TextEditingController addMerkController = TextEditingController();
-  final TextEditingController addTahunController = TextEditingController();
 
-  // Controllers for the edit dialog (separate to avoid accidental add)
-  final TextEditingController editMerkController = TextEditingController();
-  final TextEditingController editTahunController = TextEditingController();
-  final TextEditingController editStatusController = TextEditingController();
-  final TextEditingController editKondisiController = TextEditingController();
-  final TextEditingController editKodeQRController = TextEditingController();
+  final merkC = TextEditingController();
+  final tahunC = TextEditingController();
+
+  final editMerkC = TextEditingController();
+  final editTahunC = TextEditingController();
+  final editStatusC = TextEditingController();
+  final editKondisiC = TextEditingController();
+  final editKodeQRC = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -32,79 +32,80 @@ class _PeminjamanPageState extends State<PeminjamanPage> {
     setState(() => sepedaList = data);
   }
 
-  // Dialog untuk edit sepeda (ditempatkan di level class supaya bisa dipanggil dari builder)
-  Future<void> showEditDialog(Map<String, dynamic> sepeda) async {
-    // Pre-fill controllers with existing data (use edit controllers)
-    editMerkController.text = sepeda['merk'] ?? '';
-    editTahunController.text = sepeda['tahun']?.toString() ?? '';
-    editStatusController.text = sepeda['status'] ?? '';
-    editKondisiController.text = sepeda['kondisi'] ?? '';
-    editKodeQRController.text = sepeda['kode_qr'] ?? '';
+  Future<void> tambahSepeda() async {
+    if (merkC.text.isEmpty) return;
+    final ok = await api.tambahSepeda(
+      merkC.text,
+      int.tryParse(tahunC.text) ?? DateTime.now().year,
+    );
+    if (ok) {
+      merkC.clear();
+      tahunC.clear();
+      loadSepeda();
+      _snack('Sepeda ditambahkan!');
+    }
+  }
+
+  Future<void> hapusSepeda(int id) async {
+    final ok = await api.hapusSepeda(id);
+    if (ok) {
+      sepedaList.removeWhere((s) => s['id'] == id);
+      setState(() {});
+      _snack('Sepeda berhasil dihapus!');
+    }
+  }
+
+  Future<void> ubahStatus(int id, String status) async {
+    final newStatus =
+        status.toLowerCase() == 'tersedia' ? 'Dipinjam' : 'Tersedia';
+    if (await api.updateStatusSepeda(id, newStatus)) loadSepeda();
+  }
+
+  void _snack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  Future<void> showEditDialog(Map<String, dynamic> s) async {
+    editMerkC.text = s['merk'] ?? '';
+    editTahunC.text = s['tahun']?.toString() ?? '';
+    editStatusC.text = s['status'] ?? '';
+    editKondisiC.text = s['kondisi'] ?? '';
+    editKodeQRC.text = s['kode_qr'] ?? '';
 
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Data Sepeda'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: editMerkController,
-                decoration: const InputDecoration(labelText: 'Merk/Model'),
-              ),
-              TextField(
-                controller: editTahunController,
-                decoration: const InputDecoration(labelText: 'Tahun'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: editStatusController,
-                decoration: const InputDecoration(labelText: 'Status'),
-              ),
-              TextField(
-                controller: editKondisiController,
-                decoration: const InputDecoration(labelText: 'Kondisi'),
-              ),
-              TextField(
-                controller: editKodeQRController,
-                decoration: const InputDecoration(labelText: 'Kode QR'),
-              ),
-            ],
-          ),
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Edit Data Sepeda',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Color(0xFF002D72))),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _field('Merk/Model', editMerkC),
+            _field('Tahun', editTahunC, TextInputType.number),
+            _field('Status', editStatusC),
+            _field('Kondisi', editKondisiC),
+            _field('Kode QR', editKodeQRC),
+          ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
           ElevatedButton(
+            style: _btnStyle(),
             onPressed: () async {
-              final success = await api.editSepeda(
-                sepeda['id'],
-                editMerkController.text,
-                int.tryParse(editTahunController.text) ?? DateTime.now().year,
-                editStatusController.text,
-                editKondisiController.text,
-                editKodeQRController.text,
+              final ok = await api.editSepeda(
+                s['id'],
+                editMerkC.text,
+                int.tryParse(editTahunC.text) ?? DateTime.now().year,
+                editStatusC.text,
+                editKondisiC.text,
+                editKodeQRC.text,
               );
-
-              if (success) {
+              if (ok && mounted) {
+                Navigator.pop(context);
                 loadSepeda();
-                if (mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Data sepeda berhasil diperbarui!')),
-                  );
-                }
-              } else {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Gagal memperbarui data sepeda')),
-                  );
-                }
+                _snack('Data sepeda diperbarui!');
               }
             },
             child: const Text('Simpan'),
@@ -112,153 +113,155 @@ class _PeminjamanPageState extends State<PeminjamanPage> {
         ],
       ),
     );
-
-    // Clear edit controllers after dialog is closed
-    editMerkController.clear();
-    editTahunController.clear();
-    editStatusController.clear();
-    editKondisiController.clear();
-    editKodeQRController.clear();
   }
 
-  Future<void> tambahSepeda() async {
-    if (addMerkController.text.isEmpty) return;
-    final ok = await api.tambahSepeda(
-      addMerkController.text,
-      int.tryParse(addTahunController.text) ?? DateTime.now().year,
+  InputDecoration _inputDeco(String label) => InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.blue[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      );
+
+  Widget _field(String label, TextEditingController c,
+      [TextInputType? type]) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextField(
+        controller: c,
+        keyboardType: type,
+        decoration: _inputDeco(label),
+      ),
     );
-    if (ok) {
-      addMerkController.clear();
-      addTahunController.clear();
-      loadSepeda();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Sepeda ditambahkan!')));
-    }
   }
 
-  Future<void> hapusSepeda(int id) async {
-    final ok = await api.hapusSepeda(id);
-    if (ok) {
-      setState(() {
-        sepedaList.removeWhere((item) => item['id'] == id);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sepeda berhasil dihapus!')),
+  ButtonStyle _btnStyle() => ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF002D72),
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menghapus sepeda!')),
-      );
-    }
-  }
-
-  Future<void> ubahStatus(int id, String status) async {
-    final newStatus =
-        status.toString().toLowerCase() == 'tersedia' ? 'Dipinjam' : 'Tersedia';
-    final ok = await api.updateStatusSepeda(id, newStatus);
-    if (ok) loadSepeda();
-  }
-
-  @override
-  void dispose() {
-    // dispose both add and edit controllers
-    addMerkController.dispose();
-    addTahunController.dispose();
-    editMerkController.dispose();
-    editTahunController.dispose();
-    editStatusController.dispose();
-    editKondisiController.dispose();
-    editKodeQRController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Daftar Sepeda")),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: TextField(
-                    controller: addMerkController,
-                    decoration: const InputDecoration(
-                      labelText: 'Merk/Model Sepeda',
-                    ),
+      appBar: AppBar(
+        title: const Text('Daftar Sepeda',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: const Color(0xFF002D72),
+        foregroundColor: Colors.white,
+        elevation: 2,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Color(0xFFE3F2FD), Colors.white],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                              child: TextField(
+                                  controller: merkC,
+                                  decoration:
+                                      _inputDeco('Merk/Model Sepeda'))),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: TextField(
+                                  controller: tahunC,
+                                  decoration: _inputDeco('Tahun'),
+                                  keyboardType: TextInputType.number)),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: ElevatedButton.icon(
+                          style: _btnStyle(),
+                          onPressed: tambahSepeda,
+                          icon: const Icon(Icons.add),
+                          label: const Text('Tambah Sepeda'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: addTahunController,
-                    decoration: const InputDecoration(
-                      labelText: 'Tahun',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: tambahSepeda,
-                  child: const Text("Tambah"),
-                )
-              ],
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: sepedaList.length,
-              itemBuilder: (context, index) {
-                final s = sepedaList[index];
-                final merk = s['merk'] ?? 'Tidak ada nama';
-                final status = s['status'] ?? 'Tidak diketahui';
-                final tahun = s['tahun']?.toString() ?? '-';
-                final kondisi = s['kondisi'] ?? 'Tidak diketahui';
-
-                return Card(
-                  child: ListTile(
-                    title: Text('$merk ($tahun)'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Status: $status',
-                          style: TextStyle(
-                            color: status.toLowerCase() == 'tersedia'
-                                ? Colors.green
-                                : Colors.redAccent,
+            Expanded(
+              child: sepedaList.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: sepedaList.length,
+                      itemBuilder: (_, i) {
+                        final s = sepedaList[i];
+                        final status = s['status'] ?? 'Tidak diketahui';
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          child: ListTile(
+                            title: Text('${s['merk']} (${s['tahun']})',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF002D72))),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Status: $status',
+                                  style: TextStyle(
+                                    color: status.toLowerCase() == 'tersedia'
+                                        ? Colors.green
+                                        : Colors.redAccent,
+                                  ),
+                                ),
+                                Text('Kondisi: ${s['kondisi'] ?? '-'}'),
+                              ],
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.blueAccent),
+                                    onPressed: () => showEditDialog(s)),
+                                IconButton(
+                                    icon: const Icon(Icons.swap_horiz,
+                                        color: Colors.orange),
+                                    onPressed: () =>
+                                        ubahStatus(s['id'], s['status'])),
+                                IconButton(
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
+                                    onPressed: () => hapusSepeda(s['id'])),
+                              ],
+                            ),
                           ),
-                        ),
-                        Text('Kondisi: $kondisi'),
-                      ],
+                        );
+                      },
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => showEditDialog(s),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.swap_horiz),
-                          onPressed: () => ubahStatus(s['id'], s['status']),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => hapusSepeda(s['id']),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

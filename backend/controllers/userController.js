@@ -19,9 +19,17 @@ exports.createUser = (req, res) => {
       .json({ message: "id_NIM_NIP, nama, dan password wajib diisi!" });
   }
 
-  // Tambahkan user baru
-  User.create(data, (err, result) => {
+  // cek apakah id sudah ada
+  User.findById(data.id_NIM_NIP, (err, rows) => {
     if (err) return res.status(500).send(err);
-    res.json({ message: "User berhasil ditambahkan!" });
+    if (rows && rows.length > 0) {
+      return res.status(409).json({ message: "ID sudah terdaftar" });
+    }
+
+    // Tambahkan user baru
+    User.create(data, (err2, result) => {
+      if (err2) return res.status(500).send(err2);
+      res.status(201).json({ message: "User berhasil ditambahkan!" });
+    });
   });
 };

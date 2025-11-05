@@ -18,6 +18,7 @@ dependencies:
 
   # ikon & widget tambahan
   cupertino_icons: ^1.0.8
+  google_fonts: ^6.3.2
 
 dev_dependencies:
   flutter_test:

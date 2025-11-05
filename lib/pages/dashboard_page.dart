@@ -26,34 +26,95 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // make AppBar visually match register/login header (logo + name)
       appBar: AppBar(
-        title: const Text("Dashboard Sepeda Kampus"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', width: 40, height: 40),
+            const SizedBox(width: 10),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'CampusCycle',
+                  style: TextStyle(
+                    color: Color(0xFF002D72),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  'Peminjaman Sepeda',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Color(0xFF002D72)),
             onPressed: () => _logout(context),
             tooltip: 'Logout',
           ),
         ],
       ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(20),
-        crossAxisCount: 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
-        children: [
-          _menuCard(
-            context,
-            Icons.pedal_bike,
-            'Peminjaman',
-            const PeminjamanPage(),
+      // body uses same gradient background as login/register
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue[50]!, Colors.white],
           ),
-          _menuCard(context, Icons.history, 'Riwayat Pemeliharaan',
-              const RiwayatPage()),
-          _menuCard(
-              context, Icons.settings, 'Pengaturan', const PengaturanPage()),
-          _menuCard(context, Icons.place, 'Stasiun', const StasiunPage()),
-        ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 8),
+                const Text(
+                  'SELAMAT DATANG DI CAMPUSCYCLE',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF002D72),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    children: [
+                      _menuCard(
+                        context,
+                        Icons.pedal_bike,
+                        'Peminjaman',
+                        const PeminjamanPage(),
+                      ),
+                      _menuCard(context, Icons.history, 'Riwayat Pemeliharaan',
+                          const RiwayatPage()),
+                      _menuCard(
+                          context, Icons.settings, 'Pengaturan', const PengaturanPage()),
+                      _menuCard(context, Icons.place, 'Stasiun', const StasiunPage()),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -62,14 +123,19 @@ class DashboardPage extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.push(ctx, MaterialPageRoute(builder: (_) => page)),
       child: Card(
-        elevation: 3,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 50, color: Colors.blue),
+              Icon(icon, size: 50, color: const Color(0xFF002D72)),
               const SizedBox(height: 10),
-              Text(title, style: const TextStyle(fontSize: 16)),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, color: Color(0xFF002D72)),
+              ),
             ],
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'dashboard_page.dart';
 import 'register_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,18 +59,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 80),
                     Image.asset(
                       'assets/images/logo.png',
-                      width: 120,
-                      height: 120,
+                      width: 350,
+                      height: 350,
                     ),
-                    const SizedBox(height: 16),
-                    const Icon(
-                      Icons.pedal_bike,
-                      size: 60,
-                      color: Color(0xFF002D72),
-                    ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 3),
                     const Text(
                       'CampusCycle',
                       style: TextStyle(

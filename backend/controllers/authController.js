@@ -14,7 +14,7 @@ exports.register = (req, res) => {
 
   // Check if user already exists
   db.query(
-    "SELECT id FROM user WHERE id_NIM_NIP = ?",
+    "SELECT id_NIM_NIP FROM user WHERE id_NIM_NIP = ?",
     [id_NIM_NIP],
     (err, results) => {
       if (err) {
@@ -33,10 +33,13 @@ exports.register = (req, res) => {
         id_NIM_NIP,
         nama,
         password,
-        role: role || 'user'
+        email_kampus: ''
       };
 
-      db.query("INSERT INTO user SET ?", userData, (err, result) => {
+      db.query(
+        "INSERT INTO user (id_NIM_NIP, nama, password, email_kampus) VALUES (?, ?, ?, ?)",
+        [userData.id_NIM_NIP, userData.nama, userData.password, userData.email_kampus],
+        (err, result) => {
         if (err) {
           console.error("DB error:", err);
           return res.status(500).json({ message: "Server error" });
@@ -60,7 +63,7 @@ exports.login = (req, res) => {
     return res.status(400).json({ message: "ID dan Password wajib diisi!" });
   }
 
-  // 🔹 Ubah ke tabel `user`
+  // 🔹 Ubah ke tabel user
   const sql = "SELECT * FROM user WHERE id_NIM_NIP = ? AND password = ?";
   db.query(sql, [id_NIM_NIP, password], (err, results) => {
     if (err) {

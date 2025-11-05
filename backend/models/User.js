@@ -16,6 +16,11 @@ const User = {
       callback
     );
   },
+
+  // Cari user berdasarkan id_NIM_NIP
+  findById: (id, callback) => {
+    db.query('SELECT * FROM user WHERE id_NIM_NIP = ?', [id], callback);
+  },
 };
 
 module.exports = User;
