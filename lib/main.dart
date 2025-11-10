@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'pages/login_page.dart';
-import 'pages/dashboard_page.dart';
 
 void main() {
   runApp(const PeminjamanSepedaApp());
@@ -18,11 +17,7 @@ class PeminjamanSepedaApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/dashboard': (context) => const DashboardPage(),
-      },
+      home: const LoginPage(),
     );
   }
 }

@@ -1,25 +1,23 @@
-const db = require("../config/db");
+const User = require('../models/user');
 
-exports.register = (req, res) => {
-  const { id_NIM_NIP, nama, password, role } = req.body;
-  
-  console.log("📝 Data registrasi diterima:", { id_NIM_NIP, nama, password, role });
+exports.register = async (req, res) => {
+  try {
+    const { id_NIM_NIP, nama, password } = req.body;
+    
+    console.log("📝 Data registrasi diterima:", { id_NIM_NIP, nama });
 
-  if (!id_NIM_NIP || !nama || !password) {
-    console.log("❌ Data tidak lengkap");
-    return res.status(400).json({ 
-      message: "NIM/NIP, nama, dan password wajib diisi!" 
-    });
-  }
+    if (!id_NIM_NIP || !nama || !password) {
+      return res.status(400).json({ 
+        message: "NIM/NIP, nama, dan password wajib diisi!" 
+      });
+    }
 
-  // Check if user already exists
-  db.query(
-    "SELECT id_NIM_NIP FROM user WHERE id_NIM_NIP = ?",
-    [id_NIM_NIP],
-    (err, results) => {
+    User.findById(id_NIM_NIP, (err, results) => {
       if (err) {
         console.error("DB error:", err);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({ 
+          message: "Server error" 
+        });
       }
 
       if (results.length > 0) {
@@ -28,58 +26,98 @@ exports.register = (req, res) => {
         });
       }
 
-      // Insert new user
       const userData = {
         id_NIM_NIP,
         nama,
         password,
-        email_kampus: ''
+        email_kampus: null,
+        status_jaminan: 'tidak',
+        status_akun: 'aktif',
+        jenis_pengguna: 'user',
+        no_hp_pengguna: null
       };
 
-      db.query(
-        "INSERT INTO user (id_NIM_NIP, nama, password, email_kampus) VALUES (?, ?, ?, ?)",
-        [userData.id_NIM_NIP, userData.nama, userData.password, userData.email_kampus],
-        (err, result) => {
+      User.create(userData, (err, result) => {
         if (err) {
           console.error("DB error:", err);
-          return res.status(500).json({ message: "Server error" });
+          return res.status(500).json({ 
+            message: "Gagal mendaftar, coba lagi nanti" 
+          });
         }
 
+        // Return success with user data
         res.status(201).json({
-          message: "Registrasi berhasil!",
-          userId: result.insertId
+          message: "Registrasi berhasil",
+          user: {
+            id_NIM_NIP: userData.id_NIM_NIP,
+            nama: userData.nama,
+            jenis_pengguna: userData.jenis_pengguna,
+            status_akun: userData.status_akun
+          }
         });
       });
-    }
-  );
+    });
+
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ 
+      message: "Terjadi kesalahan, coba lagi nanti" 
+    });
+  }
 };
 
-exports.login = (req, res) => {
-  const { id_NIM_NIP, password } = req.body;
+exports.login = async (req, res) => {
+  try {
+    const { id_NIM_NIP, password } = req.body;
+    
+    console.log("🔑 Login request:", { id_NIM_NIP });
 
-  console.log("🟡 Data diterima dari Flutter:", req.body); // debug log
-
-  if (!id_NIM_NIP || !password) {
-    return res.status(400).json({ message: "ID dan Password wajib diisi!" });
-  }
-
-  // 🔹 Ubah ke tabel user
-  const sql = "SELECT * FROM user WHERE id_NIM_NIP = ? AND password = ?";
-  db.query(sql, [id_NIM_NIP, password], (err, results) => {
-    if (err) {
-      console.error("DB error:", err);
-      return res.status(500).json({ message: "Server error" });
+    if (!id_NIM_NIP || !password) {
+      return res.status(400).json({ 
+        message: "NIM/NIP dan password wajib diisi!" 
+      });
     }
 
-    console.log("🔹 Hasil query:", results);
+    User.findForLogin(id_NIM_NIP, (err, results) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ 
+          message: "Server error" 
+        });
+      }
 
-    if (results.length === 0) {
-      return res.status(401).json({ message: "ID atau Password salah!" });
-    }
+      if (results.length === 0) {
+        return res.status(401).json({
+          message: "NIM/NIP atau password salah"
+        });
+      }
 
-    res.json({
-      message: "Login berhasil!",
-      data: results[0],
+      const user = results[0];
+
+      if (password !== user.password) {
+        return res.status(401).json({
+          message: "NIM/NIP atau password salah"
+        });
+      }
+
+      if (user.status_akun !== 'aktif') {
+        return res.status(403).json({
+          message: "Akun tidak aktif. Hubungi admin."
+        });
+      }
+
+      delete user.password;
+      
+      res.json({
+        message: "Login berhasil",
+        user: user
+      });
     });
-  });
+
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ 
+      message: "Terjadi kesalahan, coba lagi nanti" 
+    });
+  }
 };

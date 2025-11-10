@@ -1,6 +1,5 @@
 const Riwayat = require('../models/RiwayatPemeliharaan');
 
-// ambil semua riwayat pemeliharaan
 exports.getAllRiwayat = (req, res) => {
   Riwayat.getAll((err, rows) => {
     if (err) {

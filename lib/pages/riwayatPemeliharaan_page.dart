@@ -33,6 +33,7 @@ class _RiwayatPageState extends State<RiwayatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "Riwayat Pemeliharaan",
           style: TextStyle(fontWeight: FontWeight.bold),

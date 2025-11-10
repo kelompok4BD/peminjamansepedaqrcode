@@ -27,6 +27,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Pengaturan Sistem',
           style: TextStyle(fontWeight: FontWeight.bold),

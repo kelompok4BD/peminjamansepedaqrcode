@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,7 +17,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final _namaController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
 
   @override
   void dispose() {
@@ -29,7 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
 
     try {
@@ -74,7 +77,6 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Header: logo + app name aligned horizontally
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -162,8 +164,19 @@ class _RegisterPageState extends State<RegisterPage> {
                             _buildTextField(
                               controller: _passwordController,
                               label: 'Password',
-                              obscureText: true,
+                              obscureText: _obscurePassword,
                               prefixIcon: Icons.lock,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() =>
+                                      _obscurePassword = !_obscurePassword);
+                                },
+                              ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Password wajib diisi';
@@ -178,8 +191,19 @@ class _RegisterPageState extends State<RegisterPage> {
                             _buildTextField(
                               controller: _confirmPasswordController,
                               label: 'Konfirmasi Password',
-                              obscureText: true,
+                              obscureText: _obscureConfirm,
                               prefixIcon: Icons.lock_outline,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureConfirm
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(
+                                      () => _obscureConfirm = !_obscureConfirm);
+                                },
+                              ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Konfirmasi password wajib diisi';
@@ -201,7 +225,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   : ElevatedButton(
                                       onPressed: _register,
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF002D72),
+                                        backgroundColor:
+                                            const Color(0xFF002D72),
                                         foregroundColor: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -217,7 +242,32 @@ class _RegisterPageState extends State<RegisterPage> {
                                       ),
                                     ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const LoginPage(),
+                                  ),
+                                );
+                              },
+                              child: const Text.rich(
+                                TextSpan(
+                                  text: 'Sudah punya akun? ',
+                                  style: TextStyle(color: Colors.black87),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Login di sini',
+                                      style: TextStyle(
+                                        color: Color(0xFF002D72),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -238,6 +288,7 @@ class _RegisterPageState extends State<RegisterPage> {
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
     IconData? prefixIcon,
+    Widget? suffixIcon,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
@@ -248,6 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.grey[50],
         border: OutlineInputBorder(

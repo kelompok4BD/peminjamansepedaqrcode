@@ -27,6 +27,7 @@ class _StasiunPageState extends State<StasiunPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Daftar Stasiun Sepeda',
           style: TextStyle(fontWeight: FontWeight.bold),

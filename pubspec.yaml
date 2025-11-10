@@ -10,13 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # 👇 library yang kita butuhin
   http: ^1.2.0               # untuk koneksi ke backend Node.js
   qr_flutter: ^4.1.0         # untuk generate QR Code
   dio: ^5.4.3               # untuk HTTP request ke Node.js
   mobile_scanner: ^3.5.7    
-
-  # ikon & widget tambahan
   cupertino_icons: ^1.0.8
   google_fonts: ^6.3.2
 
@@ -28,6 +25,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # kalau nanti lo mau pake gambar atau ikon lokal, aktifin ini:
   assets:
     - assets/images/

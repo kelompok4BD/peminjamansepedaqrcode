@@ -1,25 +1,68 @@
 const db = require("../config/db");
 
 const User = {
-  // Ambil semua user
   getAll: (callback) => {
     db.query("SELECT * FROM user", callback);
   },
 
-  // Tambah user baru
+  findById: (id, callback) => {
+    db.query("SELECT * FROM user WHERE id_NIM_NIP = ?", [id], callback);
+  },
+
+  findForLogin: (id, callback) => {
+    const sql = `
+      SELECT 
+        id_NIM_NIP, 
+        nama, 
+        jenis_pengguna, 
+        status_akun, 
+        password 
+      FROM user 
+      WHERE id_NIM_NIP = ?
+    `;
+    db.query(sql, [id], callback);
+  },
+
   create: (data, callback) => {
-    const sql =
-      "INSERT INTO user (id_NIM_NIP, nama, email_kampus, password) VALUES (?, ?, ?, ?)";
+    const sql = `
+      INSERT INTO user (
+        id_NIM_NIP, 
+        nama, 
+        email_kampus, 
+        status_jaminan, 
+        status_akun, 
+        jenis_pengguna, 
+        no_hp_pengguna, 
+        password
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
     db.query(
       sql,
-      [data.id_NIM_NIP, data.nama, data.email_kampus || "", data.password],
+      [
+        data.id_NIM_NIP,
+        data.nama,
+        data.email_kampus || null,
+        data.status_jaminan || 'tidak',
+        data.status_akun || 'aktif',
+        data.jenis_pengguna || 'user',
+        data.no_hp_pengguna || null,
+        data.password,
+      ],
       callback
     );
   },
 
-  // Cari user berdasarkan id_NIM_NIP
-  findById: (id, callback) => {
-    db.query('SELECT * FROM user WHERE id_NIM_NIP = ?', [id], callback);
+  update: (id, data, callback) => {
+    const sql = `
+      UPDATE user 
+      SET password = ?, status_akun = ?
+      WHERE id_NIM_NIP = ?
+    `;
+    db.query(sql, [data.password, data.status_akun, id], callback);
+  },
+
+  delete: (id, callback) => {
+    db.query("DELETE FROM user WHERE id_NIM_NIP = ?", [id], callback);
   },
 };
 

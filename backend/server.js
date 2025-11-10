@@ -10,20 +10,26 @@ app.use(bodyParser.json());
 // Import routes
 const sepedaRoutes = require("./routes/sepedaRoutes");
 const userRoutes = require("./routes/userRoutes");
-const peminjamanRoutes = require("./routes/peminjamanRoutes");
-const authRoutes = require("./routes/authRoutes"); // ✅ Route login
+const transaksiPeminjamanRoutes = require("./routes/transaksiPeminjamanRoutes")
+const authRoutes = require("./routes/authRoutes"); 
 const pengaturanRoutes = require("./routes/pengaturanRoutes");
-const stasiunRoutes = require("./routes/stasiunRoutes");
+const stasiunSepedaRoutes = require("./routes/stasiunSepedaRoutes");
 const riwayatPemeliharaanRoutes = require("./routes/riwayatPemeliharaanRoutes");
+const laporanKerusakanRoutes = require('./routes/laporanKerusakanRoutes');
+const pegawaiRoutes = require('./routes/pegawaiRoutes');
+const logAktivitasRoutes = require('./routes/logAktivitasRoutes');
 
 // Gunakan routes
 app.use("/api/sepeda", sepedaRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/peminjaman", peminjamanRoutes);
-app.use("/api", authRoutes); // ✅ Penting! untuk /api/login
+app.use("/api/transaksi_peminjaman", transaksiPeminjamanRoutes);
+app.use("/api", authRoutes); 
 app.use("/api/pengaturan", pengaturanRoutes);
-app.use("/api/stasiun", stasiunRoutes);
+app.use("/api/stasiun_sepeda", stasiunSepedaRoutes);
 app.use("/api/riwayat_pemeliharaan", riwayatPemeliharaanRoutes);
+app.use('/api', laporanKerusakanRoutes);
+app.use('/api', pegawaiRoutes);
+app.use('/api', logAktivitasRoutes);
 
 // Cek koneksi database
 db.connect((err) => {
@@ -34,12 +40,10 @@ db.connect((err) => {
   }
 });
 
-// Endpoint root
 app.get("/", (req, res) => {
   res.send("🚴‍♂️ Backend Peminjaman Sepeda Kampus Aktif!");
 });
 
-// Jalankan server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server berjalan di http://localhost:${PORT}`);

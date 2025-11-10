@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
-import 'dashboard_page.dart';
+import 'admin_dashboard.dart';
+import 'user_dashboard.dart';
 import 'register_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,24 +20,35 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login() async {
     setState(() => loading = true);
-    final success = await api.login(
-      nimController.text,
-      passwordController.text,
-    );
+    final result = await api.login(nimController.text, passwordController.text);
     setState(() => loading = false);
 
+    final success = result['success'] == true;
+    final message = (result['message'] ?? 'Login gagal').toString();
+
     if (success) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login gagal! Periksa NIM atau password.'),
-        ),
-      );
+      final user = result['user'] is Map
+          ? result['user'] as Map<String, dynamic>
+          : <String, dynamic>{};
+      final jenis = (user['jenis_pengguna'] ?? '').toString().toLowerCase();
+
+      if (jenis.contains('admin')) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => AdminDashboard(adminData: user)),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => UserDashboard(userData: user)),
+        );
+      }
+      return;
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
