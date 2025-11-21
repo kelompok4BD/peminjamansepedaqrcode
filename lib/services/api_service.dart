@@ -1,13 +1,31 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
 
   late final Dio _dio;
-  final String baseUrl = "http://localhost:3000/api";
+  late final String baseUrl;
 
   ApiService._internal() {
+    // determine baseUrl depending on platform
+    if (kIsWeb) {
+      baseUrl = "http://localhost:3000/api";
+    } else {
+      try {
+        if (Platform.isAndroid) {
+          // Android emulator -> host machine is 10.0.2.2
+          baseUrl = "http://10.0.2.2:3000/api";
+        } else {
+          baseUrl = "http://localhost:3000/api";
+        }
+      } catch (_) {
+        baseUrl = "http://localhost:3000/api";
+      }
+    }
+
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -16,6 +34,7 @@ class ApiService {
         receiveTimeout: const Duration(seconds: 5),
       ),
     );
+    print('🔌 ApiService baseUrl = $baseUrl');
   }
 
   String _handleError(dynamic error) {
@@ -290,11 +309,32 @@ class ApiService {
     }
   }
 
+  // ⭐⭐⭐ PERBAIKAN RIWAYAT PEMELIHARAAN — FINAL ⭐⭐⭐
   Future<List<Map<String, dynamic>>> getRiwayatPemeliharaan() async {
     try {
+      print('🔷 Fetching riwayat pemeliharaan from $baseUrl');
+
       final res = await _dio.get('/riwayat_pemeliharaan');
-      final List<dynamic> rawList = res.data['data'] ?? [];
-      return rawList.map((item) => item as Map<String, dynamic>).toList();
+      print('🔁 riwayat response status=${res.statusCode}');
+      print('🔁 riwayat response body=${res.data}');
+
+      if (res.statusCode != 200) {
+        throw Exception('Server returned status ${res.statusCode}');
+      }
+
+      dynamic body = res.data;
+      List<dynamic> rawList = [];
+
+      if (body is List) {
+        rawList = body;
+      } else if (body is Map && body['data'] is List) {
+        rawList = body['data'];
+      } else if (body is Map && body['rows'] is List) {
+        // sometimes controllers return { rows: [...] }
+        rawList = body['rows'];
+      }
+
+      return rawList.map((item) => Map<String, dynamic>.from(item)).toList();
     } catch (e) {
       print('❌ Error fetching riwayat pemeliharaan: $e');
       return [];
@@ -303,9 +343,29 @@ class ApiService {
 
   Future<List<Map<String, dynamic>>> getPengaturan() async {
     try {
+      print('🔷 Fetching pengaturan from $baseUrl');
+
       final res = await _dio.get('/pengaturan');
-      final List<dynamic> rawList = res.data['data'] ?? [];
-      return rawList.map((item) => item as Map<String, dynamic>).toList();
+      print('🔁 pengaturan response status=${res.statusCode}');
+      print('🔁 pengaturan response body=${res.data}');
+
+      if (res.statusCode != 200) {
+        throw Exception('Server returned status ${res.statusCode}');
+      }
+
+      dynamic body = res.data;
+      List<dynamic> rawList = [];
+
+      if (body is List) {
+        rawList = body;
+      } else if (body is Map && body['data'] is List) {
+        rawList = body['data'];
+      } else if (body is Map && body['rows'] is List) {
+        // sometimes controllers return { rows: [...] }
+        rawList = body['rows'];
+      }
+
+      return rawList.map((item) => Map<String, dynamic>.from(item)).toList();
     } catch (e) {
       print('❌ Error fetching pengaturan: $e');
       return [];

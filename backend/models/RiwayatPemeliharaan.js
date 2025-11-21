@@ -1,9 +1,12 @@
 const db = require('../config/db');
 
-const RiwayatPemeliharaan = {
+const Riwayat = {
   getAll: (callback) => {
-    db.query('SELECT * FROM riwayat_pemeliharaan', callback);
-  },
+    db.query(
+      "SELECT * FROM riwayat_pemeliharaan ORDER BY tanggal_mulai DESC",
+      callback
+    );
+  }
 };
 
-module.exports = RiwayatPemeliharaan;
+module.exports = Riwayat;
