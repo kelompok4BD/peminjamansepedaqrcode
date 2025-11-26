@@ -16,6 +16,8 @@ const User = {
         nama, 
         jenis_pengguna, 
         status_akun, 
+        email_kampus,
+        no_hp_pengguna,
         password 
       FROM user 
       WHERE id_NIM_NIP = ?

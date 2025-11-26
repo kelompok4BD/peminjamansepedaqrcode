@@ -155,14 +155,33 @@ class _PengaturanPageState extends State<PengaturanPage> {
                                     ),
                                     const SizedBox(height: 8),
                                     _infoRow(
+                                      Icons.person,
+                                      'ID Pegawai',
+                                      p['id_pegawai']?.toString() ?? '-',
+                                    ),
+                                    const SizedBox(height: 6),
+                                    _infoRow(
                                       Icons.access_time,
                                       'Batas waktu pinjam',
                                       '${_parseInt(p['batas_waktu_pinjam'])} jam',
                                     ),
+                                    const SizedBox(height: 6),
                                     _infoRow(
                                       Icons.monetization_on,
                                       'Tarif denda/jam',
                                       _formatCurrency(p['tarif_denda_per_jam']),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    _infoRow(
+                                      Icons.phone,
+                                      'Kontak darurat',
+                                      p['informasi_kontak_darurat']?.toString() ?? '-',
+                                    ),
+                                    const SizedBox(height: 6),
+                                    _infoRow(
+                                      Icons.location_on,
+                                      'Batas wilayah (GPS)',
+                                      p['batas_wilayah_gps']?.toString() ?? '-',
                                     ),
                                   ],
                                 ),

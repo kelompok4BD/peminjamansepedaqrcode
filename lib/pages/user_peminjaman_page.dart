@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'login_page.dart';
+import 'pengaturan_user_page.dart';
 
 class UserPeminjamanPage extends StatefulWidget {
   final String userId;
@@ -36,9 +37,15 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
 
     if (res['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Peminjaman berhasil!')),
+        const SnackBar(content: Text('✅ Peminjaman berhasil! Mengalihkan...')),
       );
-      fetchSemuaSepeda();
+      // navigate to user pengaturan page
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const PengaturanUserPage()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
