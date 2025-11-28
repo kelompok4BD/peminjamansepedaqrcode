@@ -69,24 +69,31 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Transaksi Peminjaman'),
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
+        title: const Text('Transaksi Peminjaman', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[50]!, Colors.white],
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: loading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : peminjaman.isEmpty
-                ? const Center(
-                    child: Text('Belum ada transaksi peminjaman'),
-                  )
+                ? const Center(child: Text('Belum ada transaksi peminjaman', style: TextStyle(color: Colors.white70)))
                 : RefreshIndicator(
                     onRefresh: loadPeminjaman,
                     child: ListView.builder(
@@ -98,41 +105,41 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                         final idSepeda = p['id_sepeda'] ?? '-';
                         final waktuPinjam = formatDate(p['waktu_pinjam']);
                         final waktuKembali = formatDate(p['waktu_kembali']);
-                        final durasi =
-                            p['durasi']?.toString() ?? 'Tidak diketahui';
-                        final metodeJaminan =
-                            p['metode_jaminan'] ?? 'Tidak ada';
-                        final status =
-                            p['status_transaksi'] ?? 'Tidak diketahui';
+                        final durasi = p['durasi']?.toString() ?? 'Tidak diketahui';
+                        final metodeJaminan = p['metode_jaminan'] ?? 'Tidak ada';
+                        final status = p['status_transaksi'] ?? 'Tidak diketahui';
 
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 14),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                            borderRadius: BorderRadius.circular(18),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(18),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.pedal_bike,
-                                        color: Color(0xFF002D72)),
+                                    const Icon(Icons.pedal_bike, color: Color(0xFF6366F1)),
                                     const SizedBox(width: 8),
-                                    Text(
-                                      'Transaksi #$idTransaksi',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF002D72),
-                                      ),
-                                    ),
+                                    Text('Transaksi #$idTransaksi', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                                     const Spacer(),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: getStatusColor(status),
                                         borderRadius: BorderRadius.circular(10),
@@ -147,7 +154,7 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                                     ),
                                   ],
                                 ),
-                                const Divider(height: 20),
+                                const Divider(height: 20, color: Colors.white24),
                                 _infoRow('ID Sepeda', idSepeda.toString()),
                                 _infoRow('Durasi (menit)', durasi),
                                 _infoRow('Metode Jaminan', metodeJaminan),

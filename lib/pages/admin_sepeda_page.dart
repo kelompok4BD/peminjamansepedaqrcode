@@ -216,25 +216,34 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Kelola Sepeda'),
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
+        title: const Text('Kelola Sepeda', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
         actions: [
           IconButton(icon: const Icon(Icons.add), onPressed: _addSepeda)
         ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue[50]!, Colors.white],
           ),
         ),
         child: loading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : sepeda.isEmpty
-                ? const Center(child: Text('Belum ada data sepeda'))
+                ? const Center(child: Text('Belum ada data sepeda', style: TextStyle(color: Colors.white70)))
                 : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: sepeda.length,
@@ -247,16 +256,29 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
                       final kondisi = s['kondisi'] ?? '-';
                       final kodeQR = s['kode_qr'] ?? '-';
 
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: InkWell(
                           onTap: () => _editSepeda(s),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(18),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(18),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -264,7 +286,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
                                   children: [
                                     const Icon(
                                       Icons.pedal_bike,
-                                      color: Color(0xFF002D72),
+                                      color: Color(0xFF6366F1),
                                       size: 24,
                                     ),
                                     const SizedBox(width: 8),
@@ -274,7 +296,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF002D72),
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
@@ -284,36 +306,165 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
-                                        color:
-                                            status.toLowerCase() == 'tersedia'
-                                                ? Colors.green[100]
-                                                : Colors.red[100],
+                                        color: status.toLowerCase() == 'tersedia'
+                                            ? Colors.green.withOpacity(0.18)
+                                            : Colors.red.withOpacity(0.18),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
                                         status,
                                         style: TextStyle(
-                                          color:
-                                              status.toLowerCase() == 'tersedia'
-                                                  ? Colors.green[700]
-                                                  : Colors.red[700],
+                                          color: status.toLowerCase() == 'tersedia'
+                                              ? Colors.greenAccent.shade200
+                                              : Colors.redAccent.shade100,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.blue, size: 20),
+                                      icon: const Icon(Icons.edit, color: Color(0xFF6366F1), size: 20),
                                       onPressed: () => _editSepeda(s),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red, size: 20),
+                                      icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
                                       onPressed: () => _deleteSepeda(id),
                                     ),
                                   ],
                                 ),
-                                const Divider(height: 24),
+                                const Divider(height: 24, color: Colors.white24),
+                                _infoRow('ID Sepeda', '#$id'),
+                                _infoRow('Tahun', tahun.toString()),
+                                _infoRow('Status', status),
+                                _infoRow('Kondisi', kondisi),
+                                _infoRow('Kode QR', kodeQR),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+      ),
+    );
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Kelola Sepeda', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
+        actions: [
+          IconButton(icon: const Icon(Icons.add), onPressed: _addSepeda)
+        ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: loading
+            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            : sepeda.isEmpty
+                ? const Center(child: Text('Belum ada data sepeda', style: TextStyle(color: Colors.white70)))
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: sepeda.length,
+                    itemBuilder: (context, i) {
+                      final s = sepeda[i];
+                      final id = s['id'] ?? s['id_sepeda'] ?? 0;
+                      final merk = s['merk'] ?? s['merk_model'] ?? '-';
+                      final tahun = s['tahun'] ?? s['tahun_pembelian'] ?? '-';
+                      final status = s['status'] ?? s['status_saat_ini'] ?? '-';
+                      final kondisi = s['kondisi'] ?? '-';
+                      final kodeQR = s['kode_qr'] ?? '-';
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: InkWell(
+                          onTap: () => _editSepeda(s),
+                          borderRadius: BorderRadius.circular(18),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.pedal_bike,
+                                      color: Color(0xFF6366F1),
+                                      size: 24,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        merk,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: status.toLowerCase() == 'tersedia'
+                                            ? Colors.green.withOpacity(0.18)
+                                            : Colors.red.withOpacity(0.18),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        status,
+                                        style: TextStyle(
+                                          color: status.toLowerCase() == 'tersedia'
+                                              ? Colors.greenAccent.shade200
+                                              : Colors.redAccent.shade100,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit, color: Color(0xFF6366F1), size: 20),
+                                      onPressed: () => _editSepeda(s),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+                                      onPressed: () => _deleteSepeda(id),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(height: 24, color: Colors.white24),
                                 _infoRow('ID Sepeda', '#$id'),
                                 _infoRow('Tahun', tahun.toString()),
                                 _infoRow('Status', status),

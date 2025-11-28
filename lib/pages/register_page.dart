@@ -63,9 +63,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[50]!, Colors.white],
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -82,8 +82,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Image.asset(
                         'assets/images/logo.png',
-                        width: 88,
-                        height: 88,
+                        width: 80,
+                        height: 80,
                       ),
                       const SizedBox(width: 12),
                       Column(
@@ -94,14 +94,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF002D72),
+                              color: Colors.white,
                             ),
                           ),
                           Text(
                             'Peminjaman Sepeda Kampus',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
+                              color: Colors.white70,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -111,21 +111,34 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 18),
                   const Text(
-                    'Registrasi',
+                    'Create Account',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF002D72),
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(28),
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -145,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             _buildTextField(
                               controller: _namaController,
                               label: 'Nama Lengkap',
@@ -160,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             _buildTextField(
                               controller: _passwordController,
                               label: 'Password',
@@ -171,6 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _obscurePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
+                                  color: Colors.white70,
                                 ),
                                 onPressed: () {
                                   setState(() =>
@@ -187,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             _buildTextField(
                               controller: _confirmPasswordController,
                               label: 'Konfirmasi Password',
@@ -198,6 +212,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _obscureConfirm
                                       ? Icons.visibility_off
                                       : Icons.visibility,
+                                  color: Colors.white70,
                                 ),
                                 onPressed: () {
                                   setState(
@@ -214,30 +229,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 24),
                             SizedBox(
                               width: double.infinity,
-                              height: 45,
+                              height: 48,
                               child: _isLoading
                                   ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : ElevatedButton(
-                                      onPressed: _register,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF002D72),
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                      child: CircularProgressIndicator(color: Colors.white))
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [Colors.teal.shade400, Colors.cyan.shade600],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
                                         ),
+                                        borderRadius: BorderRadius.circular(14),
                                       ),
-                                      child: const Text(
-                                        'Daftar',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                      child: ElevatedButton(
+                                        onPressed: _register,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'SIGN UP',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            letterSpacing: 1,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -254,13 +278,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                               child: const Text.rich(
                                 TextSpan(
-                                  text: 'Sudah punya akun? ',
-                                  style: TextStyle(color: Colors.black87),
+                                  text: 'Already have an account? ',
+                                  style: TextStyle(color: Colors.white70, fontSize: 13),
                                   children: [
                                     TextSpan(
-                                      text: 'Login di sini',
+                                      text: 'Sign In',
                                       style: TextStyle(
-                                        color: Color(0xFF002D72),
+                                        color: Colors.cyan,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -296,15 +320,39 @@ class _RegisterPageState extends State<RegisterPage> {
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+        labelStyle: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+        prefixIcon: prefixIcon != null 
+            ? Icon(prefixIcon, color: Colors.white70) 
+            : null,
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: Colors.white.withOpacity(0.08),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.cyan, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+        ),
+        errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 12),
+        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       ),
     );
   }

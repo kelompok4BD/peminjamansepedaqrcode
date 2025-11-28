@@ -30,16 +30,24 @@ class _StasiunPageState extends State<StasiunPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'Daftar Stasiun Sepeda',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
-        elevation: 2,
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE3F2FD), Colors.white],
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -50,7 +58,7 @@ class _StasiunPageState extends State<StasiunPage> {
                   'Tidak ada data stasiun',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Colors.white70,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -60,45 +68,62 @@ class _StasiunPageState extends State<StasiunPage> {
                 itemCount: stasiun.length,
                 itemBuilder: (_, i) {
                   final s = stasiun[i];
-                  return Card(
-                    elevation: 3,
-                    margin: const EdgeInsets.only(bottom: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 14),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
-                      leading: const CircleAvatar(
-                        backgroundColor: Color(0xFF002D72),
-                        child: Icon(Icons.location_on, color: Colors.white),
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6366F1).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.location_on, color: Color(0xFF6366F1), size: 24),
                       ),
                       title: Text(
-                        s['nama_stasiun'] ??
-                            'Stasiun #${s['id_stasiun'] ?? i + 1}',
+                        s['nama_stasiun'] ?? 'Stasiun #${s['id_stasiun'] ?? i + 1}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF002D72),
+                          color: Colors.white,
+                          fontSize: 16,
                         ),
                       ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
                           s['alamat_stasiun'] ?? '-',
-                          style: const TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.white70),
                         ),
                       ),
                       trailing: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.blue[50],
+                          color: const Color(0xFF6366F1).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           'Kapasitas: ${s['kapasitas_dock'] ?? '-'}',
                           style: const TextStyle(
-                            color: Color(0xFF002D72),
+                            color: Color(0xFF6366F1),
                             fontWeight: FontWeight.w600,
+                            fontSize: 12,
                           ),
                         ),
                       ),

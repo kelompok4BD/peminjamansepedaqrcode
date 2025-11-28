@@ -48,72 +48,84 @@ class _PinjamPageState extends State<DetailPinjamPage> {
     final sepeda = widget.sepeda;
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
-        title: const Text('Konfirmasi Peminjaman'),
-        backgroundColor: Colors.blue[800],
+        title: const Text('Konfirmasi Peminjaman', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[50]!, Colors.white],
+            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              sepeda['merk_model'] ?? sepeda['merk'] ?? 'Sepeda',
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-                'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
-            Text(
-                'Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
-            Text(
-                'Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}'),
-            if (sepeda['kode_qr_sepeda'] != null)
-              Text('Kode QR: ${sepeda['kode_qr_sepeda']}'),
-            const Divider(height: 32, thickness: 1.2),
-            const Text(
-              'Pilih Metode Jaminan',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            RadioListTile<String>(
-              title: const Text('KTP'),
-              value: 'KTP',
-              groupValue: selectedJaminan,
-              onChanged: (val) => setState(() => selectedJaminan = val),
-            ),
-            RadioListTile<String>(
-              title: const Text('KTM'),
-              value: 'KTM',
-              groupValue: selectedJaminan,
-              onChanged: (val) => setState(() => selectedJaminan = val),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: isLoading ? null : handleKonfirmasi,
-                icon: const Icon(Icons.check_circle_outline),
-                label:
-                    Text(isLoading ? 'Memproses...' : 'Konfirmasi Peminjaman'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[700],
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  textStyle: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sepeda['merk_model'] ?? sepeda['merk'] ?? 'Sepeda',
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text('Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
+                Text('Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
+                Text('Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}'),
+                if (sepeda['kode_qr_sepeda'] != null) Text('Kode QR: ${sepeda['kode_qr_sepeda']}'),
+                const Divider(height: 32, thickness: 1.2),
+                const Text(
+                  'Pilih Metode Jaminan',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                RadioListTile<String>(
+                  title: const Text('KTP'),
+                  value: 'KTP',
+                  groupValue: selectedJaminan,
+                  onChanged: (val) => setState(() => selectedJaminan = val),
+                ),
+                RadioListTile<String>(
+                  title: const Text('KTM'),
+                  value: 'KTM',
+                  groupValue: selectedJaminan,
+                  onChanged: (val) => setState(() => selectedJaminan = val),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: isLoading ? null : handleKonfirmasi,
+                    icon: const Icon(Icons.check_circle_outline),
+                    label: Text(isLoading ? 'Memproses...' : 'Konfirmasi Peminjaman'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF6366F1),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

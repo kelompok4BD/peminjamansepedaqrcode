@@ -45,52 +45,66 @@ class _PengaturanPageState extends State<PengaturanPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'Pengaturan Sistem',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
-        elevation: 2,
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE3F2FD), Colors.white],
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: _loading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : (_error != null)
                 ? Center(
                     child: Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.error_outline,
-                              size: 48, color: Colors.red),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Gagal memuat pengaturan',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                      child: Container(
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            _error!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.black54),
-                          ),
-                          const SizedBox(height: 12),
-                          ElevatedButton.icon(
-                            onPressed: loadPengaturan,
-                            icon: const Icon(Icons.refresh),
-                            label: const Text('Muat ulang'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF002D72),
+                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                            const SizedBox(height: 8),
+                            const Text('Gagal memuat pengaturan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                            const SizedBox(height: 6),
+                            Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+                            const SizedBox(height: 12),
+                            ElevatedButton.icon(
+                              onPressed: loadPengaturan,
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('Muat ulang'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF6366F1),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   )
@@ -98,32 +112,38 @@ class _PengaturanPageState extends State<PengaturanPage> {
                     ? Center(
                         child: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.info_outline,
-                                  size: 48, color: Colors.orange.shade700),
-                              const SizedBox(height: 8),
-                              const Text(
-                                'Belum ada data pengaturan',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Container(
+                            padding: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                              const SizedBox(height: 6),
-                              const Text(
-                                'Data pengaturan sistem belum dimasukkan ke database.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                              const SizedBox(height: 12),
-                              ElevatedButton.icon(
-                                onPressed: loadPengaturan,
-                                icon: const Icon(Icons.refresh),
-                                label: const Text('Muat ulang'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF002D72),
+                              border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.info_outline, size: 48, color: Colors.amber.shade700),
+                                const SizedBox(height: 8),
+                                const Text('Belum ada data pengaturan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                const SizedBox(height: 6),
+                                const Text('Data pengaturan sistem belum dimasukkan ke database.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+                                const SizedBox(height: 12),
+                                ElevatedButton.icon(
+                                  onPressed: loadPengaturan,
+                                  icon: const Icon(Icons.refresh),
+                                  label: const Text('Muat ulang'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF6366F1),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -134,25 +154,30 @@ class _PengaturanPageState extends State<PengaturanPage> {
                           itemCount: pengaturan.length,
                           itemBuilder: (_, i) {
                             final p = pengaturan[i];
-                            return Card(
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                              margin: const EdgeInsets.only(bottom: 12),
                               child: Padding(
-                                padding: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.all(18),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Pengaturan #${p['id_pengaturan'] ?? i + 1}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF002D72),
-                                        fontSize: 16,
-                                      ),
-                                    ),
+                                    Text('Pengaturan #${p['id_pengaturan'] ?? i + 1}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18)),
                                     const SizedBox(height: 8),
                                     _infoRow(
                                       Icons.person,

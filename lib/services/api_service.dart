@@ -382,4 +382,108 @@ class ApiService {
       return [];
     }
   }
+
+  Future<List<Map<String, dynamic>>> getLaporanKerusakan() async {
+    try {
+      print('🔷 Fetching laporan kerusakan from $baseUrl');
+      final res = await _dio.get('/laporan-kerusakan');
+      print('🔁 laporan kerusakan response status=${res.statusCode}');
+      print('🔁 laporan kerusakan response body=${res.data}');
+
+      if (res.statusCode != 200) {
+        throw Exception('Server returned status ${res.statusCode}');
+      }
+
+      dynamic body = res.data;
+      List<dynamic> rawList = [];
+
+      if (body is List) {
+        rawList = body;
+      } else if (body is Map && body['data'] is List) {
+        rawList = body['data'];
+      } else if (body is Map && body['success'] == true && body['data'] is List) {
+        rawList = body['data'];
+      }
+
+      return rawList.map((item) => Map<String, dynamic>.from(item)).toList();
+    } catch (e) {
+      print('❌ Error fetching laporan kerusakan: $e');
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> createLaporanKerusakan(
+    int idSepeda,
+    int idPegawai,
+    String deskripsi,
+    String statusPerbaikan,
+  ) async {
+    try {
+      final res = await _dio.post(
+        '/laporan-kerusakan',
+        data: {
+          'id_sepeda': idSepeda,
+          'id_pegawai': idPegawai,
+          'deskripsi_kerusakan': deskripsi,
+          'tanggal_laporan': DateTime.now().toIso8601String(),
+          'status_perbaikan': statusPerbaikan,
+        },
+      );
+
+      return {
+        'success': res.statusCode == 201,
+        'message': res.data['message'] ?? 'Laporan berhasil ditambahkan',
+        'data': res.data['data']
+      };
+    } catch (e) {
+      print('❌ Error creating laporan kerusakan: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateLaporanKerusakanStatus(
+    int idLaporan,
+    String status,
+  ) async {
+    try {
+      final res = await _dio.put(
+        '/laporan-kerusakan/$idLaporan',
+        data: {'status': status},
+      );
+
+      return {
+        'success': res.statusCode == 200,
+        'message': res.data['message'] ?? 'Status diperbarui',
+      };
+    } catch (e) {
+      print('❌ Error updating laporan status: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<Map<String, dynamic>> createLogAktivitas(
+    int? idPegawai,
+    String jenisAktivitas,
+    String deskripsi,
+  ) async {
+    try {
+      final res = await _dio.post(
+        '/log-aktivitas',
+        data: {
+          'id_pegawai': idPegawai,
+          'waktu_aktivitas': DateTime.now().toIso8601String(),
+          'jenis_aktivitas': jenisAktivitas,
+          'deskripsi_aktivitas': deskripsi,
+        },
+      );
+
+      return {
+        'success': res.statusCode == 201,
+        'message': res.data['message'] ?? 'Log aktivitas tercatat',
+      };
+    } catch (e) {
+      print('❌ Error creating log aktivitas: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
 }

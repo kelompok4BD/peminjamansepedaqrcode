@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
 
   bool loading = false;
+  bool obscurePassword = true;
   final ApiService api = ApiService();
 
   Future<void> login() async {
@@ -55,11 +56,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue[50]!, Colors.white],
           ),
         ),
         child: SafeArea(
@@ -70,109 +71,193 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 80),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      width: 350,
-                      height: 350,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/logo.png',
+                          width: 80,
+                          height: 80,
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              'CampusCycle',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Peminjaman Sepeda Kampus',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 18),
                     const Text(
-                      'CampusCycle',
+                      'Sign In',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF002D72),
-                      ),
-                    ),
-                    const Text(
-                      'Peminjaman Sepeda Kampus',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 40),
-                    Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(28),
                         child: Column(
                           children: [
+                            // Username field
                             TextField(
                               controller: nimController,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                labelText: 'NIM',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                prefixIcon: const Icon(Icons.person),
+                                labelText: 'Username',
+                                labelStyle: const TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.person, color: Colors.white70),
                                 filled: true,
-                                fillColor: Colors.grey[50],
+                                fillColor: Colors.white.withOpacity(0.08),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: const BorderSide(color: Colors.teal, width: 2),
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
+                            // Password field
                             TextField(
                               controller: passwordController,
-                              obscureText: true,
+                              obscureText: obscurePassword,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                labelStyle: const TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                                    color: Colors.white70,
+                                  ),
+                                  onPressed: () => setState(() => obscurePassword = !obscurePassword),
                                 ),
-                                prefixIcon: const Icon(Icons.lock),
                                 filled: true,
-                                fillColor: Colors.grey[50],
+                                fillColor: Colors.white.withOpacity(0.08),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: const BorderSide(color: Colors.teal, width: 2),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 24),
                             SizedBox(
                               width: double.infinity,
-                              height: 45,
+                              height: 48,
                               child: loading
                                   ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : ElevatedButton(
-                                      onPressed: login,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF002D72),
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                      child: CircularProgressIndicator(color: Colors.white))
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [Colors.teal.shade600, Colors.teal.shade700],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
                                         ),
+                                        borderRadius: BorderRadius.circular(14),
                                       ),
-                                      child: const Text(
-                                        'Login',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                      child: ElevatedButton(
+                                        onPressed: login,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'LOGIN',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            letterSpacing: 1,
+                                          ),
                                         ),
                                       ),
                                     ),
                             ),
                             const SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const RegisterPage(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'Forgot password?',
+                                    style: TextStyle(color: Colors.white70, fontSize: 13),
                                   ),
-                                );
-                              },
-                              child: const Text(
-                                'Belum punya akun? Daftar disini',
-                                style: TextStyle(color: Color(0xFF002D72)),
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Don't have an account? Sign up",
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                     ),
                   ],

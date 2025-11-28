@@ -191,73 +191,122 @@ class _AdminUserPageState extends State<AdminUserPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Kelola User'),
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: DropdownButtonFormField<String>(
-              value: filterStatus,
-              decoration: _inputDeco('Filter Status Akun'),
-              items: const [
-                DropdownMenuItem(value: 'Semua', child: Text('Semua')),
-                DropdownMenuItem(value: 'aktif', child: Text('Aktif')),
-                DropdownMenuItem(value: 'nonaktif', child: Text('Nonaktif')),
-              ],
-              onChanged: (val) {
-                filterStatus = val!;
-                applyFilter();
-              },
+        title: const Text('Kelola User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: const Color(0xFF1a237e),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
           ),
-          Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : filteredList.isEmpty
-                    ? const Center(child: Text('Tidak ada user ditemukan'))
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, i) {
-                          final user = filteredList[i];
-                          final status =
-                              (user['status_akun'] ?? '-').toString();
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: DropdownButtonFormField<String>(
+                value: filterStatus,
+                decoration: _inputDeco('Filter Status Akun').copyWith(
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.08),
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Color(0xFF6366F1), width: 2),
+                  ),
+                ),
+                dropdownColor: const Color(0xFF1a237e),
+                style: const TextStyle(color: Colors.white),
+                items: const [
+                  DropdownMenuItem(value: 'Semua', child: Text('Semua', style: TextStyle(color: Colors.white))),
+                  DropdownMenuItem(value: 'aktif', child: Text('Aktif', style: TextStyle(color: Colors.white))),
+                  DropdownMenuItem(value: 'nonaktif', child: Text('Nonaktif', style: TextStyle(color: Colors.white))),
+                ],
+                onChanged: (val) {
+                  filterStatus = val!;
+                  applyFilter();
+                },
+              ),
+            ),
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+                  : filteredList.isEmpty
+                      ? const Center(child: Text('Tidak ada user ditemukan', style: TextStyle(color: Colors.white70)))
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: filteredList.length,
+                          itemBuilder: (context, i) {
+                            final user = filteredList[i];
+                            final status = (user['status_akun'] ?? '-').toString();
 
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: ListTile(
-                              leading: Icon(Icons.person,
-                                  color: status.toLowerCase() == 'aktif'
-                                      ? Colors.green
-                                      : Colors.red),
-                              title: Text(
-                                  '${user['id_NIM_NIP'] ?? 'User'} - ${user['nama'] ?? ''}'),
-                              subtitle: Text('Status: ${status.toUpperCase()}'),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () => _editUser(user),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () => _deleteUser(
-                                        user['id_NIM_NIP'].toString()),
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                      ),
-          ),
-        ],
+                              child: ListTile(
+                                leading: Icon(Icons.person,
+                                    color: status.toLowerCase() == 'aktif'
+                                        ? Colors.greenAccent.shade200
+                                        : Colors.redAccent.shade100),
+                                title: Text(
+                                    '${user['id_NIM_NIP'] ?? 'User'} - ${user['nama'] ?? ''}',
+                                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                subtitle: Text('Status: ${status.toUpperCase()}', style: const TextStyle(color: Colors.white70)),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit, color: Color(0xFF6366F1)),
+                                      onPressed: () => _editUser(user),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.redAccent),
+                                      onPressed: () => _deleteUser(user['id_NIM_NIP'].toString()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+            ),
+          ],
+        ),
       ),
     );
   }

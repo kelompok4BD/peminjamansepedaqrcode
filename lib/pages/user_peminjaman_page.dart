@@ -92,24 +92,35 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
-        title: const Text('Peminjaman Sepeda'),
-        backgroundColor: Colors.blue[800],
+        title: const Text('Peminjaman Sepeda', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => _kembaliKeLogin(context),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[50]!, Colors.white],
+            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: Colors.white))
             : sepedaList.isEmpty
                 ? const Center(child: Text('Tidak ada data sepeda'))
                 : RefreshIndicator(

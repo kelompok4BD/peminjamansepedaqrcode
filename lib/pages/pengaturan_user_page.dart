@@ -92,20 +92,31 @@ class _PengaturanUserPageState extends State<PengaturanUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
-        title: const Text('Informasi Pengaturan'),
-        backgroundColor: const Color(0xFF002D72),
+        title: const Text('Informasi Pengaturan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE3F2FD), Colors.white],
+            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: _loading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
             : (_error != null)
                 ? Center(
                     child: Padding(
@@ -123,7 +134,7 @@ class _PengaturanUserPageState extends State<PengaturanUserPage> {
                             onPressed: loadPengaturan,
                             icon: const Icon(Icons.refresh),
                             label: const Text('Muat ulang'),
-                            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF002D72)),
+                            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6366F1)),
                           ),
                         ],
                       ),
@@ -146,7 +157,7 @@ class _PengaturanUserPageState extends State<PengaturanUserPage> {
                                 onPressed: loadPengaturan,
                                 icon: const Icon(Icons.refresh),
                                 label: const Text('Muat ulang'),
-                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF002D72)),
+                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6366F1)),
                               ),
                             ],
                           ),
@@ -165,7 +176,7 @@ class _PengaturanUserPageState extends State<PengaturanUserPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('Pengaturan Sistem', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF002D72))),
+                                    const Text('Pengaturan Sistem', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF6366F1))),
                                     const SizedBox(height: 12),
                                     _infoRow(Icons.access_time, 'Batas waktu pinjam', '${_parseInt(pengaturan!['batas_waktu_pinjam'])} jam'),
                                     _infoRow(Icons.monetization_on, 'Tarif denda/jam', _formatCurrency(pengaturan!['tarif_denda_per_jam'])),

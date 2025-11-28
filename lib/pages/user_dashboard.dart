@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'user_peminjaman_page.dart';
 import 'pengaturan_user_page.dart';
+import 'scan_qr_page.dart';
 import 'login_page.dart';
 
 class UserDashboard extends StatefulWidget {
@@ -33,6 +34,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
     final List<Widget> pages = [
       UserPeminjamanPage(userId: userId),
+      ScanQrPage(userId: userId),
       const PengaturanUserPage(),
       // improved profile page
       SingleChildScrollView(
@@ -49,7 +51,7 @@ class _UserDashboardState extends State<UserDashboard> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: const Color(0xFF002D72),
+                      backgroundColor: const Color(0xFF6366F1),
                       child: Text(
                         (widget.userData['nama'] ?? '-')
                             .toString()
@@ -95,11 +97,11 @@ class _UserDashboardState extends State<UserDashboard> {
                       children: [
                         OutlinedButton.icon(
                           onPressed: _logout,
-                          icon: const Icon(Icons.logout, color: Color(0xFF002D72)),
-                          label: const Text('Logout', style: TextStyle(color: Color(0xFF002D72))),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFF002D72)),
-                          ),
+                          icon: const Icon(Icons.logout, color: Color(0xFF6366F1)),
+                            label: const Text('Logout', style: TextStyle(color: Color(0xFF6366F1))),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFF6366F1)),
+                            ),
                         ),
                       ],
                     ),
@@ -113,30 +115,68 @@ class _UserDashboardState extends State<UserDashboard> {
     ];
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
-        title: const Text('User Dashboard'),
-        backgroundColor: const Color(0xFF002D72),
+        title: const Text('User Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: _logout,
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+          ),
+        ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
+            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue[50]!, Colors.white],
           ),
         ),
         child: pages[_selectedIndex],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF002D72),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.pedal_bike), label: 'Peminjaman'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Pengaturan'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 16,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: const Color(0xFF6366F1),
+          unselectedItemColor: Colors.white70,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.pedal_bike), label: 'Peminjaman'),
+            BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: 'Scan'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Pengaturan'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          ],
+        ),
       ),
     );
   }
