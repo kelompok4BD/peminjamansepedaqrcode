@@ -161,20 +161,48 @@ class ApiService {
     try {
       final res = await _dio.get('/sepeda');
       final List<dynamic> rawList = res.data['data'] ?? [];
-      return rawList.map((item) => item as Map<String, dynamic>).toList();
+
+      // Normalize items so frontend can rely on predictable keys
+      final normalized = rawList.map<Map<String, dynamic>>((dynamic item) {
+        final map =
+            item is Map ? Map<String, dynamic>.from(item) : <String, dynamic>{};
+
+        final idVal = map['id'] ?? map['id_sepeda'];
+        final merkVal = map['merk_model'] ?? map['merk'];
+        final tahunVal = map['tahun_pembelian'] ?? map['tahun'];
+        final statusVal = map['status_saat_ini'] ?? map['status'];
+        final kondisiVal = map['status_perawatan'] ?? map['kondisi'];
+        final kodeQrVal = map['kode_qr_sepeda'] ?? map['kode_qr'];
+
+        return {
+          // keep both naming conventions
+          'id': idVal,
+          'id_sepeda': idVal,
+          'merk_model': merkVal,
+          'merk': merkVal,
+          'tahun_pembelian': tahunVal,
+          'tahun': tahunVal,
+          'status_saat_ini': statusVal,
+          'status': statusVal,
+          'status_perawatan': kondisiVal,
+          'kondisi': kondisiVal,
+          'kode_qr_sepeda': kodeQrVal,
+          'kode_qr': kodeQrVal,
+          // include original fields to avoid losing anything
+          ...map,
+        };
+      }).toList();
+
+      return normalized;
     } catch (e) {
       print('❌ Error fetching sepeda: $e');
       return [];
     }
   }
 
-  Future<Map<String, dynamic>> addSepeda(
-    String merkModel,
-    int tahunPembelian,
-    String statusSaatIni,
-    String statusPerawatan,
-    String kodeQR,
-  ) async {
+  Future<Map<String, dynamic>> addSepeda(String merkModel, int tahunPembelian,
+      String statusSaatIni, String statusPerawatan, String kodeQR,
+      [int? idStasiun]) async {
     try {
       final res = await _dio.post(
         '/sepeda',
@@ -184,6 +212,7 @@ class ApiService {
           'status': statusSaatIni,
           'kondisi': statusPerawatan,
           'kode_qr_sepeda': kodeQR,
+          'id_stasiun': idStasiun,
         },
       );
       return _handleSuccess(res);
@@ -207,13 +236,13 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> editSepeda(
-    int id,
-    String merkModel,
-    int tahunPembelian,
-    String statusSaatIni,
-    String statusPerawatan,
-    String kodeQR,
-  ) async {
+      int id,
+      String merkModel,
+      int tahunPembelian,
+      String statusSaatIni,
+      String statusPerawatan,
+      String kodeQR,
+      [int? idStasiun]) async {
     try {
       final res = await _dio.put(
         '/sepeda/edit/$id',
@@ -223,6 +252,7 @@ class ApiService {
           'status_saat_ini': statusSaatIni,
           'status_perawatan': statusPerawatan,
           'kode_qr_sepeda': kodeQR,
+          'id_stasiun': idStasiun,
         },
       );
       return _handleSuccess(res);
@@ -239,6 +269,35 @@ class ApiService {
     } catch (e) {
       print('❌ Error hapusSepeda: $e');
       return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  // ✅ Get all stasiun (stations)
+  Future<List<Map<String, dynamic>>> getAllStasiun() async {
+    try {
+      final res = await _dio.get('/stasiun_sepeda');
+
+      List<dynamic> rawList = [];
+      if (res.data is List) {
+        rawList = res.data;
+      } else if (res.data is Map && res.data['data'] is List) {
+        rawList = res.data['data'];
+      }
+
+      return rawList.map((item) {
+        final s = Map<String, dynamic>.from(item);
+        return {
+          'id_stasiun': s['id_stasiun'] ?? s['id'],
+          'nama_stasiun':
+              s['nama_stasiun'] ?? s['nama'] ?? 'Stasiun Tidak Diketahui',
+          'alamat_stasiun': s['alamat_stasiun'] ?? s['alamat'] ?? '',
+          'kapasitas_dock': s['kapasitas_dock'] ?? 0,
+          'koordinat_gps': s['koordinat_gps'] ?? '',
+        };
+      }).toList();
+    } catch (e) {
+      print('❌ Error fetching stasiun: $e');
+      return [];
     }
   }
 
@@ -262,25 +321,58 @@ class ApiService {
 
   Future<Map<String, dynamic>> pinjamSepeda(int idUser, int idSepeda) async {
     try {
+      print('🔷 Mengirim request ke /transaksi-peminjaman ...');
       final res = await _dio.post(
-        '/transaksi_peminjaman',
+        '/transaksi-peminjaman',
+        data: {'id_user': idUser, 'id_sepeda': idSepeda},
+      );
+      print('🔶 Response status: ${res.statusCode}');
+      print('🔶 Response data: ${res.data}');
+
+      if (res.statusCode == 200 && res.data is Map) {
+        return {
+          'success': res.data['success'] ?? true,
+          'data': res.data['data'] ?? {},
+          'message': res.data['message'] ?? 'Peminjaman berhasil',
+          'qr_code': res.data['data']?['qr_code'],
+          'id_transaksi': res.data['data']?['id_transaksi'],
+        };
+      }
+      return {'success': false, 'message': 'Gagal meminjam sepeda'};
+    } catch (e) {
+      print('❌ Error pinjamSepeda: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<Map<String, dynamic>> pinjamSepedaWithJaminan(
+      int idUser, int idSepeda, String metodeJaminan) async {
+    try {
+      print(
+          '🔷 pinjamSepedaWithJaminan: baseUrl=$baseUrl, idUser=$idUser, idSepeda=$idSepeda, jaminan=$metodeJaminan');
+      final res = await _dio.post(
+        '/transaksi-peminjaman',
         data: {
           'id_user': idUser,
           'id_sepeda': idSepeda,
+          'metode_jaminan': metodeJaminan
         },
       );
+      print('🔶 Response status: ${res.statusCode}');
+      print('🔶 Response data: ${res.data}');
 
-      if (res.statusCode == 201 || res.statusCode == 200) {
+      if (res.statusCode == 200 && res.data is Map) {
         return {
-          'success': true,
+          'success': res.data['success'] ?? true,
           'data': res.data['data'] ?? {},
-          'message': res.data['message'] ?? 'Peminjaman berhasil ditambahkan'
+          'message': res.data['message'] ?? 'Peminjaman berhasil',
+          'qr_code': res.data['data']?['qr_code'],
+          'id_transaksi': res.data['data']?['id_transaksi'],
         };
       }
-
-      return {'success': false, 'message': 'Gagal menambahkan peminjaman'};
+      return {'success': false, 'message': 'Gagal meminjam sepeda'};
     } catch (e) {
-      print('❌ Error pinjamSepeda: $e');
+      print('❌ Error pinjamSepedaWithJaminan: $e');
       return {'success': false, 'message': _handleError(e)};
     }
   }
@@ -383,6 +475,41 @@ class ApiService {
     }
   }
 
+  // Create a new stasiun
+  Future<Map<String, dynamic>> createStasiun(
+      Map<String, dynamic> payload) async {
+    try {
+      final res = await _dio.post('/stasiun_sepeda', data: payload);
+      return _handleSuccess(res);
+    } catch (e) {
+      print('❌ Error createStasiun: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  // Update an existing stasiun by id
+  Future<Map<String, dynamic>> updateStasiun(
+      int id, Map<String, dynamic> payload) async {
+    try {
+      final res = await _dio.put('/stasiun_sepeda/$id', data: payload);
+      return _handleSuccess(res);
+    } catch (e) {
+      print('❌ Error updateStasiun: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  // Delete a stasiun by id
+  Future<Map<String, dynamic>> deleteStasiun(int id) async {
+    try {
+      final res = await _dio.delete('/stasiun_sepeda/$id');
+      return _handleSuccess(res);
+    } catch (e) {
+      print('❌ Error deleteStasiun: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getLaporanKerusakan() async {
     try {
       print('🔷 Fetching laporan kerusakan from $baseUrl');
@@ -401,7 +528,9 @@ class ApiService {
         rawList = body;
       } else if (body is Map && body['data'] is List) {
         rawList = body['data'];
-      } else if (body is Map && body['success'] == true && body['data'] is List) {
+      } else if (body is Map &&
+          body['success'] == true &&
+          body['data'] is List) {
         rawList = body['data'];
       }
 
@@ -484,6 +613,19 @@ class ApiService {
     } catch (e) {
       print('❌ Error creating log aktivitas: $e');
       return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getLogAktivitas() async {
+    try {
+      final res = await _dio.get('/log-aktivitas');
+      final List<dynamic> data = res.data['data'] ?? [];
+      return data
+          .map((item) => Map<String, dynamic>.from(item as Map))
+          .toList();
+    } catch (e) {
+      print('❌ Error fetching log aktivitas: $e');
+      return [];
     }
   }
 }

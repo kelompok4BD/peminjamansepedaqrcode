@@ -8,5 +8,7 @@ router.post("/", sepedaController.createSepeda);
 router.put("/edit/:id", sepedaController.updateSepeda);
 router.put("/:id", sepedaController.updateStatus);
 router.delete("/:id", sepedaController.deleteSepeda);
+router.post("/pinjam", sepedaController.pinjamSepeda);
+
 
 module.exports = router;

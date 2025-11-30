@@ -33,6 +33,13 @@ class _LoginPageState extends State<LoginPage> {
           : <String, dynamic>{};
       final jenis = (user['jenis_pengguna'] ?? '').toString().toLowerCase();
 
+      // Log aktivitas login
+      await api.createLogAktivitas(
+        null,
+        'Login',
+        'User ${nimController.text} ($jenis) login ke sistem',
+      );
+
       if (jenis.contains('admin')) {
         Navigator.pushReplacement(
           context,
@@ -105,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 18),
                     const Text(
-                      'Sign In',
+                      'Login',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -116,11 +123,15 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                          colors: [
+                            Colors.white.withOpacity(0.12),
+                            Colors.white.withOpacity(0.05)
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                        border: Border.all(
+                            color: Colors.white.withOpacity(0.15), width: 1.5),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
@@ -139,22 +150,29 @@ class _LoginPageState extends State<LoginPage> {
                               controller: nimController,
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                labelText: 'Username',
-                                labelStyle: const TextStyle(color: Colors.white70),
-                                prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                                labelText: 'NIM/NIP',
+                                labelStyle:
+                                    const TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.person,
+                                    color: Colors.white70),
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.08),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.2),
+                                      width: 1),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.2),
+                                      width: 1),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: const BorderSide(color: Colors.teal, width: 2),
+                                  borderSide: const BorderSide(
+                                      color: Colors.teal, width: 2),
                                 ),
                               ),
                             ),
@@ -166,28 +184,38 @@ class _LoginPageState extends State<LoginPage> {
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Password',
-                                labelStyle: const TextStyle(color: Colors.white70),
-                                prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.lock,
+                                    color: Colors.white70),
                                 suffixIcon: IconButton(
                                   icon: Icon(
-                                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                                    obscurePassword
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
                                     color: Colors.white70,
                                   ),
-                                  onPressed: () => setState(() => obscurePassword = !obscurePassword),
+                                  onPressed: () => setState(
+                                      () => obscurePassword = !obscurePassword),
                                 ),
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.08),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.2),
+                                      width: 1),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.2),
+                                      width: 1),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(14),
-                                  borderSide: const BorderSide(color: Colors.teal, width: 2),
+                                  borderSide: const BorderSide(
+                                      color: Colors.teal, width: 2),
                                 ),
                               ),
                             ),
@@ -197,11 +225,15 @@ class _LoginPageState extends State<LoginPage> {
                               height: 48,
                               child: loading
                                   ? const Center(
-                                      child: CircularProgressIndicator(color: Colors.white))
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white))
                                   : Container(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
-                                          colors: [Colors.teal.shade600, Colors.teal.shade700],
+                                          colors: [
+                                            Colors.teal.shade600,
+                                            Colors.teal.shade700
+                                          ],
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
                                         ),
@@ -213,7 +245,8 @@ class _LoginPageState extends State<LoginPage> {
                                           backgroundColor: Colors.transparent,
                                           shadowColor: Colors.transparent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(14),
+                                            borderRadius:
+                                                BorderRadius.circular(14),
                                           ),
                                         ),
                                         child: const Text(
@@ -235,8 +268,9 @@ class _LoginPageState extends State<LoginPage> {
                                 TextButton(
                                   onPressed: () {},
                                   child: const Text(
-                                    'Forgot password?',
-                                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                                    'Lupa password?',
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 13),
                                   ),
                                 ),
                               ],
@@ -256,7 +290,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                       child: const Text(
-                        "Don't have an account? Sign up",
+                        "Belum Punya Akun? Daftar",
                         style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                     ),

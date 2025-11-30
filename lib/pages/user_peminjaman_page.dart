@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'login_page.dart';
 import 'pengaturan_user_page.dart';
+import 'detail_pinjam_page.dart';
 
 class UserPeminjamanPage extends StatefulWidget {
   final String userId;
+  final int? stasiunId;
+  final String? stasiunName;
 
-  const UserPeminjamanPage({super.key, required this.userId});
+  const UserPeminjamanPage({
+    super.key,
+    required this.userId,
+    this.stasiunId,
+    this.stasiunName,
+  });
 
   @override
   State<UserPeminjamanPage> createState() => _UserPeminjamanPageState();
@@ -26,35 +34,55 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
   Future<void> fetchSemuaSepeda() async {
     setState(() => isLoading = true);
     final allSepeda = await api.getAllSepeda();
-    sepedaList = allSepeda;
+
+    // Filter by stasiun if stasiunId is provided
+    if (widget.stasiunId != null) {
+      sepedaList =
+          allSepeda.where((s) => s['id_stasiun'] == widget.stasiunId).toList();
+    } else {
+      sepedaList = allSepeda;
+    }
+
     setState(() => isLoading = false);
   }
 
-  Future<void> handlePinjam(int idSepeda) async {
-    final idUser = int.tryParse(widget.userId) ?? 0;
+  Future<void> handlePinjam(Map<String, dynamic> sepeda) async {
+    // Resolve possible id fields and log the full object for debugging
+    final dynamic rawId = sepeda['id_sepeda'] ??
+        sepeda['id'] ??
+        sepeda['idSepeda'] ??
+        sepeda['ID'];
+    final resolvedId = int.tryParse(rawId?.toString() ?? '') ?? 0;
 
-    final res = await api.pinjamSepeda(idUser, idSepeda);
+    print('🟢 Navigate -> DetailPinjamPage; sepeda object: $sepeda');
+    print('   Resolved sepeda id: raw=$rawId parsed=$resolvedId');
 
-    if (res['success'] == true) {
+    if (resolvedId <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Peminjaman berhasil! Mengalihkan...')),
+        const SnackBar(content: Text('❌ ID sepeda tidak valid, coba lagi')),
       );
-      // navigate to user pengaturan page
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PengaturanUserPage()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('❌ ${res['message'] ?? 'Gagal meminjam sepeda'}')),
-      );
+      return;
+    }
+
+    final normalizedSepeda = {...sepeda, 'id_sepeda': resolvedId};
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetailPinjamPage(
+          userId: widget.userId,
+          sepeda: normalizedSepeda,
+        ),
+      ),
+    );
+
+    // Jika berhasil pinjam (result == true), refresh list
+    if (result == true && mounted) {
+      print('✅ Peminjaman berhasil, refresh list');
+      await fetchSemuaSepeda();
     }
   }
 
-  // 🔹 warna card berdasarkan status
   Color _getCardColor(String status) {
     switch (status.toLowerCase()) {
       case 'tersedia':
@@ -77,24 +105,18 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
     }
   }
 
-  void _kembaliKeLogin(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginPage()),
-      (route) => false,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Berhasil kembali ke login')),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final titleText = widget.stasiunName != null
+        ? 'Sepeda - ${widget.stasiunName}'
+        : 'Peminjaman Sepeda';
+
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Text('Peminjaman Sepeda', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        automaticallyImplyLeading: widget.stasiunId != null,
+        title: Text(titleText,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -105,10 +127,6 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
               end: Alignment.bottomRight,
             ),
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => _kembaliKeLogin(context),
         ),
       ),
       body: Container(
@@ -169,8 +187,7 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                             ),
                             trailing: status.toLowerCase() == 'tersedia'
                                 ? ElevatedButton(
-                                    onPressed: () =>
-                                        handlePinjam(sepeda['id_sepeda']),
+                                    onPressed: () => handlePinjam(sepeda),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green,
                                     ),

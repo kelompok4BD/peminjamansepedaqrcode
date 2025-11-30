@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import 'qr_page.dart';
 
 class DetailPinjamPage extends StatefulWidget {
   final String userId;
@@ -20,25 +21,82 @@ class _PinjamPageState extends State<DetailPinjamPage> {
   Future<void> handleKonfirmasi() async {
     setState(() => isLoading = true);
 
-    final idUser = int.tryParse(widget.userId) ?? 0;
-    final idSepeda = widget.sepeda['id_sepeda'];
+    final idUserRaw = widget.userId;
+    final idSepedaRaw = widget.sepeda['id_sepeda'] ??
+        widget.sepeda['id'] ??
+        widget.sepeda['idSepeda'] ??
+        widget.sepeda['ID'];
 
-    final res = await api.pinjamSepeda(
-      idUser,
-      idSepeda,
-    );
+    final idUser = int.tryParse(idUserRaw.toString()) ?? 0;
+    final idSepeda = int.tryParse(idSepedaRaw?.toString() ?? '') ?? 0;
 
-    setState(() => isLoading = false);
+    print(
+        '🔵 handleKonfirmasi: userId=$idUserRaw (parsed=$idUser), sepedaId=$idSepedaRaw (parsed=$idSepeda), jaminan=$selectedJaminan');
 
-    if (res['success'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Peminjaman berhasil!')),
-      );
-      Navigator.pop(context, true);
-    } else {
+    if (idUser <= 0 || idSepeda <= 0) {
+      setState(() => isLoading = false);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('❌ ${res['message'] ?? 'Gagal meminjam sepeda'}')),
+            content: Text(
+                '❌ Data tidak valid - UserId: $idUser, SepedaId: $idSepeda')),
+      );
+      return;
+    }
+
+    try {
+      print('🔷 Memanggil API dengan idUser=$idUser, idSepeda=$idSepeda');
+      final res = await api.pinjamSepedaWithJaminan(
+          idUser, idSepeda, selectedJaminan ?? 'KTP');
+      print('✅ Response: $res');
+
+      setState(() => isLoading = false);
+
+      if (!mounted) return;
+
+      if (res['success'] == true) {
+        // Log aktivitas peminjaman
+        final merkSepeda =
+            widget.sepeda['merk_model'] ?? widget.sepeda['merk'] ?? 'Sepeda';
+        await api.createLogAktivitas(
+          null,
+          'Peminjaman',
+          'User ID $idUser meminjam sepeda ($merkSepeda) ID $idSepeda dengan jaminan ${selectedJaminan ?? "KTP"}',
+        );
+
+        // Extract QR code
+        final qrCode = res['qr_code'] ??
+            res['data']?['qr_code'] ??
+            res['data']?['qr_data'] ??
+            '';
+
+        if (qrCode.isNotEmpty) {
+          // Show QR code page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => QrDisplayPage(qrCode: qrCode)),
+          ).then((_) {
+            // Setelah dari QR page, back ke list
+            Navigator.pop(context, true);
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('✅ Peminjaman berhasil! (QR tidak tersedia)')),
+          );
+          Navigator.pop(context, true);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('❌ ${res['message'] ?? 'Gagal meminjam sepeda'}')),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Error: $e')),
       );
     }
   }
@@ -50,7 +108,8 @@ class _PinjamPageState extends State<DetailPinjamPage> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Text('Konfirmasi Peminjaman', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text('Konfirmasi Peminjaman',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -74,7 +133,8 @@ class _PinjamPageState extends State<DetailPinjamPage> {
         padding: const EdgeInsets.all(20),
         child: Card(
           elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -82,13 +142,18 @@ class _PinjamPageState extends State<DetailPinjamPage> {
               children: [
                 Text(
                   sepeda['merk_model'] ?? sepeda['merk'] ?? 'Sepeda',
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text('Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
-                Text('Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
-                Text('Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}'),
-                if (sepeda['kode_qr_sepeda'] != null) Text('Kode QR: ${sepeda['kode_qr_sepeda']}'),
+                Text(
+                    'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
+                Text(
+                    'Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
+                Text(
+                    'Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}'),
+                if (sepeda['kode_qr_sepeda'] != null)
+                  Text('Kode QR: ${sepeda['kode_qr_sepeda']}'),
                 const Divider(height: 32, thickness: 1.2),
                 const Text(
                   'Pilih Metode Jaminan',
@@ -112,11 +177,13 @@ class _PinjamPageState extends State<DetailPinjamPage> {
                   child: ElevatedButton.icon(
                     onPressed: isLoading ? null : handleKonfirmasi,
                     icon: const Icon(Icons.check_circle_outline),
-                    label: Text(isLoading ? 'Memproses...' : 'Konfirmasi Peminjaman'),
+                    label: Text(
+                        isLoading ? 'Memproses...' : 'Konfirmasi Peminjaman'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF6366F1),
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      textStyle: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

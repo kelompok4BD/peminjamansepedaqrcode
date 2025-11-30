@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 18),
                   const Text(
-                    'Create Account',
+                    'Buat Akun',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 28,
@@ -123,11 +123,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                        colors: [
+                          Colors.white.withOpacity(0.12),
+                          Colors.white.withOpacity(0.05)
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.15), width: 1.5),
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
@@ -235,11 +239,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               height: 48,
                               child: _isLoading
                                   ? const Center(
-                                      child: CircularProgressIndicator(color: Colors.white))
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white))
                                   : Container(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
-                                          colors: [Colors.teal.shade400, Colors.cyan.shade600],
+                                          colors: [
+                                            Colors.teal.shade400,
+                                            Colors.cyan.shade600
+                                          ],
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
                                         ),
@@ -251,11 +259,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                           backgroundColor: Colors.transparent,
                                           shadowColor: Colors.transparent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(14),
+                                            borderRadius:
+                                                BorderRadius.circular(14),
                                           ),
                                         ),
                                         child: const Text(
-                                          'SIGN UP',
+                                          'DAFTAR',
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -278,11 +287,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                               child: const Text.rich(
                                 TextSpan(
-                                  text: 'Already have an account? ',
-                                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                                  text: 'Sudah Punya Akun? ',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 13),
                                   children: [
                                     TextSpan(
-                                      text: 'Sign In',
+                                      text: 'Login',
                                       style: TextStyle(
                                         color: Colors.cyan,
                                         fontWeight: FontWeight.bold,
@@ -323,21 +333,23 @@ class _RegisterPageState extends State<RegisterPage> {
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
+        labelStyle:
+            TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
         hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-        prefixIcon: prefixIcon != null 
-            ? Icon(prefixIcon, color: Colors.white70) 
-            : null,
+        prefixIcon:
+            prefixIcon != null ? Icon(prefixIcon, color: Colors.white70) : null,
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.white.withOpacity(0.08),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+          borderSide:
+              BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
+          borderSide:
+              BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -352,7 +364,8 @@ class _RegisterPageState extends State<RegisterPage> {
           borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
         ),
         errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 12),
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       ),
     );
   }

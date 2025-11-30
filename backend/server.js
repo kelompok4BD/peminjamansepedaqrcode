@@ -23,6 +23,7 @@ const logAktivitasRoutes = require('./routes/logAktivitasRoutes');
 app.use("/api/sepeda", sepedaRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/transaksi_peminjaman", transaksiPeminjamanRoutes);
+app.use("/api/transaksi-peminjaman", transaksiPeminjamanRoutes); // Alias dengan hyphen
 app.use("/api", authRoutes); 
 app.use("/api/pengaturan", pengaturanRoutes);
 app.use("/api/stasiun_sepeda", stasiunSepedaRoutes);

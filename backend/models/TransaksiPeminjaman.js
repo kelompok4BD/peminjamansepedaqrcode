@@ -48,7 +48,7 @@ create: (data, callback) => {
 
   db.query(
     sql,
-    [data.id_user, data.id_sepeda, 'dipinjam', data.metode_jaminan || 'KTM'],
+    [data.id_user, data.id_sepeda, 'Dipinjam', data.metode_jaminan || 'KTM'],
     (err, result) => {
       if (err) return callback(err);
 
@@ -71,18 +71,20 @@ create: (data, callback) => {
 
   updateStatus: (id, status, callback) => {
     const now = new Date();
+    // Normalize status casing
+    const normalizedStatus = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
     const sql =
-      status === "dikembalikan"
+      normalizedStatus === "Dikembalikan"
         ? "UPDATE transaksi_peminjaman SET status_transaksi = ?, waktu_kembali = ? WHERE id_transaksi = ?"
         : "UPDATE transaksi_peminjaman SET status_transaksi = ? WHERE id_transaksi = ?";
 
     const params =
-      status === "dikembalikan" ? [status, now, id] : [status, id];
+      normalizedStatus === "Dikembalikan" ? [normalizedStatus, now, id] : [normalizedStatus, id];
 
     db.query(sql, params, (err, result) => {
       if (err) return callback(err);
 
-      if (status === "dikembalikan") {
+      if (normalizedStatus === "Dikembalikan") {
         const getSepedaId =
           "SELECT id_sepeda FROM transaksi_peminjaman WHERE id_transaksi = ?";
         db.query(getSepedaId, [id], (getErr, rows) => {

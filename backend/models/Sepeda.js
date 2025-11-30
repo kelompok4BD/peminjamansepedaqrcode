@@ -12,7 +12,8 @@ const Sepeda = {
         status: s.status_saat_ini || "Tersedia", 
         tahun: s.tahun_pembelian,
         kondisi: s.status_perawatan,
-        kode_qr: s.kode_qr_sepeda
+        kode_qr: s.kode_qr_sepeda,
+        id_stasiun: s.id_stasiun
       }));
 
       callback(null, mappedResults);
@@ -26,8 +27,9 @@ const Sepeda = {
         tahun_pembelian, 
         status_saat_ini, 
         status_perawatan, 
-        kode_qr_sepeda
-      ) VALUES (?, ?, ?, ?, ?)
+        kode_qr_sepeda,
+        id_stasiun
+      ) VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     db.query(sql, [
@@ -35,7 +37,8 @@ const Sepeda = {
       data.tahun || new Date().getFullYear(),
       data.status || "Tersedia",
       data.kondisi || "Baik",
-      data.kode_qr || `QR${Date.now()}`
+      data.kode_qr || `QR${Date.now()}`,
+      data.id_stasiun || null
     ], callback);
   },
 
@@ -56,7 +59,8 @@ const Sepeda = {
           tahun_pembelian = ?, 
           status_saat_ini = ?, 
           status_perawatan = ?,
-          kode_qr_sepeda = ?
+          kode_qr_sepeda = ?,
+          id_stasiun = ?
       WHERE id_sepeda = ?
     `;
 
@@ -66,6 +70,7 @@ const Sepeda = {
       data.status_saat_ini || "Tersedia",
       data.status_perawatan || "Baik",
       data.kode_qr_sepeda,
+      data.id_stasiun || null,
       id
     ], callback);
   }

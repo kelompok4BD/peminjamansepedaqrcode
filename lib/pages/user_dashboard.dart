@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'user_peminjaman_page.dart';
+import 'user_stasiun_select_page.dart';
 import 'pengaturan_user_page.dart';
-import 'scan_qr_page.dart';
 import 'login_page.dart';
 
 class UserDashboard extends StatefulWidget {
@@ -33,8 +32,7 @@ class _UserDashboardState extends State<UserDashboard> {
     final userId = widget.userData['id_NIM_NIP'].toString();
 
     final List<Widget> pages = [
-      UserPeminjamanPage(userId: userId),
-      ScanQrPage(userId: userId),
+      UserStasiunSelectPage(userId: userId),
       const PengaturanUserPage(),
       // improved profile page
       SingleChildScrollView(
@@ -43,7 +41,8 @@ class _UserDashboardState extends State<UserDashboard> {
           children: [
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -60,13 +59,17 @@ class _UserDashboardState extends State<UserDashboard> {
                             .take(2)
                             .join()
                             .toUpperCase(),
-                        style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       widget.userData['nama'] ?? '-',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 6),
                     Text(
@@ -80,7 +83,9 @@ class _UserDashboardState extends State<UserDashboard> {
                       children: [
                         const Icon(Icons.email, color: Colors.black54),
                         const SizedBox(width: 12),
-                        Expanded(child: Text(widget.userData['email_kampus'] ?? '-')),
+                        Expanded(
+                            child:
+                                Text(widget.userData['email_kampus'] ?? '-')),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -88,7 +93,10 @@ class _UserDashboardState extends State<UserDashboard> {
                       children: [
                         const Icon(Icons.phone, color: Colors.black54),
                         const SizedBox(width: 12),
-                        Expanded(child: Text(widget.userData['no_hp_pengguna']?.toString() ?? '-')),
+                        Expanded(
+                            child: Text(
+                                widget.userData['no_hp_pengguna']?.toString() ??
+                                    '-')),
                       ],
                     ),
                     const SizedBox(height: 18),
@@ -97,11 +105,13 @@ class _UserDashboardState extends State<UserDashboard> {
                       children: [
                         OutlinedButton.icon(
                           onPressed: _logout,
-                          icon: const Icon(Icons.logout, color: Color(0xFF6366F1)),
-                            label: const Text('Logout', style: TextStyle(color: Color(0xFF6366F1))),
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF6366F1)),
-                            ),
+                          icon: const Icon(Icons.logout,
+                              color: Color(0xFF6366F1)),
+                          label: const Text('Logout',
+                              style: TextStyle(color: Color(0xFF6366F1))),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFF6366F1)),
+                          ),
                         ),
                       ],
                     ),
@@ -117,7 +127,8 @@ class _UserDashboardState extends State<UserDashboard> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Text('User Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        title: const Text('User Dashboard',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -171,9 +182,10 @@ class _UserDashboardState extends State<UserDashboard> {
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.pedal_bike), label: 'Peminjaman'),
-            BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: 'Scan'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Pengaturan'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.pedal_bike), label: 'Peminjaman'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Pengaturan'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
           ],
         ),

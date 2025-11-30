@@ -9,3 +9,55 @@ exports.getAllStasiun = (req, res) => {
     res.json({ data });
   });
 };
+
+exports.getStasiunById = (req, res) => {
+  const { id } = req.params;
+  Stasiun.getById(id, (err, data) => {
+    if (err) {
+      console.error('❌ Gagal ambil stasiun:', err);
+      return res.status(500).json({ message: 'Gagal ambil stasiun' });
+    }
+    if (!data) return res.status(404).json({ message: 'Stasiun tidak ditemukan' });
+    res.json({ data });
+  });
+};
+
+exports.createStasiun = (req, res) => {
+  const { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps } = req.body || {};
+  if (!nama_stasiun) {
+    return res.status(400).json({ message: 'Nama stasiun wajib diisi' });
+  }
+  Stasiun.create({ nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, (err, result) => {
+    if (err) {
+      console.error('❌ Gagal menambah stasiun:', err);
+      return res.status(500).json({ message: 'Gagal menambah stasiun', error: err });
+    }
+    res.status(201).json({ success: true, data: { id_stasiun: result.insertId, nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, message: 'Stasiun berhasil ditambahkan' });
+  });
+};
+
+exports.updateStasiun = (req, res) => {
+  const { id } = req.params;
+  const { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps } = req.body || {};
+  if (!nama_stasiun) {
+    return res.status(400).json({ message: 'Nama stasiun wajib diisi' });
+  }
+  Stasiun.update(id, { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, (err, result) => {
+    if (err) {
+      console.error('❌ Gagal update stasiun:', err);
+      return res.status(500).json({ message: 'Gagal update stasiun', error: err });
+    }
+    res.json({ success: true, message: 'Stasiun berhasil diperbarui' });
+  });
+};
+
+exports.deleteStasiun = (req, res) => {
+  const { id } = req.params;
+  Stasiun.delete(id, (err) => {
+    if (err) {
+      console.error('❌ Gagal hapus stasiun:', err);
+      return res.status(500).json({ message: 'Gagal hapus stasiun', error: err });
+    }
+    res.json({ success: true, message: 'Stasiun berhasil dihapus' });
+  });
+};

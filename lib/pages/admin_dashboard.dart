@@ -7,7 +7,7 @@ import 'pengaturan_page.dart';
 import 'login_page.dart';
 import 'admin_user_page.dart';
 import 'admin_laporan_kerusakan_page.dart';
-import 'admin_scan_page.dart';
+import 'admin_log_aktivitas_page.dart';
 
 class AdminDashboard extends StatefulWidget {
   final Map<String, dynamic> adminData;
@@ -22,7 +22,6 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-
   int _selectedIndex = 0;
   int? _drawerIndex; // null means not using drawer
 
@@ -40,7 +39,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _mainPages = [
       const AdminPeminjamanPage(),
       const AdminSepedaPage(),
-      AdminScanPage(adminData: widget.adminData),
       const StasiunPage(),
     ];
     _drawerPages = [
@@ -48,18 +46,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
       const AdminUserPage(),
       const AdminLaporanKerusakanPage(),
       const PengaturanPage(),
+      const AdminLogAktivitasPage(),
     ];
     _drawerTitles = [
       'Riwayat',
       'User',
       'Kerusakan',
       'Pengaturan',
+      'Log Aktivitas',
     ];
     _drawerIcons = [
       Icons.history,
       Icons.people,
       Icons.warning,
       Icons.settings,
+      Icons.assignment_turned_in,
     ];
   }
 
@@ -80,7 +81,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Text('Admin Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        title: const Text('Admin Dashboard',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -124,16 +126,22 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text('Menu Lainnya', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                    const Text('Menu Lainnya',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18)),
                     const SizedBox(height: 8),
-                    Text(widget.adminData['nama']?.toString() ?? '', style: const TextStyle(color: Colors.white70)),
+                    Text(widget.adminData['nama']?.toString() ?? '',
+                        style: const TextStyle(color: Colors.white70)),
                   ],
                 ),
               ),
               for (int i = 0; i < _drawerPages.length; i++)
                 ListTile(
                   leading: Icon(_drawerIcons[i], color: Colors.white),
-                  title: Text(_drawerTitles[i], style: const TextStyle(color: Colors.white)),
+                  title: Text(_drawerTitles[i],
+                      style: const TextStyle(color: Colors.white)),
                   selected: _drawerIndex == i,
                   onTap: () {
                     setState(() {
@@ -188,10 +196,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             BottomNavigationBarItem(
               icon: Icon(Icons.pedal_bike),
               label: 'Sepeda',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: 'Scan',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.location_on),
