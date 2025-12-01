@@ -1,3 +1,4 @@
+import 'dart:ui'; // Tambahkan ini untuk efek Blur/Glassmorphism
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'admin_dashboard.dart';
@@ -12,6 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // --- LOGIKA UTAMA (TIDAK DIUBAH) ---
   final TextEditingController nimController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -33,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
           : <String, dynamic>{};
       final jenis = (user['jenis_pengguna'] ?? '').toString().toLowerCase();
 
+      // Logika Log Aktivitas (Tetap dipertahankan)
       try {
         await api.createLogAktivitas(
           null,
@@ -58,7 +61,11 @@ class _LoginPageState extends State<LoginPage> {
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.pinkAccent.shade700, // Merah/Pink Gelap untuk error
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -69,13 +76,21 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
+    // Definisi Warna Tema
+    final primaryColor = const Color(0xFFFF007F); // Neon Pink
+    final secondaryColor = const Color(0xFF880E4F); // Dark Pink
+    final blackBg = const Color(0xFF000000); // Hitam Pekat
+    final darkCherry = const Color(0xFF25000B); // Merah Gelap
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          // Background Gradient: Hitam ke Cherry
           gradient: LinearGradient(
-            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -83,218 +98,252 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/logo.png',
-                          width: 64,
-                          height: 64,
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 24),
+                  
+                  // --- HEADER: LOGO & JUDUL ---
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Container Logo dengan Glow Pink
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.9), 
+                            width: 2
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: primaryColor.withOpacity(0.3),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                            )
+                          ]
                         ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          width: 50,
+                          height: 50,
+                          // color: Colors.white, // Uncomment jika logo asli hitam
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) => LinearGradient(
+                              colors: [Colors.white, primaryColor],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ).createShader(bounds),
+                            child: const Text(
                               'CampusCycle',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 24, // Sedikit diperbesar
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
-                            Text(
-                              'Peminjaman Sepeda Kampus',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white70,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 420),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withOpacity(0.12),
-                              Colors.white.withOpacity(0.05),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
                           ),
-                          border: Border.all(
+                          Text(
+                            'Peminjaman Sepeda Kampus',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withOpacity(0.7),
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  
+                  const Text(
+                    'Welcome Back',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // --- KARTU LOGIN (GLASSMORPHISM) ---
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Efek Blur
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.05), // Background transparan gelap
+                            border: Border.all(
                               color: Colors.white.withOpacity(0.15),
-                              width: 1.5),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              width: 1.5,
                             ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(28),
-                          child: Column(
-                            children: [
-                              TextField(
-                                controller: nimController,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  labelText: 'NIM/NIP',
-                                  labelStyle:
-                                      const TextStyle(color: Colors.white70),
-                                  prefixIcon: const Icon(Icons.person,
-                                      color: Colors.white70),
-                                  filled: true,
-                                  fillColor: Colors.white.withOpacity(0.08),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.2),
-                                        width: 1),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.2),
-                                        width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: const BorderSide(
-                                        color: Colors.teal, width: 2),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 18),
-                              TextField(
-                                controller: passwordController,
-                                obscureText: obscurePassword,
-                                style: const TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  labelStyle:
-                                      const TextStyle(color: Colors.white70),
-                                  prefixIcon: const Icon(Icons.lock,
-                                      color: Colors.white70),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      obscurePassword
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: Colors.white70,
-                                    ),
-                                    onPressed: () => setState(() =>
-                                        obscurePassword = !obscurePassword),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white.withOpacity(0.08),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.2),
-                                        width: 1),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: BorderSide(
-                                        color: Colors.white.withOpacity(0.2),
-                                        width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                    borderSide: const BorderSide(
-                                        color: Colors.teal, width: 2),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                              SizedBox(
-                                width: double.infinity,
-                                height: 48,
-                                child: loading
-                                    ? const Center(
-                                        child: CircularProgressIndicator(
-                                            color: Colors.white))
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Colors.teal.shade600,
-                                              Colors.teal.shade700
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                        ),
-                                        child: ElevatedButton(
-                                          onPressed: login,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.transparent,
-                                            shadowColor: Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(14),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'LOGIN',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              letterSpacing: 1,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                              ),
-                              const SizedBox(height: 16),
-                              const SizedBox(height: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const RegisterPage()),
-                                  );
-                                },
-                                child: const Text('Belum Punya Akun? Daftar',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 14)),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
                               ),
                             ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(28),
+                            child: Column(
+                              children: [
+                                // Input NIM
+                                TextField(
+                                  controller: nimController,
+                                  style: const TextStyle(color: Colors.white),
+                                  cursorColor: primaryColor, // Kursor Pink
+                                  decoration: InputDecoration(
+                                    labelText: 'NIM/NIP',
+                                    labelStyle: const TextStyle(color: Colors.white70),
+                                    prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                                    filled: true,
+                                    fillColor: Colors.black.withOpacity(0.3), // Input lebih gelap
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide(color: primaryColor, width: 1.5), // Border Pink
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 18),
+                                
+                                // Input Password
+                                TextField(
+                                  controller: passwordController,
+                                  obscureText: obscurePassword,
+                                  style: const TextStyle(color: Colors.white),
+                                  cursorColor: primaryColor,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    labelStyle: const TextStyle(color: Colors.white70),
+                                    prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        obscurePassword ? Icons.visibility : Icons.visibility_off,
+                                        color: Colors.white70,
+                                      ),
+                                      onPressed: () => setState(() => obscurePassword = !obscurePassword),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.black.withOpacity(0.3),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                      borderSide: BorderSide(color: primaryColor, width: 1.5),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                
+                                // Tombol Login Gradient Pink
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: loading
+                                      ? Center(
+                                          child: CircularProgressIndicator(color: primaryColor)
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [secondaryColor, primaryColor], // Ungu ke Pink
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius: BorderRadius.circular(14),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: primaryColor.withOpacity(0.4),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 4),
+                                              ),
+                                            ],
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: login,
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.transparent,
+                                              shadowColor: Colors.transparent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(14),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'LOGIN',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                letterSpacing: 1.2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                                const SizedBox(height: 20),
+                                
+                                // Tombol Daftar
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => const RegisterPage()),
+                                    );
+                                  },
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'Belum Punya Akun? ',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Daftar',
+                                          style: TextStyle(
+                                            color: primaryColor, // Teks Pink
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

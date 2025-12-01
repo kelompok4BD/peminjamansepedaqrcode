@@ -22,12 +22,11 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  // --- LOGIKA (TIDAK DIUBAH SAMA SEKALI) ---
   int _selectedIndex = 0;
-  int? _drawerIndex; // null means not using drawer
+  int? _drawerIndex;
 
-  // Main nav bar pages: Transaksi, Sepeda, Scan, Stasiun
   late final List<Widget> _mainPages;
-  // Drawer pages: Riwayat, User, Kerusakan, Pengaturan
   late final List<Widget> _drawerPages;
   late final List<String> _drawerTitles;
   late final List<IconData> _drawerIcons;
@@ -76,19 +75,32 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
+    // Definisi Warna Tema
+    final pinkNeon = const Color(0xFFFF007F); // Pink Menyala
+    final darkPink = const Color(0xFF880E4F); // Pink Gelap
+    final blackBg = const Color(0xFF000000);  // Hitam Pekat
+    final darkCherry = const Color(0xFF25000B); // Merah Kehitaman
+
     return Scaffold(
       extendBody: true,
+      
+      // --- APP BAR ---
       appBar: AppBar(
-        title: const Text('Admin Dashboard',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        title: const Text(
+          'Admin Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white), // Ikon menu putih
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            // Gradient Header: Hitam ke Dark Pink
             gradient: LinearGradient(
-              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -97,16 +109,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
         actions: [
           IconButton(
             onPressed: () => _logout(context),
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             tooltip: 'Logout',
           ),
         ],
       ),
+
+      // --- DRAWER (MENU SAMPING) ---
       drawer: Drawer(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            // Background Drawer: Hitam Pekat
             gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF312e81)],
+              colors: [blackBg, darkCherry],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -115,9 +130,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
+                  // Header Drawer: Gradient Pink Dominan
                   gradient: LinearGradient(
-                    colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+                    colors: [darkPink, pinkNeon],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -126,23 +142,38 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text('Menu Lainnya',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18)),
+                    const Text(
+                      'Menu Lainnya',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
                     const SizedBox(height: 8),
-                    Text(widget.adminData['nama']?.toString() ?? '',
-                        style: const TextStyle(color: Colors.white70)),
+                    Text(
+                      widget.adminData['nama']?.toString() ?? '',
+                      style: const TextStyle(color: Colors.white70),
+                    ),
                   ],
                 ),
               ),
               for (int i = 0; i < _drawerPages.length; i++)
                 ListTile(
-                  leading: Icon(_drawerIcons[i], color: Colors.white),
-                  title: Text(_drawerTitles[i],
-                      style: const TextStyle(color: Colors.white)),
+                  leading: Icon(
+                    _drawerIcons[i],
+                    // Warna Pink jika dipilih, Putih jika tidak
+                    color: _drawerIndex == i ? pinkNeon : Colors.white,
+                  ),
+                  title: Text(
+                    _drawerTitles[i],
+                    style: TextStyle(
+                      color: _drawerIndex == i ? pinkNeon : Colors.white,
+                      fontWeight: _drawerIndex == i ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
                   selected: _drawerIndex == i,
+                  selectedTileColor: Colors.white.withOpacity(0.05),
                   onTap: () {
                     setState(() {
                       _drawerIndex = i;
@@ -154,10 +185,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ),
         ),
       ),
+
+      // --- BODY UTAMA ---
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          // Background Body: Hitam ke Cherry Gelap
           gradient: LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -166,16 +200,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ? _mainPages[_selectedIndex]
             : _drawerPages[_drawerIndex!],
       ),
+
+      // --- BOTTOM NAVIGATION BAR ---
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.black.withOpacity(0.4), // Transparan gelap
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
+          border: Border(
+            top: BorderSide(color: Colors.white.withOpacity(0.1), width: 0.5)
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withOpacity(0.5),
               blurRadius: 16,
               offset: const Offset(0, -2),
             ),
@@ -184,8 +223,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
           currentIndex: _selectedIndex,
-          selectedItemColor: const Color(0xFF6366F1),
-          unselectedItemColor: Colors.white70,
+          selectedItemColor: pinkNeon, // Item aktif jadi Pink Neon
+          unselectedItemColor: Colors.white60, // Item mati putih redup
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           items: const [

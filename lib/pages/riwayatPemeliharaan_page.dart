@@ -10,6 +10,7 @@ class RiwayatPage extends StatefulWidget {
 }
 
 class _RiwayatPageState extends State<RiwayatPage> {
+  // --- LOGIKA (TIDAK DIUBAH) ---
   final api = ApiService();
   List<RiwayatPemeliharaan> riwayat = [];
   bool _loading = true;
@@ -44,37 +45,47 @@ class _RiwayatPageState extends State<RiwayatPage> {
     }
   }
 
+  // --- WARNA TEMA ---
+  final pinkNeon = const Color(0xFFFF007F);
+  final darkPink = const Color(0xFF880E4F);
+  final blackBg = const Color(0xFF000000);
+  final darkCherry = const Color(0xFF25000B);
+
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
           "Riwayat Pemeliharaan",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF1a237e),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: _loading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? Center(child: CircularProgressIndicator(color: pinkNeon))
             : (_error != null)
                 ? Center(
                     child: Padding(
@@ -82,31 +93,31 @@ class _RiwayatPageState extends State<RiwayatPage> {
                       child: Container(
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          color: Colors.white.withOpacity(0.05),
                           borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.white.withOpacity(0.1)),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                            const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
                             const SizedBox(height: 8),
-                            const Text('Gagal memuat data:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                            const Text('Gagal memuat data:',
+                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                             const SizedBox(height: 6),
-                            Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+                            Text(_error!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white70)),
                             const SizedBox(height: 12),
                             ElevatedButton.icon(
                               onPressed: loadRiwayat,
                               icon: const Icon(Icons.refresh),
                               label: const Text('Muat ulang'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF6366F1),
+                                backgroundColor: pinkNeon,
                                 foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ],
@@ -120,84 +131,88 @@ class _RiwayatPageState extends State<RiwayatPage> {
                           'Tidak ada data riwayat pemeliharaan',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white70,
+                            color: Colors.white54,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       )
                     : RefreshIndicator(
-                    onRefresh: loadRiwayat,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: riwayat.length,
-                      itemBuilder: (_, i) {
-                        final r = riwayat[i];
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 14),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
-                            borderRadius: BorderRadius.circular(18),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
+                        onRefresh: loadRiwayat,
+                        color: pinkNeon,
+                        backgroundColor: Colors.grey[900],
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: riwayat.length,
+                          itemBuilder: (_, i) {
+                            final r = riwayat[i];
+                            
+                            // Card Riwayat Glassmorphism
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05), // Transparan
+                                border: Border.all(
+                                    color: Colors.white.withOpacity(0.1), width: 1.0),
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(18),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Sepeda ID: ${r.idSepeda}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Sepeda ID: ${r.idSepeda}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          _formatCurrency(r.biayaPerbaikan),
+                                          style: const TextStyle(
+                                            color: Colors.greenAccent, // Uang tetap hijau agar kontras
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      _formatCurrency(r.biayaPerbaikan),
-                                      style: const TextStyle(
-                                        color: Colors.greenAccent,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                    const SizedBox(height: 8),
+                                    _infoRow(Icons.build, 'Jenis Perbaikan', r.jenisPerbaikan ?? '-'),
+                                    _infoRow(Icons.calendar_today, 'Mulai', _formatDate(r.tanggalMulai)),
+                                    _infoRow(Icons.check_circle, 'Selesai', _formatDate(r.tanggalSelesai)),
+                                    const SizedBox(height: 6),
+                                    _infoRow(Icons.person, 'ID Pegawai', r.idPegawai?.toString() ?? '-'),
+                                    if ((r.keterangan ?? '').isNotEmpty)
+                                      _infoRow(Icons.note, 'Keterangan', r.keterangan ?? '-'),
                                   ],
                                 ),
-                                const SizedBox(height: 8),
-                                _infoRow(Icons.build, 'Jenis Perbaikan', r.jenisPerbaikan ?? '-'),
-                                _infoRow(Icons.calendar_today, 'Mulai', _formatDate(r.tanggalMulai)),
-                                _infoRow(Icons.check_circle, 'Selesai', _formatDate(r.tanggalSelesai)),
-                                const SizedBox(height: 6),
-                                _infoRow(Icons.person, 'ID Pegawai', r.idPegawai?.toString() ?? '-'),
-                                if ((r.keterangan ?? '').isNotEmpty)
-                                  _infoRow(Icons.note, 'Keterangan', r.keterangan ?? '-'),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
       ),
     );
   }
+
+  // --- HELPER WIDGETS & FORMATTERS ---
 
   Widget _infoRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: Colors.white70),
           const SizedBox(width: 6),
@@ -208,7 +223,7 @@ class _RiwayatPageState extends State<RiwayatPage> {
               color: Colors.white70,
             ),
           ),
-          Flexible(
+          Expanded(
             child: Text(
               value,
               style: const TextStyle(color: Colors.white),

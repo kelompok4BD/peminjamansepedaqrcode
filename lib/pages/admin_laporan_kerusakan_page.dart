@@ -10,6 +10,7 @@ class AdminLaporanKerusakanPage extends StatefulWidget {
 }
 
 class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
+  // --- LOGIKA (TIDAK DIUBAH SAMA SEKALI) ---
   final api = ApiService();
   List<Map<String, dynamic>> laporan = [];
   bool _loading = true;
@@ -51,6 +52,33 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
     }
   }
 
+  // --- WARNA TEMA ---
+  final pinkNeon = const Color(0xFFFF007F);
+  final darkBgDialog = const Color(0xFF1E1E1E);
+
+  // --- STYLE INPUT DECORATION (DARK MODE) ---
+  InputDecoration _inputDeco(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white70),
+      filled: true,
+      fillColor: Colors.white.withOpacity(0.1),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: pinkNeon, width: 1.5),
+      ),
+    );
+  }
+
+  // --- MODAL TAMBAH LAPORAN (UI DIUBAH KE DARK) ---
   void _showAddModal() {
     final idSepedaCtrl = TextEditingController();
     final idPegawaiCtrl = TextEditingController();
@@ -62,35 +90,42 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (_, setDialogState) => AlertDialog(
-          title: const Text('Tambah Laporan Kerusakan'),
+          backgroundColor: darkBgDialog, // Dialog Hitam
+          title: const Text('Tambah Laporan Kerusakan',
+              style: TextStyle(color: Colors.white)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: idSepedaCtrl,
-                  decoration: const InputDecoration(
-                      labelText: 'ID Sepeda', border: OutlineInputBorder()),
+                  style: const TextStyle(color: Colors.white),
+                  cursorColor: pinkNeon,
+                  decoration: _inputDeco('ID Sepeda'),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: idPegawaiCtrl,
-                  decoration: const InputDecoration(
-                      labelText: 'ID Pegawai', border: OutlineInputBorder()),
+                  style: const TextStyle(color: Colors.white),
+                  cursorColor: pinkNeon,
+                  decoration: _inputDeco('ID Pegawai'),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: deskripsiCtrl,
-                  decoration: const InputDecoration(
-                      labelText: 'Deskripsi Kerusakan',
-                      border: OutlineInputBorder()),
+                  style: const TextStyle(color: Colors.white),
+                  cursorColor: pinkNeon,
+                  decoration: _inputDeco('Deskripsi Kerusakan'),
                   maxLines: 3,
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   value: statusPerbaikan,
+                  dropdownColor: const Color(0xFF2C2C2C), // Dropdown gelap
+                  style: const TextStyle(color: Colors.white),
                   onChanged: (val) => setDialogState(
                       () => statusPerbaikan = val ?? 'Belum Diperbaiki'),
                   items: [
@@ -100,9 +135,7 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                   ]
                       .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                       .toList(),
-                  decoration: const InputDecoration(
-                      labelText: 'Status Perbaikan',
-                      border: OutlineInputBorder()),
+                  decoration: _inputDeco('Status Perbaikan'),
                 ),
               ],
             ),
@@ -110,11 +143,12 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Batal')),
+                child: const Text('Batal', style: TextStyle(color: Colors.white70))),
             ElevatedButton(
               onPressed: isLoading
                   ? null
                   : () async {
+                      // --- LOGIKA SIMPAN (TIDAK DIUBAH) ---
                       final idSepeda = int.tryParse(idSepedaCtrl.text) ?? 0;
                       final idPegawai = int.tryParse(idPegawaiCtrl.text) ?? 0;
                       final deskripsi = deskripsiCtrl.text.trim();
@@ -144,7 +178,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                       }
                     },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF002D72)),
+                  backgroundColor: pinkNeon, // Tombol Pink
+                  foregroundColor: Colors.white),
               child: const Text('Simpan'),
             ),
           ],
@@ -153,31 +188,37 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
     );
   }
 
-  // _getStatusColor removed because it's unused; keep text color only.
   Color _getStatusTextColor(String status) {
     switch (status.toLowerCase()) {
       case 'sudah diperbaiki':
-        return Colors.green;
+        return Colors.greenAccent;
       case 'sedang diperbaiki':
-        return Colors.orange;
+        return Colors.orangeAccent;
       default:
-        return Colors.red;
+        return Colors.redAccent;
     }
   }
 
+  // --- TAMPILAN UTAMA (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
+    // Definisi Warna Tema
+    final darkPink = const Color(0xFF880E4F);
+    final blackBg = const Color(0xFF000000);
+    final darkCherry = const Color(0xFF25000B);
+
     return Scaffold(
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Laporan Kerusakan',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        backgroundColor: const Color(0xFF1a237e),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -191,24 +232,26 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
               icon: const Icon(Icons.add),
               label: const Text('Tambah Laporan'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7C3AED),
+                backgroundColor: pinkNeon, // Tombol Header Pink
                 foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
           ),
         ],
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: _loading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? Center(child: CircularProgressIndicator(color: pinkNeon))
             : (_error != null)
                 ? Center(
                     child: Padding(
@@ -216,24 +259,15 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                       child: Container(
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withOpacity(0.12),
-                              Colors.white.withOpacity(0.05)
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(
-                              color: Colors.white.withOpacity(0.15),
-                              width: 1.5),
+                          color: Colors.white.withOpacity(0.05),
                           borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.white.withOpacity(0.1)),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.error_outline,
-                                size: 48, color: Colors.red),
+                                size: 48, color: Colors.redAccent),
                             const SizedBox(height: 8),
                             const Text('Gagal memuat laporan',
                                 style: TextStyle(
@@ -249,10 +283,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                               icon: const Icon(Icons.refresh),
                               label: const Text('Muat ulang'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF6366F1),
+                                backgroundColor: pinkNeon,
                                 foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ],
@@ -267,18 +299,9 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                           child: Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.white.withOpacity(0.12),
-                                  Colors.white.withOpacity(0.05)
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              border: Border.all(
-                                  color: Colors.white.withOpacity(0.15),
-                                  width: 1.5),
+                              color: Colors.white.withOpacity(0.05),
                               borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: Colors.white.withOpacity(0.1)),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -292,7 +315,7 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                         color: Colors.white)),
                                 const SizedBox(height: 6),
                                 const Text(
-                                    'Tambahkan laporan kerusakan baru dengan tombol di bawah.',
+                                    'Tambahkan laporan kerusakan baru dengan tombol di atas.',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(color: Colors.white70)),
                               ],
@@ -302,6 +325,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                       )
                     : RefreshIndicator(
                         onRefresh: loadLaporan,
+                        color: pinkNeon, // Loader Refresh
+                        backgroundColor: Colors.grey[900],
                         child: ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: laporan.length,
@@ -311,25 +336,20 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                 (l['status_perbaikan'] ?? 'Belum Diperbaiki')
                                     .toString();
                             final tglLaporan = l['tanggal_laporan'] ?? '-';
+                            
+                            // --- CARD LAPORAN (GLASSMORPHISM) ---
                             return Container(
                               margin: const EdgeInsets.only(bottom: 14),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.white.withOpacity(0.12),
-                                    Colors.white.withOpacity(0.05)
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                                color: Colors.white.withOpacity(0.05), // Transparan
                                 border: Border.all(
-                                    color: Colors.white.withOpacity(0.15),
-                                    width: 1.5),
+                                    color: Colors.white.withOpacity(0.1),
+                                    width: 1.0),
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 16,
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
                                 ],
@@ -357,59 +377,28 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                                   color: _getStatusTextColor(
                                                       status),
                                                   fontWeight: FontWeight.w600)),
-                                          backgroundColor: Colors.white70,
+                                          backgroundColor: Colors.white.withOpacity(0.1),
+                                          padding: EdgeInsets.zero,
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.pedal_bike,
-                                            size: 18, color: Colors.white70),
-                                        const SizedBox(width: 6),
-                                        Expanded(
-                                            child: Text(
-                                                'Sepeda ID: ${l['id_sepeda'] ?? '-'}',
-                                                style: TextStyle(
-                                                    color: Colors.white70))),
-                                      ],
-                                    ),
+                                    _buildInfoRow(Icons.pedal_bike, 'Sepeda ID: ${l['id_sepeda'] ?? '-'}'),
                                     const SizedBox(height: 6),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.person,
-                                            size: 18, color: Colors.white70),
-                                        const SizedBox(width: 6),
-                                        Expanded(
-                                            child: Text(
-                                                'Pegawai ID: ${l['id_pegawai'] ?? '-'}',
-                                                style: TextStyle(
-                                                    color: Colors.white70))),
-                                      ],
-                                    ),
+                                    _buildInfoRow(Icons.person, 'Pegawai ID: ${l['id_pegawai'] ?? '-'}'),
                                     const SizedBox(height: 6),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.calendar_today,
-                                            size: 18, color: Colors.white70),
-                                        const SizedBox(width: 6),
-                                        Expanded(
-                                            child: Text('Tanggal: $tglLaporan',
-                                                style: TextStyle(
-                                                    color: Colors.white70))),
-                                      ],
-                                    ),
+                                    _buildInfoRow(Icons.calendar_today, 'Tanggal: $tglLaporan'),
                                     const SizedBox(height: 10),
                                     Container(
-                                      padding: const EdgeInsets.all(8),
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.18),
-                                        borderRadius: BorderRadius.circular(6),
+                                        color: Colors.white.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
                                           'Deskripsi: ${l['deskripsi_kerusakan'] ?? '-'}',
-                                          style: const TextStyle(
-                                              color: Colors.white)),
+                                          style: const TextStyle(color: Colors.white)),
                                     ),
                                     const SizedBox(height: 12),
                                     Row(
@@ -422,13 +411,13 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                                 l['id_laporan'] ?? 0,
                                                 'Sedang Diperbaiki'),
                                             icon: const Icon(Icons.build,
-                                                size: 16, color: Colors.orange),
+                                                size: 16, color: Colors.orangeAccent),
                                             label: const Text('Perbaiki',
                                                 style: TextStyle(
-                                                    color: Colors.orange)),
+                                                    color: Colors.orangeAccent)),
                                             style: OutlinedButton.styleFrom(
                                                 side: const BorderSide(
-                                                    color: Colors.orange)),
+                                                    color: Colors.orangeAccent)),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
@@ -456,6 +445,18 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                         ),
                       ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: Colors.white70),
+        const SizedBox(width: 6),
+        Expanded(
+            child: Text(text,
+                style: const TextStyle(color: Colors.white70))),
+      ],
     );
   }
 }

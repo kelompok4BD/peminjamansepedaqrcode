@@ -9,6 +9,7 @@ class AdminUserPage extends StatefulWidget {
 }
 
 class _AdminUserPageState extends State<AdminUserPage> {
+  // --- LOGIKA (TIDAK DIUBAH SAMA SEKALI) ---
   final ApiService api = ApiService();
   List<Map<String, dynamic>> userList = [];
   List<Map<String, dynamic>> filteredList = [];
@@ -52,6 +53,53 @@ class _AdminUserPageState extends State<AdminUserPage> {
     });
   }
 
+  // --- WARNA TEMA ---
+  final pinkNeon = const Color(0xFFFF007F);
+  final darkBgDialog = const Color(0xFF1E1E1E);
+
+  // --- STYLE INPUT (DARK MODE) ---
+  InputDecoration _inputDeco(String label) => InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.1), // Background transparan
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: pinkNeon, width: 1.5),
+        ),
+      );
+
+  Widget _field(String label, TextEditingController c,
+      {bool obscure = false, bool enabled = true}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextField(
+        controller: c,
+        obscureText: obscure,
+        enabled: enabled,
+        style: const TextStyle(color: Colors.white), // Teks Putih
+        cursorColor: pinkNeon,
+        decoration: _inputDeco(label),
+      ),
+    );
+  }
+
+  // --- STYLE BUTTON (PINK NEON) ---
+  ButtonStyle _btnStyle() => ElevatedButton.styleFrom(
+        backgroundColor: pinkNeon,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      );
+
+  // --- DIALOG EDIT USER (UI DARK) ---
   Future<void> _editUser(Map<String, dynamic> user) async {
     final nimController =
         TextEditingController(text: user['id_NIM_NIP'].toString());
@@ -63,7 +111,8 @@ class _AdminUserPageState extends State<AdminUserPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setStateDialog) => AlertDialog(
-          title: const Text('Edit User'),
+          backgroundColor: darkBgDialog, // Background hitam
+          title: const Text('Edit User', style: TextStyle(color: Colors.white)),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Column(
@@ -73,17 +122,25 @@ class _AdminUserPageState extends State<AdminUserPage> {
               TextField(
                 controller: passwordController,
                 obscureText: !showPassword,
+                style: const TextStyle(color: Colors.white),
+                cursorColor: pinkNeon,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: Colors.blue[50],
+                  fillColor: Colors.white.withOpacity(0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: pinkNeon, width: 1.5),
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        showPassword ? Icons.visibility_off : Icons.visibility),
+                        showPassword ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.white70),
                     onPressed: () =>
                         setStateDialog(() => showPassword = !showPassword),
                   ),
@@ -93,6 +150,8 @@ class _AdminUserPageState extends State<AdminUserPage> {
               DropdownButtonFormField<String>(
                 value: status,
                 decoration: _inputDeco('Status Akun'),
+                dropdownColor: const Color(0xFF2C2C2C), // Dropdown gelap
+                style: const TextStyle(color: Colors.white),
                 items: const [
                   DropdownMenuItem(value: 'aktif', child: Text('Aktif')),
                   DropdownMenuItem(value: 'nonaktif', child: Text('Nonaktif')),
@@ -104,7 +163,7 @@ class _AdminUserPageState extends State<AdminUserPage> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Batal')),
+                child: const Text('Batal', style: TextStyle(color: Colors.white70))),
             ElevatedButton(
                 style: _btnStyle(),
                 onPressed: () => Navigator.pop(ctx, true),
@@ -130,18 +189,26 @@ class _AdminUserPageState extends State<AdminUserPage> {
     }
   }
 
+  // --- DIALOG DELETE USER (UI DARK) ---
   Future<void> _deleteUser(String idNim) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Hapus User'),
-        content: const Text('Yakin ingin menghapus user ini?'),
+        backgroundColor: darkBgDialog,
+        title: const Text('Hapus User', style: TextStyle(color: Colors.white)),
+        content: const Text('Yakin ingin menghapus user ini?', 
+            style: TextStyle(color: Colors.white70)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Batal')),
+              child: const Text('Batal', style: TextStyle(color: Colors.white70))),
           ElevatedButton(
-              style: _btnStyle(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
               onPressed: () => Navigator.pop(ctx, true),
               child: const Text('Hapus')),
         ],
@@ -157,90 +224,58 @@ class _AdminUserPageState extends State<AdminUserPage> {
     }
   }
 
-  InputDecoration _inputDeco(String label) => InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: Colors.blue[50],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-      );
-
-  Widget _field(String label, TextEditingController c,
-      {bool obscure = false, bool enabled = true}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: TextField(
-        controller: c,
-        obscureText: obscure,
-        enabled: enabled,
-        decoration: _inputDeco(label),
-      ),
-    );
-  }
-
-  ButtonStyle _btnStyle() => ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF002D72),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      );
-
+  // --- TAMPILAN UI UTAMA (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
+    // Definisi Warna Tema
+    final darkPink = const Color(0xFF880E4F);
+    final blackBg = const Color(0xFF000000);
+    final darkCherry = const Color(0xFF25000B);
+
     return Scaffold(
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Kelola User', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        backgroundColor: const Color(0xFF1a237e),
+        title: const Text('Kelola User', 
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: Column(
           children: [
+            // --- FILTER DROPDOWN ---
             Padding(
               padding: const EdgeInsets.all(12),
               child: DropdownButtonFormField<String>(
                 value: filterStatus,
-                decoration: _inputDeco('Filter Status Akun').copyWith(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.08),
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.2), width: 1),
-                  ),
-                  focusedBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Color(0xFF6366F1), width: 2),
-                  ),
-                ),
-                dropdownColor: const Color(0xFF1a237e),
+                dropdownColor: const Color(0xFF2C2C2C), // Menu dropdown gelap
                 style: const TextStyle(color: Colors.white),
+                decoration: _inputDeco('Filter Status Akun').copyWith(
+                  prefixIcon: Icon(Icons.filter_list, color: pinkNeon),
+                ),
                 items: const [
-                  DropdownMenuItem(value: 'Semua', child: Text('Semua', style: TextStyle(color: Colors.white))),
-                  DropdownMenuItem(value: 'aktif', child: Text('Aktif', style: TextStyle(color: Colors.white))),
-                  DropdownMenuItem(value: 'nonaktif', child: Text('Nonaktif', style: TextStyle(color: Colors.white))),
+                  DropdownMenuItem(value: 'Semua', child: Text('Semua')),
+                  DropdownMenuItem(value: 'aktif', child: Text('Aktif')),
+                  DropdownMenuItem(value: 'nonaktif', child: Text('Nonaktif')),
                 ],
                 onChanged: (val) {
                   filterStatus = val!;
@@ -248,11 +283,15 @@ class _AdminUserPageState extends State<AdminUserPage> {
                 },
               ),
             ),
+            
+            // --- LIST USER ---
             Expanded(
               child: isLoading
-                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+                  ? Center(child: CircularProgressIndicator(color: pinkNeon))
                   : filteredList.isEmpty
-                      ? const Center(child: Text('Tidak ada user ditemukan', style: TextStyle(color: Colors.white70)))
+                      ? const Center(
+                          child: Text('Tidak ada user ditemukan', 
+                              style: TextStyle(color: Colors.white70)))
                       : ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: filteredList.length,
@@ -260,38 +299,48 @@ class _AdminUserPageState extends State<AdminUserPage> {
                             final user = filteredList[i];
                             final status = (user['status_akun'] ?? '-').toString();
 
+                            // Glassmorphism Card
                             return Container(
                               margin: const EdgeInsets.only(bottom: 14),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                                color: Colors.white.withOpacity(0.05), // Transparan
+                                border: Border.all(
+                                    color: Colors.white.withOpacity(0.1), width: 1.0),
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 16,
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
                               child: ListTile(
-                                leading: Icon(Icons.person,
+                                leading: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
                                     color: status.toLowerCase() == 'aktif'
-                                        ? Colors.greenAccent.shade200
-                                        : Colors.redAccent.shade100),
+                                        ? Colors.greenAccent.withOpacity(0.2)
+                                        : Colors.redAccent.withOpacity(0.2),
+                                  ),
+                                  child: Icon(Icons.person,
+                                      color: status.toLowerCase() == 'aktif'
+                                          ? Colors.greenAccent
+                                          : Colors.redAccent),
+                                ),
                                 title: Text(
                                     '${user['id_NIM_NIP'] ?? 'User'} - ${user['nama'] ?? ''}',
-                                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                subtitle: Text('Status: ${status.toUpperCase()}', style: const TextStyle(color: Colors.white70)),
+                                    style: const TextStyle(
+                                        color: Colors.white, 
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text('Status: ${status.toUpperCase()}', 
+                                    style: const TextStyle(color: Colors.white70)),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Color(0xFF6366F1)),
+                                      icon: Icon(Icons.edit, color: pinkNeon), // Icon Edit Pink
                                       onPressed: () => _editUser(user),
                                     ),
                                     IconButton(

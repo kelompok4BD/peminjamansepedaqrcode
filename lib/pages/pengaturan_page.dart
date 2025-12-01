@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
-import '../theme/app_theme.dart';
+// import '../theme/app_theme.dart'; // Dihapus/dikomentari agar menggunakan style lokal
 
 class PengaturanPage extends StatefulWidget {
   const PengaturanPage({super.key});
@@ -10,6 +10,7 @@ class PengaturanPage extends StatefulWidget {
 }
 
 class _PengaturanPageState extends State<PengaturanPage> {
+  // --- LOGIKA (TIDAK DIUBAH SAMA SEKALI) ---
   final api = ApiService();
   List<dynamic> pengaturan = [];
   Map<int, bool> _editingMode = {};
@@ -145,38 +146,47 @@ class _PengaturanPageState extends State<PengaturanPage> {
     }
   }
 
+  // --- WARNA TEMA ---
+  final pinkNeon = const Color(0xFFFF007F);
+  final darkPink = const Color(0xFF880E4F);
+  final blackBg = const Color(0xFF000000);
+  final darkCherry = const Color(0xFF25000B);
+
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
           'Pengaturan Sistem',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF1a237e),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0A1428), Color(0xFF0f2342)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: _loading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? Center(child: CircularProgressIndicator(color: pinkNeon))
             : (_error != null)
                 ? _buildErrorWidget()
                 : pengaturan.isEmpty
@@ -186,6 +196,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
     );
   }
 
+  // --- WIDGET ERROR (DARK MODE) ---
   Widget _buildErrorWidget() {
     return Center(
       child: Padding(
@@ -193,22 +204,14 @@ class _PengaturanPageState extends State<PengaturanPage> {
         child: Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.white.withOpacity(0.12),
-                Colors.white.withOpacity(0.05)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            border:
-                Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+            color: Colors.white.withOpacity(0.05),
+            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
               const SizedBox(height: 8),
               const Text('Gagal memuat pengaturan',
                   style: TextStyle(
@@ -223,7 +226,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Muat ulang'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
+                  backgroundColor: pinkNeon,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -236,6 +239,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
     );
   }
 
+  // --- WIDGET KOSONG (DARK MODE) ---
   Widget _buildEmptyWidget() {
     return Center(
       child: Padding(
@@ -243,16 +247,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
         child: Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.white.withOpacity(0.12),
-                Colors.white.withOpacity(0.05)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            border:
-                Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+            color: Colors.white.withOpacity(0.05),
+            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -273,7 +269,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Muat ulang'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
+                  backgroundColor: pinkNeon,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -286,9 +282,12 @@ class _PengaturanPageState extends State<PengaturanPage> {
     );
   }
 
+  // --- LIST DATA (GLASSMORPHISM CARDS) ---
   Widget _buildListView() {
     return RefreshIndicator(
       onRefresh: loadPengaturan,
+      color: pinkNeon,
+      backgroundColor: Colors.grey[900],
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: pengaturan.length,
@@ -301,22 +300,14 @@ class _PengaturanPageState extends State<PengaturanPage> {
           return Container(
             margin: const EdgeInsets.only(bottom: 14),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.white.withOpacity(0.12),
-                  Colors.white.withOpacity(0.05)
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Colors.white.withOpacity(0.05), // Background Transparan
               border: Border.all(
-                  color:
-                      isEditing ? Colors.amber : Colors.white.withOpacity(0.15),
-                  width: 1.5),
+                  color: isEditing ? pinkNeon : Colors.white.withOpacity(0.15),
+                  width: isEditing ? 2.0 : 1.0),
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withOpacity(0.3),
                   blurRadius: 16,
                   offset: const Offset(0, 4),
                 ),
@@ -339,8 +330,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
                       ),
                       if (!isEditing)
                         IconButton(
-                          icon: const Icon(Icons.edit,
-                              color: Colors.amber, size: 20),
+                          icon: Icon(Icons.edit,
+                              color: pinkNeon, size: 20), // Icon Edit Pink
                           onPressed: () => _toggleEditMode(id),
                           constraints: const BoxConstraints(),
                           padding: EdgeInsets.zero,
@@ -414,8 +405,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
                           icon: const Icon(Icons.close),
                           label: const Text('Batal'),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.grey,
-                            side: const BorderSide(color: Colors.grey),
+                            foregroundColor: Colors.white70,
+                            side: const BorderSide(color: Colors.white70),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -435,7 +426,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
                               : const Icon(Icons.save),
                           label: Text(isSaving ? 'Menyimpan...' : 'Simpan'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6366F1),
+                            backgroundColor: pinkNeon, // Tombol Simpan Pink
                             foregroundColor: Colors.white,
                           ),
                         ),
@@ -451,6 +442,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
     );
   }
 
+  // --- EDITABLE FIELD WIDGET ---
   Widget _editableField(
       int id, String label, String field, String currentValue, String hint) {
     return Padding(
@@ -462,7 +454,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
             label,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+              color: Colors.white, // Label Putih
               fontSize: 12,
             ),
           ),
@@ -477,19 +469,23 @@ class _PengaturanPageState extends State<PengaturanPage> {
               hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF6366F1)),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: Color(0xFF6366F1), width: 2),
+                borderSide: BorderSide(color: pinkNeon, width: 2), // Focus Pink
               ),
               filled: true,
-              fillColor: Colors.white.withOpacity(0.06),
+              fillColor: Colors.black.withOpacity(0.3), // Background Input Gelap
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             ),
             style: const TextStyle(color: Colors.white),
+            cursorColor: pinkNeon, // Kursor Pink
             keyboardType: field.contains('jam') || field.contains('tarif')
                 ? TextInputType.number
                 : TextInputType.text,
@@ -499,24 +495,25 @@ class _PengaturanPageState extends State<PengaturanPage> {
     );
   }
 
+  // --- READ-ONLY INFO ROW ---
   Widget _infoRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: AppColors.textSecondary),
+          Icon(icon, size: 18, color: Colors.white70),
           const SizedBox(width: 6),
           Text(
             "$label: ",
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+              color: Colors.white70,
             ),
           ),
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: const TextStyle(color: Colors.white), // Value Putih
               overflow: TextOverflow.ellipsis,
             ),
           ),
