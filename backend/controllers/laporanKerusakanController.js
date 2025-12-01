@@ -52,12 +52,19 @@ exports.updateStatus = (req, res) => {
     });
   }
 
-  LaporanKerusakan.updateStatus(id, status, (err) => {
+  LaporanKerusakan.updateStatus(id, status, (err, result) => {
     if (err) {
       console.error("❌ updateStatus error:", err);
       return res.status(500).json({
         success: false,
         message: "Gagal update status laporan"
+      });
+    }
+
+    if (result && result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Laporan tidak ditemukan"
       });
     }
 

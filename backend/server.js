@@ -34,10 +34,14 @@ app.use("/api/transaksi-peminjaman", transaksiPeminjamanRoutes); // Alias
 app.use("/api/auth", authRoutes);
 app.use("/api/pengaturan", pengaturanRoutes);
 app.use("/api/stasiun_sepeda", stasiunSepedaRoutes);
+app.use("/api/stasiun-sepeda", stasiunSepedaRoutes); // Alias (dash)
 app.use("/api/riwayat_pemeliharaan", riwayatPemeliharaanRoutes);
+app.use("/api/riwayat-pemeliharaan", riwayatPemeliharaanRoutes); // Alias (dash)
 app.use("/api/laporan_kerusakan", laporanKerusakanRoutes);
+app.use("/api/laporan-kerusakan", laporanKerusakanRoutes); // Alias (dash)
 app.use("/api/pegawai", pegawaiRoutes);
 app.use("/api/log_aktivitas", logAktivitasRoutes);
+app.use("/api/log-aktivitas", logAktivitasRoutes); // Alias (dash)
 
 // Route tes
 app.get("/", (req, res) => {

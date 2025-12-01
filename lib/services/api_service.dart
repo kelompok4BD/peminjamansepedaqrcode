@@ -617,8 +617,8 @@ class ApiService {
     String status,
   ) async {
     try {
-      final res = await _dio
-          .put('/laporan_kerusakan/$idLaporan', data: {'status': status});
+      final res = await _dio.put('/laporan_kerusakan/$idLaporan',
+          data: {'status_perbaikan': status});
 
       return {
         'success': res.statusCode == 200,

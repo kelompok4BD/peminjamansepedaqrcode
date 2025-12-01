@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 // Hapus import theme lama jika error, karena kita akan pakai warna custom di sini
-// import '../theme/app_theme.dart'; 
+// import '../theme/app_theme.dart';
 
 class AdminPeminjamanPage extends StatefulWidget {
   const AdminPeminjamanPage({super.key});
@@ -25,6 +25,7 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
   Future<void> loadPeminjaman() async {
     setState(() => loading = true);
     final data = await api.getPeminjaman();
+    if (!mounted) return;
     setState(() {
       peminjaman = data;
       loading = false;
@@ -83,7 +84,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'Transaksi Peminjaman',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -128,17 +130,22 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                         final idSepeda = p['id_sepeda'] ?? '-';
                         final waktuPinjam = formatDate(p['waktu_pinjam']);
                         final waktuKembali = formatDate(p['waktu_kembali']);
-                        final durasi = p['durasi']?.toString() ?? 'Tidak diketahui';
-                        final metodeJaminan = p['metode_jaminan'] ?? 'Tidak ada';
-                        final status = p['status_transaksi'] ?? 'Tidak diketahui';
+                        final durasi =
+                            p['durasi']?.toString() ?? 'Tidak diketahui';
+                        final metodeJaminan =
+                            p['metode_jaminan'] ?? 'Tidak ada';
+                        final status =
+                            p['status_transaksi'] ?? 'Tidak diketahui';
 
                         // Card Transaksi (Glassmorphism Dark)
                         return Container(
                           margin: const EdgeInsets.only(bottom: 14),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.05), // Background transparan
+                            color: Colors.white
+                                .withOpacity(0.05), // Background transparan
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.1), // Border tipis putih
+                              color: Colors.white
+                                  .withOpacity(0.1), // Border tipis putih
                               width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(18),
@@ -157,7 +164,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(Icons.pedal_bike, color: pinkNeon), // Icon Pink
+                                    Icon(Icons.pedal_bike,
+                                        color: pinkNeon), // Icon Pink
                                     const SizedBox(width: 8),
                                     Text(
                                       'Transaksi #$idTransaksi',
@@ -170,12 +178,14 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                                     const Spacer(),
                                     // Badge Status
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: getStatusColor(status),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          color: getStatusTextColor(status).withOpacity(0.3),
+                                          color: getStatusTextColor(status)
+                                              .withOpacity(0.3),
                                           width: 1,
                                         ),
                                       ),
@@ -190,7 +200,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                                     ),
                                   ],
                                 ),
-                                const Divider(height: 20, color: Colors.white12),
+                                const Divider(
+                                    height: 20, color: Colors.white12),
                                 _infoRow('ID Sepeda', idSepeda.toString()),
                                 _infoRow('Durasi (menit)', durasi),
                                 _infoRow('Metode Jaminan', metodeJaminan),

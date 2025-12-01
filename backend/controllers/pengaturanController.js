@@ -7,7 +7,7 @@ exports.getAllPengaturan = (req, res) => {
       return res.status(500).json({ message: 'Gagal ambil pengaturan' });
     }
 
-    res.json(rows);
+    res.json({ success: true, data: rows });
   });
 };
 
