@@ -14,9 +14,10 @@ exports.register = async (req, res) => {
 
     User.findById(id_NIM_NIP, (err, results) => {
       if (err) {
-        console.error("DB error:", err);
+        console.error("❌ Register query error:", err);
         return res.status(500).json({ 
-          message: "Server error" 
+          message: "Server error: " + err.message,
+          error: err.code
         });
       }
 
@@ -80,9 +81,10 @@ exports.login = async (req, res) => {
 
     User.findForLogin(id_NIM_NIP, (err, results) => {
       if (err) {
-        console.error("Login error:", err);
+        console.error("❌ Login query error:", err);
         return res.status(500).json({ 
-          message: "Server error" 
+          message: "Server error: " + err.message,
+          error: err.code
         });
       }
 

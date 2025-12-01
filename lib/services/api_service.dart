@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -10,31 +8,18 @@ class ApiService {
   late final String baseUrl;
 
   ApiService._internal() {
-    // determine baseUrl depending on platform
-    if (kIsWeb) {
-      baseUrl = "http://localhost:3000/api";
-    } else {
-      try {
-        if (Platform.isAndroid) {
-          // Android emulator -> host machine is 10.0.2.2
-          baseUrl = "http://10.0.2.2:3000/api";
-        } else {
-          baseUrl = "http://localhost:3000/api";
-        }
-      } catch (_) {
-        baseUrl = "http://localhost:3000/api";
-      }
-    }
+    baseUrl = "https://peminjamansepedaqrcode.onrender.com/api";
 
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
         headers: {'Content-Type': 'application/json'},
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
       ),
     );
-    print('🔌 ApiService baseUrl = $baseUrl');
+
+    print('🌐 ApiService baseUrl = $baseUrl');
   }
 
   String _handleError(dynamic error) {
@@ -61,7 +46,7 @@ class ApiService {
     try {
       print('🔷 Mengirim request login: $nim');
       final res = await _dio.post(
-        '/login',
+        '/auth/login',
         data: {
           'id_NIM_NIP': int.tryParse(nim) ?? nim,
           'password': password,
@@ -98,7 +83,7 @@ class ApiService {
       print('🔷 Mengirim request registrasi: $nim, $nama');
       final idValue = int.tryParse(nim) ?? nim;
       final res = await _dio.post(
-        '/register',
+        '/auth/register',
         data: {
           'id_NIM_NIP': idValue,
           'nama': nama,
@@ -351,7 +336,7 @@ class ApiService {
       print(
           '🔷 pinjamSepedaWithJaminan: baseUrl=$baseUrl, idUser=$idUser, idSepeda=$idSepeda, jaminan=$metodeJaminan');
       final res = await _dio.post(
-        '/transaksi-peminjaman',
+        '/transaksi_peminjaman',
         data: {
           'id_user': idUser,
           'id_sepeda': idSepeda,
@@ -361,13 +346,14 @@ class ApiService {
       print('🔶 Response status: ${res.statusCode}');
       print('🔶 Response data: ${res.data}');
 
-      if (res.statusCode == 200 && res.data is Map) {
+      if ((res.statusCode == 200 || res.statusCode == 201) && res.data is Map) {
         return {
           'success': res.data['success'] ?? true,
           'data': res.data['data'] ?? {},
           'message': res.data['message'] ?? 'Peminjaman berhasil',
-          'qr_code': res.data['data']?['qr_code'],
-          'id_transaksi': res.data['data']?['id_transaksi'],
+          'qr_code': res.data['data']?['qr_code'] ?? res.data['qr_code'],
+          'id_transaksi':
+              res.data['data']?['id_transaksi'] ?? res.data['id_transaksi'],
         };
       }
       return {'success': false, 'message': 'Gagal meminjam sepeda'};

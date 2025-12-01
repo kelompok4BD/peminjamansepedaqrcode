@@ -1,0 +1,264 @@
+Analyzing uassd...                                              
+
+   info - The local variable '_parseInt' starts with an underscore - lib\models\riwayat_pemeliharaan.dart:23:9 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_parseNum' starts with an underscore - lib\models\riwayat_pemeliharaan.dart:36:10 - no_leading_underscores_for_local_identifiers
+   info - Don't use 'BuildContext's across async gaps - lib\models\sepeda.dart:46:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\models\sepeda.dart:51:28 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_dashboard.dart:82:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_dashboard.dart:83:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_dashboard.dart:84:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_dashboard.dart:85:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_dashboard.dart:176:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_dashboard.dart:207:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_dashboard.dart:213:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_dashboard.dart:217:35 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_laporan_kerusakan_page.dart:46:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_laporan_kerusakan_page.dart:50:28 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:65:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:72:52 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_laporan_kerusakan_page.dart:126:19 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_laporan_kerusakan_page.dart:169:39 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_laporan_kerusakan_page.dart:170:46 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_laporan_kerusakan_page.dart:176:46 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_laporan_kerusakan_page.dart:206:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_laporan_kerusakan_page.dart:207:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_laporan_kerusakan_page.dart:208:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:262:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:264:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:302:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:304:70 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:344:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:346:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:351:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:380:73 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_laporan_kerusakan_page.dart:396:61 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\pages\admin_log_aktivitas_page.dart:40:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\pages\admin_log_aktivitas_page.dart:50:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\pages\admin_log_aktivitas_page.dart:52:7 - curly_braces_in_flow_control_structures
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_log_aktivitas_page.dart:70:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_log_aktivitas_page.dart:71:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_log_aktivitas_page.dart:72:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_log_aktivitas_page.dart:73:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_log_aktivitas_page.dart:134:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_log_aktivitas_page.dart:137:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_log_aktivitas_page.dart:142:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_log_aktivitas_page.dart:155:74 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_log_aktivitas_page.dart:158:76 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:48:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:50:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:52:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:54:28 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_peminjaman_page.dart:75:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_peminjaman_page.dart:76:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_peminjaman_page.dart:77:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_peminjaman_page.dart:78:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:139:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:141:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:147:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:178:77 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_peminjaman_page.dart:223:37 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\pages\admin_sepeda_page.dart:33:7 - avoid_print
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:60:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:67:54 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_sepeda_page.dart:120:21 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_sepeda_page.dart:135:21 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_sepeda_page.dart:216:21 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_sepeda_page.dart:232:21 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_sepeda_page.dart:336:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_sepeda_page.dart:337:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_sepeda_page.dart:338:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_sepeda_page.dart:339:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:404:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:407:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:410:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:443:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:444:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:448:68 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:449:69 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_sepeda_page.dart:509:37 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_user_page.dart:36:28 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:65:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:72:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:131:43 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_user_page.dart:151:17 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_user_page.dart:184:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\admin_user_page.dart:220:28 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_user_page.dart:231:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_user_page.dart:232:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\admin_user_page.dart:233:5 - prefer_const_declarations
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\pages\admin_user_page.dart:269:17 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:306:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:308:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:312:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:324:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\admin_user_page.dart:325:60 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\pages\detail_pinjam_page.dart:34:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\pages\detail_pinjam_page.dart:49:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\pages\detail_pinjam_page.dart:52:7 - avoid_print
+   info - Don't use 'BuildContext's across async gaps - lib\pages\detail_pinjam_page.dart:77:13 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\detail_pinjam_page.dart:81:27 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\detail_pinjam_page.dart:84:32 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\detail_pinjam_page.dart:88:25 - use_build_context_synchronously
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\pages\detail_pinjam_page.dart:181:19 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\pages\detail_pinjam_page.dart:182:19 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\pages\detail_pinjam_page.dart:191:19 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\pages\detail_pinjam_page.dart:192:19 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\login_page.dart:83:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\login_page.dart:84:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\login_page.dart:85:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\login_page.dart:86:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:117:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:122:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:158:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:188:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:190:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:196:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:216:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:223:82 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:251:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:258:82 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\login_page.dart:286:69 - deprecated_member_use
+   info - The private field _editingMode could be 'final' - lib\pages\pengaturan_page.dart:16:18 - prefer_final_fields
+   info - The private field _editedData could be 'final' - lib\pages\pengaturan_page.dart:17:34 - prefer_final_fields
+   info - The private field _saving could be 'final' - lib\pages\pengaturan_page.dart:18:18 - prefer_final_fields
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:207:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:208:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:250:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:251:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:303:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:305:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:310:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:469:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:476:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\pengaturan_page.dart:483:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:80:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:85:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:89:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:94:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:134:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_dialog.dart:138:39 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\register_page.dart:70:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\register_page.dart:71:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\register_page.dart:72:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\register_page.dart:73:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:101:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:106:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:142:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:173:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:175:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:179:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:305:71 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:401:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:406:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\register_page.dart:413:54 - deprecated_member_use
+   info - The file name 'riwayatPemeliharaan_page.dart' isn't a lower_case_with_underscores identifier - lib\pages\riwayatPemeliharaan_page.dart:1:1 - file_names
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\riwayatPemeliharaan_page.dart:96:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\riwayatPemeliharaan_page.dart:98:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\riwayatPemeliharaan_page.dart:153:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\riwayatPemeliharaan_page.dart:155:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\riwayatPemeliharaan_page.dart:159:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:39:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:46:52 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\stasiun_page.dart:150:38 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\stasiun_page.dart:154:38 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\stasiun_page.dart:201:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\pages\stasiun_page.dart:205:28 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\stasiun_page.dart:214:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\stasiun_page.dart:215:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\stasiun_page.dart:216:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\stasiun_page.dart:217:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:276:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:279:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:284:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:297:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:324:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\stasiun_page.dart:326:66 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_dashboard.dart:36:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_dashboard.dart:37:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_dashboard.dart:38:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_dashboard.dart:39:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_dashboard.dart:53:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_dashboard.dart:56:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_dashboard.dart:162:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_dashboard.dart:168:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_dashboard.dart:172:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:230:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:260:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:263:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:268:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:358:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:381:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_aktif_page.dart:427:63 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\pages\user_peminjaman_page.dart:56:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\pages\user_peminjaman_page.dart:57:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\pages\user_peminjaman_page.dart:80:7 - avoid_print
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:175:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:178:66 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:183:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:193:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:256:63 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_peminjaman_page.dart:258:82 - deprecated_member_use
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_stasiun_select_page.dart:61:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_stasiun_select_page.dart:62:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_stasiun_select_page.dart:63:5 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\user_stasiun_select_page.dart:64:5 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_stasiun_select_page.dart:120:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_stasiun_select_page.dart:123:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_stasiun_select_page.dart:128:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\pages\user_stasiun_select_page.dart:137:49 - deprecated_member_use
+warning - Unused import: 'package:flutter/foundation.dart' - lib\services\api_service.dart:2:8 - unused_import
+warning - Unused import: 'dart:io' - lib\services\api_service.dart:3:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:25:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:50:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:78:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:86:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:103:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:110:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:115:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:133:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:143:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:186:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:208:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:221:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:248:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:258:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:287:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:305:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:312:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:317:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:318:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:331:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:339:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:349:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:350:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:363:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:387:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:395:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:404:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:417:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:425:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:428:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:429:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:449:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:456:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:459:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:460:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:480:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:490:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:495:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:498:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:510:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:522:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:534:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:545:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:552:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:554:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:555:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:576:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:605:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:625:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:651:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\api_service.dart:664:7 - avoid_print
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\theme\app_theme.dart:30:24 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\theme\app_theme.dart:31:24 - deprecated_member_use
+
