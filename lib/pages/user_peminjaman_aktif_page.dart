@@ -16,6 +16,7 @@ class UserPeminjamanAktifPage extends StatefulWidget {
 }
 
 class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
+  // --- LOGIKA (TIDAK DIUBAH SAMA SEKALI) ---
   final ApiService api = ApiService();
   List<Map<String, dynamic>> peminjamanAktif = [];
   bool isLoading = true;
@@ -56,6 +57,14 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
     }
   }
 
+  // --- WARNA TEMA ---
+  final pinkNeon = const Color(0xFFFF007F);
+  final darkPink = const Color(0xFF880E4F);
+  final blackBg = const Color(0xFF000000);
+  final darkCherry = const Color(0xFF25000B);
+  final darkBgDialog = const Color(0xFF1E1E1E);
+
+  // --- DIALOG KONFIRMASI (TEMA DARK) ---
   Future<void> _selesaiPinjam(Map<String, dynamic> peminjaman) async {
     final idTransaksi = peminjaman['id_transaksi'] as int?;
     final idSepeda = peminjaman['id_sepeda'] as int?;
@@ -67,29 +76,34 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
       return;
     }
 
-    // Confirmation dialog
+    // Confirmation dialog with Dark Theme
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Pengembalian'),
+        backgroundColor: darkBgDialog,
+        title: const Text('Konfirmasi Pengembalian',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Sepeda: ${peminjaman['merk_sepeda'] ?? 'N/A'}'),
+            Text('Sepeda: ${peminjaman['merk_sepeda'] ?? 'N/A'}',
+                style: const TextStyle(color: Colors.white70)),
             const SizedBox(height: 8),
-            const Text('Apakah Anda yakin ingin menyelesaikan peminjaman ini?'),
+            const Text('Apakah Anda yakin ingin menyelesaikan peminjaman ini?',
+                style: TextStyle(color: Colors.white)),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: const Text('Batal', style: TextStyle(color: Colors.white54)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF6366F1),
+              backgroundColor: pinkNeon, // Tombol Pink
+              foregroundColor: Colors.white,
             ),
             child: const Text('Ya, Selesai'),
           ),
@@ -99,7 +113,6 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
 
     if (confirmed != true) return;
 
-    // Show loading
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('⏳ Memproses pengembalian...')),
@@ -141,38 +154,42 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
     }
   }
 
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
           'Peminjaman Aktif',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? Center(
+                child: CircularProgressIndicator(color: pinkNeon)) // Loading Pink
             : _error != null
                 ? Center(
                     child: Padding(
@@ -181,7 +198,7 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(Icons.error_outline,
-                              size: 48, color: Colors.red),
+                              size: 48, color: Colors.redAccent),
                           const SizedBox(height: 12),
                           Text(
                             _error!,
@@ -194,7 +211,8 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                             icon: const Icon(Icons.refresh),
                             label: const Text('Coba Lagi'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF6366F1),
+                              backgroundColor: pinkNeon,
+                              foregroundColor: Colors.white,
                             ),
                           ),
                         ],
@@ -209,7 +227,7 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.info_outline,
-                                  size: 48, color: Colors.amber.shade700),
+                                  size: 48, color: pinkNeon.withOpacity(0.7)),
                               const SizedBox(height: 12),
                               const Text(
                                 'Tidak ada peminjaman aktif',
@@ -225,6 +243,8 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                       )
                     : RefreshIndicator(
                         onRefresh: loadPeminjamanAktif,
+                        color: pinkNeon,
+                        backgroundColor: Colors.grey[900],
                         child: ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: peminjamanAktif.length,
@@ -233,15 +253,23 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                             final waktuPinjam =
                                 peminjaman['waktu_pinjam'] ?? '-';
 
-                            return Card(
-                              color: Colors.white.withOpacity(0.05),
+                            // --- CARD PEMINJAMAN (GLASSMORPHISM) ---
+                            return Container(
                               margin: const EdgeInsets.only(bottom: 12),
-                              shape: RoundedRectangleBorder(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05), // Transparan
                                 borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Colors.amber.withOpacity(0.3),
+                                border: Border.all(
+                                  color: pinkNeon.withOpacity(0.3), // Border Pink Tipis
                                   width: 1.5,
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
@@ -250,8 +278,8 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                                   children: [
                                     Row(
                                       children: [
-                                        const Icon(Icons.pedal_bike,
-                                            color: Colors.amber, size: 24),
+                                        Icon(Icons.pedal_bike,
+                                            color: pinkNeon, size: 24),
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
@@ -267,32 +295,44 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
-                                              // Show QR code in white and its code string in white
+                                              // QR Code
                                               if ((peminjaman['kode_qr'] ?? '')
                                                   .toString()
                                                   .isNotEmpty)
                                                 Row(
                                                   children: [
-                                                    QrImageView(
-                                                      data: peminjaman[
-                                                                  'kode_qr']
-                                                              ?.toString() ??
-                                                          '',
-                                                      version: QrVersions.auto,
-                                                      size: 72.0,
+                                                    // Container Putih khusus QR agar bisa discan
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white, 
+                                                        borderRadius: BorderRadius.circular(4)
+                                                      ),
+                                                      child: QrImageView(
+                                                        data: peminjaman['kode_qr']?.toString() ?? '',
+                                                        version: QrVersions.auto,
+                                                        size: 60.0, // Sedikit diperkecil agar pas
+                                                      ),
                                                     ),
-                                                    const SizedBox(width: 8),
+                                                    const SizedBox(width: 12),
                                                     Flexible(
-                                                      child: Text(
-                                                        peminjaman['kode_qr']
-                                                                ?.toString() ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          const Text(
+                                                            'Kode QR:',
+                                                            style: TextStyle(color: Colors.white54, fontSize: 10),
+                                                          ),
+                                                          Text(
+                                                            peminjaman['kode_qr']?.toString() ?? '',
+                                                            style: const TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold
+                                                            ),
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ],
@@ -308,25 +348,24 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                                             ],
                                           ),
                                         ),
+                                        // Badge Status
                                         Container(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 8,
                                             vertical: 4,
                                           ),
                                           decoration: BoxDecoration(
-                                            color:
-                                                Colors.amber.withOpacity(0.2),
-                                            borderRadius:
-                                                BorderRadius.circular(6),
+                                            color: pinkNeon.withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(6),
                                             border: Border.all(
-                                              color: Colors.amber,
+                                              color: pinkNeon,
                                             ),
                                           ),
-                                          child: const Text(
+                                          child: Text(
                                             'Dipinjam',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.amber,
+                                              color: pinkNeon,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -334,47 +373,77 @@ class _UserPeminjamanAktifPageState extends State<UserPeminjamanAktifPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 12),
+                                    
+                                    // Info Waktu
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.05),
+                                        color: Colors.white.withOpacity(0.08),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      child: Row(
                                         children: [
-                                          const Text(
-                                            'Waktu Pinjam:',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white70,
-                                            ),
-                                          ),
-                                          Text(
-                                            waktuPinjam.toString(),
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          const Icon(Icons.access_time, color: Colors.white70, size: 16),
+                                          const SizedBox(width: 8),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                'Waktu Pinjam',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white54,
+                                                ),
+                                              ),
+                                              Text(
+                                                waktuPinjam.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 12),
+                                    
+                                    // Tombol Selesai (Button Gradient Pink)
                                     SizedBox(
                                       width: double.infinity,
-                                      child: ElevatedButton.icon(
-                                        onPressed: () =>
-                                            _selesaiPinjam(peminjaman),
-                                        icon: const Icon(Icons.check_circle),
-                                        label: const Text('Selesai Pinjam'),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.green,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
+                                      height: 45,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [darkPink, pinkNeon],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(25), // Pill shape
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: pinkNeon.withOpacity(0.4),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 4),
+                                            )
+                                          ]
+                                        ),
+                                        child: ElevatedButton.icon(
+                                          onPressed: () => _selesaiPinjam(peminjaman),
+                                          icon: const Icon(Icons.check_circle, color: Colors.white),
+                                          label: const Text('Selesai Pinjam'),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                            foregroundColor: Colors.white,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25),
+                                            ),
                                           ),
                                         ),
                                       ),

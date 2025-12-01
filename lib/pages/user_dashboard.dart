@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+// import '../theme/app_theme.dart'; // Bisa dihapus jika tidak dipakai
 import 'user_stasiun_select_page.dart';
 import 'user_peminjaman_aktif_page.dart';
 import 'login_page.dart';
@@ -14,6 +14,7 @@ class UserDashboard extends StatefulWidget {
 }
 
 class _UserDashboardState extends State<UserDashboard> {
+  // --- LOGIKA (TIDAK DIUBAH) ---
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -28,22 +29,32 @@ class _UserDashboardState extends State<UserDashboard> {
     );
   }
 
+  // --- TAMPILAN UI (TEMA BLACK PINK) ---
   @override
   Widget build(BuildContext context) {
+    // Definisi Warna Tema
+    final pinkNeon = const Color(0xFFFF007F);
+    final darkPink = const Color(0xFF880E4F);
+    final blackBg = const Color(0xFF000000);
+    final darkCherry = const Color(0xFF25000B);
+
     final userId = widget.userData['id_NIM_NIP'].toString();
 
     final List<Widget> pages = [
       UserStasiunSelectPage(userId: userId),
       UserPeminjamanAktifPage(userId: userId),
-      // improved profile page
+      // --- HALAMAN PROFIL (STYLE DARK) ---
       SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Card(
               elevation: 4,
+              color: Colors.white.withOpacity(0.05), // Background kartu transparan gelap
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.white.withOpacity(0.1)), // Border tipis
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -51,7 +62,7 @@ class _UserDashboardState extends State<UserDashboard> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: const Color(0xFF6366F1),
+                      backgroundColor: pinkNeon, // Avatar Pink
                       child: Text(
                         (widget.userData['nama'] ?? '-')
                             .toString()
@@ -70,15 +81,17 @@ class _UserDashboardState extends State<UserDashboard> {
                     Text(
                       widget.userData['nama'] ?? '-',
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w700),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white), // Teks Putih
                     ),
                     const SizedBox(height: 6),
                     Text(
                       'ID: ${widget.userData['id_NIM_NIP'] ?? '-'}',
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: const TextStyle(color: Colors.white70), // Teks Abu Terang
                     ),
                     const SizedBox(height: 12),
-                    const Divider(),
+                    const Divider(color: Colors.white24),
                     const SizedBox(height: 8),
                     const SizedBox(height: 18),
                     Row(
@@ -86,12 +99,12 @@ class _UserDashboardState extends State<UserDashboard> {
                       children: [
                         OutlinedButton.icon(
                           onPressed: _logout,
-                          icon: const Icon(Icons.logout,
-                              color: Color(0xFF6366F1)),
-                          label: const Text('Logout',
-                              style: TextStyle(color: Color(0xFF6366F1))),
+                          icon: Icon(Icons.logout,
+                              color: pinkNeon), // Ikon Pink
+                          label: Text('Logout',
+                              style: TextStyle(color: pinkNeon)), // Teks Pink
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFF6366F1)),
+                            side: BorderSide(color: pinkNeon), // Border Pink
                           ),
                         ),
                       ],
@@ -107,15 +120,16 @@ class _UserDashboardState extends State<UserDashboard> {
 
     return Scaffold(
       extendBody: true,
+      // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         title: const Text('User Dashboard',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF4F46E5), Color(0xFF6366F1)],
+              colors: [blackBg, darkPink],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -124,31 +138,38 @@ class _UserDashboardState extends State<UserDashboard> {
         actions: [
           IconButton(
             onPressed: _logout,
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             tooltip: 'Logout',
           ),
         ],
       ),
+      
+      // Body Gradient Hitam ke Cherry Gelap
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6366F1), Color(0xFF312e81)],
+            colors: [blackBg, darkCherry],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: pages[_selectedIndex],
       ),
+      
+      // Bottom Navigation Bar
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.black.withOpacity(0.4), // Transparan gelap
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
+          border: Border(
+            top: BorderSide(color: Colors.white.withOpacity(0.1), width: 0.5)
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withOpacity(0.5),
               blurRadius: 16,
               offset: const Offset(0, -2),
             ),
@@ -158,8 +179,8 @@ class _UserDashboardState extends State<UserDashboard> {
           backgroundColor: Colors.transparent,
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-          selectedItemColor: const Color(0xFF6366F1),
-          unselectedItemColor: Colors.white70,
+          selectedItemColor: pinkNeon, // Item aktif Pink Neon
+          unselectedItemColor: Colors.white60, // Item tidak aktif putih redup
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           items: const [
