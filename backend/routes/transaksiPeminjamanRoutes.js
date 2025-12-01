@@ -5,5 +5,6 @@ const TransaksiPeminjamanController = require("../controllers/transaksiPeminjama
 router.get("/", TransaksiPeminjamanController.getAll);
 router.post("/", TransaksiPeminjamanController.create);
 router.put("/:id/status", TransaksiPeminjamanController.updateStatus);
+router.post("/selesai", TransaksiPeminjamanController.selesaiPinjam);
 
 module.exports = router;

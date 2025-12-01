@@ -401,6 +401,36 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> selesaiPinjam(
+      int idTransaksi, int idSepeda) async {
+    try {
+      print('🔷 Selesai Pinjam: transaksi=$idTransaksi, sepeda=$idSepeda');
+      final res = await _dio.post(
+        '/transaksi_peminjaman/selesai',
+        data: {
+          'id_transaksi': idTransaksi,
+          'id_sepeda': idSepeda,
+        },
+      );
+
+      print('✅ Response: ${res.data}');
+
+      if (res.statusCode == 200) {
+        return {
+          'success': res.data['success'] ?? true,
+          'message': res.data['message'] ?? 'Sepeda berhasil dikembalikan',
+          'id_transaksi': res.data['id_transaksi'],
+          'id_sepeda': res.data['id_sepeda'],
+        };
+      }
+
+      return {'success': false, 'message': 'Gagal menyelesaikan peminjaman'};
+    } catch (e) {
+      print('❌ Error selesaiPinjam: $e');
+      return {'success': false, 'message': _handleError(e)};
+    }
+  }
+
   // ⭐⭐⭐ PERBAIKAN RIWAYAT PEMELIHARAAN — FINAL ⭐⭐⭐
   Future<List<Map<String, dynamic>>> getRiwayatPemeliharaan() async {
     try {
@@ -464,10 +494,29 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> updatePengaturan(
+    int idPengaturan,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      print('🔷 Updating pengaturan $idPengaturan...');
+      final res = await _dio.put(
+        '/pengaturan/$idPengaturan',
+        data: data,
+      );
+      print('✅ Pengaturan updated: ${res.data}');
+      return Map<String, dynamic>.from(res.data);
+    } catch (e) {
+      print('❌ Error updating pengaturan: $e');
+      rethrow;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getStasiun() async {
     try {
       final res = await _dio.get('/stasiun_sepeda');
       final List<dynamic> rawList = res.data['data'] ?? [];
+
       return rawList.map((item) => item as Map<String, dynamic>).toList();
     } catch (e) {
       print('❌ Error fetching stasiun: $e');

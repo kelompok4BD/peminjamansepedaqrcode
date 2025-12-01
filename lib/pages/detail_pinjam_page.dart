@@ -172,14 +172,22 @@ class _PinjamPageState extends State<DetailPinjamPage> {
                       color: AppColors.textPrimary),
                 ),
                 RadioListTile<String>(
-                  title: const Text('KTP'),
+                  title: const Text(
+                    'KTP',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   value: 'KTP',
+                  activeColor: Colors.white,
                   groupValue: selectedJaminan,
                   onChanged: (val) => setState(() => selectedJaminan = val),
                 ),
                 RadioListTile<String>(
-                  title: const Text('KTM'),
+                  title: const Text(
+                    'KTM',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   value: 'KTM',
+                  activeColor: Colors.white,
                   groupValue: selectedJaminan,
                   onChanged: (val) => setState(() => selectedJaminan = val),
                 ),

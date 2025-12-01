@@ -1,4 +1,4 @@
-const LogAktivitas = require('../models/LogAktivitas');
+const LogAktivitas = require('../models/logAktivitas');
 
 /**
  * Wrapper helper to create a log entry using req context.

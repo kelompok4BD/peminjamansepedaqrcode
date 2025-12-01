@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'admin_dashboard.dart';
 import 'user_dashboard.dart';
-import 'register_dialog.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -89,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 24),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -122,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 18),
                     const Text(
                       'Login',
@@ -133,7 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 18),
-
                     ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 420),
                       child: Container(
@@ -147,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
                             end: Alignment.bottomRight,
                           ),
                           border: Border.all(
-                              color: Colors.white.withOpacity(0.15), width: 1.5),
+                              color: Colors.white.withOpacity(0.15),
+                              width: 1.5),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
@@ -168,8 +166,8 @@ class _LoginPageState extends State<LoginPage> {
                                   labelText: 'NIM/NIP',
                                   labelStyle:
                                       const TextStyle(color: Colors.white70),
-                                  prefixIcon:
-                                      const Icon(Icons.person, color: Colors.white70),
+                                  prefixIcon: const Icon(Icons.person,
+                                      color: Colors.white70),
                                   filled: true,
                                   fillColor: Colors.white.withOpacity(0.08),
                                   border: OutlineInputBorder(
@@ -186,13 +184,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(14),
-                                    borderSide:
-                                        const BorderSide(color: Colors.teal, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: Colors.teal, width: 2),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 18),
-
                               TextField(
                                 controller: passwordController,
                                 obscureText: obscurePassword,
@@ -201,8 +198,8 @@ class _LoginPageState extends State<LoginPage> {
                                   labelText: 'Password',
                                   labelStyle:
                                       const TextStyle(color: Colors.white70),
-                                  prefixIcon:
-                                      const Icon(Icons.lock, color: Colors.white70),
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: Colors.white70),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       obscurePassword
@@ -229,13 +226,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(14),
-                                    borderSide:
-                                        const BorderSide(color: Colors.teal, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: Colors.teal, width: 2),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 24),
-
                               SizedBox(
                                 width: double.infinity,
                                 height: 48,
@@ -279,31 +275,18 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                               ),
                               const SizedBox(height: 16),
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: const Text('Lupa password?',
-                                        style: TextStyle(
-                                            color: Colors.white70, fontSize: 13)),
-                                  ),
-                                ],
-                              ),
-
                               const SizedBox(height: 10),
                               TextButton(
                                 onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (ctx) => const RegisterDialog(),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const RegisterPage()),
                                   );
                                 },
                                 child: const Text('Belum Punya Akun? Daftar',
-                                    style:
-                                        TextStyle(color: Colors.white70, fontSize: 14)),
+                                    style: TextStyle(
+                                        color: Colors.white70, fontSize: 14)),
                               ),
                             ],
                           ),

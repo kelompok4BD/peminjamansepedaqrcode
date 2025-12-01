@@ -1,4 +1,4 @@
-const Sepeda = require("../models/Sepeda");
+const Sepeda = require("../models/sepeda");
 const db = require("../config/db");
 const logActivity = require('../utils/logActivity');
 

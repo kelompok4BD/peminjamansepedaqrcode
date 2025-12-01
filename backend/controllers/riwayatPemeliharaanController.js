@@ -1,4 +1,4 @@
-const Riwayat = require('../models/RiwayatPemeliharaan');
+const Riwayat = require('../models/riwayatPemeliharaan');
 
 exports.getAllRiwayat = (req, res) => {
   Riwayat.getAll((err, rows) => {

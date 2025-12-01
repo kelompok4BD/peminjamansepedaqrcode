@@ -1,4 +1,4 @@
-const TransaksiPeminjaman = require("../models/TransaksiPeminjaman");
+const TransaksiPeminjaman = require("../models/transaksiPeminjaman");
 const QRCode = require("qrcode");
 const db = require("../config/db");
 
@@ -166,5 +166,96 @@ exports.updateStatus = (req, res) => {
     } else {
       res.json({ message: "Status berhasil diupdate", result });
     }
+  });
+};
+
+exports.selesaiPinjam = (req, res) => {
+  const { id_transaksi, id_sepeda } = req.body;
+
+  if (!id_transaksi || !id_sepeda) {
+    return res.status(400).json({ 
+      success: false,
+      message: "ID transaksi dan ID sepeda diperlukan" 
+    });
+  }
+
+  console.log('📝 Selesai Pinjam - Body:', { id_transaksi, id_sepeda });
+
+  db.beginTransaction((err) => {
+    if (err) {
+      console.error('❌ Begin transaction failed:', err);
+      return res.status(500).json({
+        success: false,
+        message: "Gagal memulai transaksi database",
+        error: err
+      });
+    }
+
+    // Step 1: Update transaksi_peminjaman status to 'Dikembalikan'
+    const updateTransaksiSql = `
+      UPDATE transaksi_peminjaman 
+      SET status_transaksi = 'Dikembalikan', 
+          waktu_kembali = NOW()
+      WHERE id_transaksi = ?
+    `;
+
+    db.query(updateTransaksiSql, [id_transaksi], (err1, result1) => {
+      if (err1) {
+        console.error('❌ Update transaksi failed:', err1);
+        return db.rollback(() => {
+          res.status(500).json({
+            success: false,
+            message: "Gagal update status transaksi",
+            error: err1
+          });
+        });
+      }
+
+      console.log('✅ Transaksi updated to Dikembalikan');
+
+      // Step 2: Update sepeda status to 'Tersedia'
+      const updateSepedaSql = `
+        UPDATE sepeda 
+        SET status_saat_ini = 'Tersedia'
+        WHERE id_sepeda = ?
+      `;
+
+      db.query(updateSepedaSql, [id_sepeda], (err2, result2) => {
+        if (err2) {
+          console.error('❌ Update sepeda failed:', err2);
+          return db.rollback(() => {
+            res.status(500).json({
+              success: false,
+              message: "Gagal update status sepeda",
+              error: err2
+            });
+          });
+        }
+
+        console.log('✅ Sepeda updated to Tersedia');
+
+        // Step 3: Commit transaction
+        db.commit((err3) => {
+          if (err3) {
+            console.error('❌ Commit failed:', err3);
+            return db.rollback(() => {
+              res.status(500).json({
+                success: false,
+                message: "Gagal commit perubahan",
+                error: err3
+              });
+            });
+          }
+
+          console.log('✅ Transaction committed successfully');
+          res.json({
+            success: true,
+            message: "✅ Sepeda berhasil dikembalikan",
+            id_transaksi,
+            id_sepeda
+          });
+        });
+      });
+    });
   });
 };

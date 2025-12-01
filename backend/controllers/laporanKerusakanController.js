@@ -1,4 +1,4 @@
-const LaporanKerusakan = require('../models/LaporanKerusakan');
+const LaporanKerusakan = require('../models/laporanKerusakan');
 
 exports.getAllLaporan = (req, res) => {
   LaporanKerusakan.getAll((err, result) => {

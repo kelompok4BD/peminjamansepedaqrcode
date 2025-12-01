@@ -81,7 +81,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
   Future<void> _addSepeda() async {
     final merkController = TextEditingController();
     final tahunController = TextEditingController();
-    final statusController = TextEditingController(text: 'Tersedia');
+    String selectedStatus = 'Tersedia';
     final kondisiController = TextEditingController(text: 'Baik');
     final kodeQrController = TextEditingController();
     int? selectedStasiun;
@@ -97,7 +97,21 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
             children: [
               _field('Merk/Model', merkController),
               _field('Tahun', tahunController, TextInputType.number),
-              _field('Status', statusController),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: DropdownButtonFormField<String>(
+                  value: selectedStatus,
+                  decoration: _inputDeco('Status'),
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'Tersedia', child: Text('Tersedia')),
+                    DropdownMenuItem(
+                        value: 'Dipinjam', child: Text('Dipinjam')),
+                  ],
+                  onChanged: (val) =>
+                      setState(() => selectedStatus = val ?? 'Tersedia'),
+                ),
+              ),
               _field('Kondisi', kondisiController),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
@@ -136,7 +150,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
       final result = await api.addSepeda(
         merkController.text,
         int.tryParse(tahunController.text) ?? DateTime.now().year,
-        statusController.text,
+        selectedStatus,
         kondisiController.text,
         kodeQrController.text,
         selectedStasiun,
@@ -161,8 +175,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
         TextEditingController(text: s['merk'] ?? s['merk_model']);
     final tahunController = TextEditingController(
         text: (s['tahun'] ?? s['tahun_pembelian'])?.toString());
-    final statusController =
-        TextEditingController(text: s['status'] ?? s['status_saat_ini']);
+    String selectedStatus = s['status'] ?? s['status_saat_ini'] ?? 'Tersedia';
     final kondisiController = TextEditingController(text: s['kondisi']);
     final kodeQrController = TextEditingController(text: s['kode_qr']);
     int? selectedStasiun = s['id_stasiun'];
@@ -178,7 +191,21 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
             children: [
               _field('Merk/Model', merkController),
               _field('Tahun', tahunController, TextInputType.number),
-              _field('Status', statusController),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: DropdownButtonFormField<String>(
+                  value: selectedStatus,
+                  decoration: _inputDeco('Status'),
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'Tersedia', child: Text('Tersedia')),
+                    DropdownMenuItem(
+                        value: 'Dipinjam', child: Text('Dipinjam')),
+                  ],
+                  onChanged: (val) =>
+                      setState(() => selectedStatus = val ?? 'Tersedia'),
+                ),
+              ),
               _field('Kondisi', kondisiController),
               _field('Kode QR', kodeQrController),
               Padding(
@@ -219,7 +246,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
         id,
         merkController.text,
         int.tryParse(tahunController.text) ?? DateTime.now().year,
-        statusController.text,
+        selectedStatus,
         kondisiController.text,
         kodeQrController.text,
         selectedStasiun,

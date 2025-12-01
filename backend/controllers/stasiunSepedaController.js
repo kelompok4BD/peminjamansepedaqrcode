@@ -1,4 +1,4 @@
-const Stasiun = require("../models/StasiunSepeda");
+const Stasiun = require("../models/stasiunSepeda");
 const logActivity = require('../utils/logActivity');
 
 exports.getAllStasiun = (req, res) => {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'user_stasiun_select_page.dart';
-import 'pengaturan_user_page.dart';
+import 'user_peminjaman_aktif_page.dart';
 import 'login_page.dart';
 
 class UserDashboard extends StatefulWidget {
@@ -34,7 +34,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
     final List<Widget> pages = [
       UserStasiunSelectPage(userId: userId),
-      const PengaturanUserPage(),
+      UserPeminjamanAktifPage(userId: userId),
       // improved profile page
       SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -80,26 +80,6 @@ class _UserDashboardState extends State<UserDashboard> {
                     const SizedBox(height: 12),
                     const Divider(),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(Icons.email, color: AppColors.textSecondary),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child:
-                                Text(widget.userData['email_kampus'] ?? '-')),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(Icons.phone, color: AppColors.textSecondary),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: Text(
-                                widget.userData['no_hp_pengguna']?.toString() ??
-                                    '-')),
-                      ],
-                    ),
                     const SizedBox(height: 18),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -184,9 +164,9 @@ class _UserDashboardState extends State<UserDashboard> {
           elevation: 0,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.pedal_bike), label: 'Peminjaman'),
+                icon: Icon(Icons.location_on), label: 'Cari Stasiun'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: 'Pengaturan'),
+                icon: Icon(Icons.pedal_bike), label: 'Peminjaman Aktif'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
           ],
         ),

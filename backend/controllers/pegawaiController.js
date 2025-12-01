@@ -1,4 +1,4 @@
-const Pegawai = require('../models/Pegawai');
+const Pegawai = require('../models/pegawai');
 const logActivity = require('../utils/logActivity');
 
 exports.getAllPegawai = (req, res) => {

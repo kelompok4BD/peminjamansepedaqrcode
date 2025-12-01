@@ -13,15 +13,25 @@ class QrDisplayPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            QrImageView(
-              data: qrCode,
-              version: QrVersions.auto,
-              size: 250,
+            // Render QR in white by inverting colors of the default renderer
+            ColorFiltered(
+              colorFilter: const ColorFilter.matrix(<double>[
+                -1, 0, 0, 0, 255, // Red
+                0, -1, 0, 0, 255, // Green
+                0, 0, -1, 0, 255, // Blue
+                0, 0, 0, 1, 0, // Alpha
+              ]),
+              child: QrImageView(
+                data: qrCode,
+                version: QrVersions.auto,
+                size: 250,
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
               "Scan QR ini di stasiun untuk membuka kunci sepeda.",
               textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

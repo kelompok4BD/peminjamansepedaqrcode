@@ -1,4 +1,4 @@
-const LogAktivitas = require('../models/LogAktivitas');
+const LogAktivitas = require('../models/logAktivitas');
 
 exports.getAllLog = (req, res) => {
   LogAktivitas.getAll((err, result) => {

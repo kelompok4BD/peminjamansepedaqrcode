@@ -12,7 +12,6 @@ class StasiunPage extends StatefulWidget {
 class _StasiunPageState extends State<StasiunPage> {
   final api = ApiService();
   List<dynamic> stasiun = [];
-  bool _loading = false;
 
   @override
   void initState() {
@@ -21,11 +20,9 @@ class _StasiunPageState extends State<StasiunPage> {
   }
 
   Future<void> loadStasiun() async {
-    setState(() => _loading = true);
     final data = await api.getAllStasiun();
     setState(() {
       stasiun = data;
-      _loading = false;
     });
   }
 
@@ -83,7 +80,6 @@ class _StasiunPageState extends State<StasiunPage> {
               }
 
               Navigator.pop(context);
-              setState(() => _loading = true);
 
               final payload = {
                 'nama_stasiun': nama,
@@ -96,12 +92,10 @@ class _StasiunPageState extends State<StasiunPage> {
               if (isNew) {
                 res = await api.createStasiun(payload);
               } else {
-                final id = item!['id_stasiun'] ?? item['id'];
+                final id = item['id_stasiun'] ?? item['id'];
                 res = await api.updateStasiun(
                     int.tryParse(id.toString()) ?? 0, payload);
               }
-
-              setState(() => _loading = false);
 
               if (res['success'] == true) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -140,9 +134,7 @@ class _StasiunPageState extends State<StasiunPage> {
 
     if (confirm != true) return;
 
-    setState(() => _loading = true);
     final res = await api.deleteStasiun(int.tryParse(id.toString()) ?? 0);
-    setState(() => _loading = false);
 
     if (res['success'] == true) {
       ScaffoldMessenger.of(context)

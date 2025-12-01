@@ -153,17 +153,7 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'sudah diperbaiki':
-        return Colors.green[50]!;
-      case 'sedang diperbaiki':
-        return Colors.orange[50]!;
-      default:
-        return Colors.red[50]!;
-    }
-  }
-
+  // _getStatusColor removed because it's unused; keep text color only.
   Color _getStatusTextColor(String status) {
     switch (status.toLowerCase()) {
       case 'sudah diperbaiki':

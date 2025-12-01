@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../theme/app_theme.dart';
-import 'login_page.dart';
-import 'pengaturan_user_page.dart';
 import 'detail_pinjam_page.dart';
 
 class UserPeminjamanPage extends StatefulWidget {
