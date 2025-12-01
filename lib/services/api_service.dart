@@ -486,15 +486,21 @@ class ApiService {
   ) async {
     try {
       print('🔷 Updating pengaturan $idPengaturan...');
-      final res = await _dio.put(
-        '/pengaturan/$idPengaturan',
-        data: data,
-      );
+      // Ensure backend receives id_pengaturan in the body (controller expects it)
+      final payload = Map<String, dynamic>.from(data);
+      payload['id_pengaturan'] = idPengaturan;
+
+      final res = await _dio.put('/pengaturan/$idPengaturan', data: payload);
       print('✅ Pengaturan updated: ${res.data}');
-      return Map<String, dynamic>.from(res.data);
+
+      return {
+        'success': res.statusCode == 200,
+        'message': res.data['message'] ?? 'Pengaturan diperbarui',
+        'data': res.data
+      };
     } catch (e) {
       print('❌ Error updating pengaturan: $e');
-      rethrow;
+      return {'success': false, 'message': _handleError(e)};
     }
   }
 
@@ -548,7 +554,8 @@ class ApiService {
   Future<List<Map<String, dynamic>>> getLaporanKerusakan() async {
     try {
       print('🔷 Fetching laporan kerusakan from $baseUrl');
-      final res = await _dio.get('/laporan-kerusakan');
+      // backend route is /api/laporan_kerusakan
+      final res = await _dio.get('/laporan_kerusakan');
       print('🔁 laporan kerusakan response status=${res.statusCode}');
       print('🔁 laporan kerusakan response body=${res.data}');
 
@@ -584,7 +591,7 @@ class ApiService {
   ) async {
     try {
       final res = await _dio.post(
-        '/laporan-kerusakan',
+        '/laporan_kerusakan',
         data: {
           'id_sepeda': idSepeda,
           'id_pegawai': idPegawai,
@@ -610,10 +617,8 @@ class ApiService {
     String status,
   ) async {
     try {
-      final res = await _dio.put(
-        '/laporan-kerusakan/$idLaporan',
-        data: {'status': status},
-      );
+      final res = await _dio
+          .put('/laporan_kerusakan/$idLaporan', data: {'status': status});
 
       return {
         'success': res.statusCode == 200,
@@ -631,8 +636,9 @@ class ApiService {
     String deskripsi,
   ) async {
     try {
+      // backend route is /api/log_aktivitas
       final res = await _dio.post(
-        '/log-aktivitas',
+        '/log_aktivitas',
         data: {
           'id_pegawai': idPegawai,
           'waktu_aktivitas': DateTime.now().toIso8601String(),
@@ -653,8 +659,15 @@ class ApiService {
 
   Future<List<Map<String, dynamic>>> getLogAktivitas() async {
     try {
-      final res = await _dio.get('/log-aktivitas');
-      final List<dynamic> data = res.data['data'] ?? [];
+      final res = await _dio.get('/log_aktivitas');
+
+      List<dynamic> data = [];
+      if (res.data is List) {
+        data = res.data;
+      } else if (res.data is Map && res.data['data'] is List) {
+        data = res.data['data'];
+      }
+
       return data
           .map((item) => Map<String, dynamic>.from(item as Map))
           .toList();

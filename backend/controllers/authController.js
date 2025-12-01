@@ -3,30 +3,31 @@ const User = require('../models/user');
 exports.register = async (req, res) => {
   try {
     const { id_NIM_NIP, nama, password } = req.body;
-    
+
     console.log("📝 Data registrasi diterima:", { id_NIM_NIP, nama });
 
     if (!id_NIM_NIP || !nama || !password) {
-      return res.status(400).json({ 
-        message: "NIM/NIP, nama, dan password wajib diisi!" 
+      return res.status(400).json({
+        message: "NIM/NIP, nama, dan password wajib diisi!"
       });
     }
 
+    // Cek apakah sudah terdaftar
     User.findById(id_NIM_NIP, (err, results) => {
       if (err) {
         console.error("❌ Register query error:", err);
-        return res.status(500).json({ 
-          message: "Server error: " + err.message,
-          error: err.code
+        return res.status(500).json({
+          message: "Server error: " + err.message
         });
       }
 
       if (results.length > 0) {
-        return res.status(400).json({ 
-          message: "NIM/NIP sudah terdaftar!" 
+        return res.status(400).json({
+          message: "NIM/NIP sudah terdaftar!"
         });
       }
 
+      // Data default
       const userData = {
         id_NIM_NIP,
         nama,
@@ -38,15 +39,15 @@ exports.register = async (req, res) => {
         no_hp_pengguna: null
       };
 
+      // Simpan ke DB
       User.create(userData, (err, result) => {
         if (err) {
           console.error("DB error:", err);
-          return res.status(500).json({ 
-            message: "Gagal mendaftar, coba lagi nanti" 
+          return res.status(500).json({
+            message: "Gagal mendaftar, coba lagi nanti"
           });
         }
 
-        // Return success with user data
         res.status(201).json({
           message: "Registrasi berhasil",
           user: {
@@ -61,30 +62,30 @@ exports.register = async (req, res) => {
 
   } catch (error) {
     console.error("Server error:", error);
-    res.status(500).json({ 
-      message: "Terjadi kesalahan, coba lagi nanti" 
+    res.status(500).json({
+      message: "Terjadi kesalahan, coba lagi nanti"
     });
   }
 };
 
+
 exports.login = async (req, res) => {
   try {
     const { id_NIM_NIP, password } = req.body;
-    
+
     console.log("🔑 Login request:", { id_NIM_NIP });
 
     if (!id_NIM_NIP || !password) {
-      return res.status(400).json({ 
-        message: "NIM/NIP dan password wajib diisi!" 
+      return res.status(400).json({
+        message: "NIM/NIP dan password wajib diisi!"
       });
     }
 
     User.findForLogin(id_NIM_NIP, (err, results) => {
       if (err) {
         console.error("❌ Login query error:", err);
-        return res.status(500).json({ 
-          message: "Server error: " + err.message,
-          error: err.code
+        return res.status(500).json({
+          message: "Server error: " + err.message
         });
       }
 
@@ -109,17 +110,17 @@ exports.login = async (req, res) => {
       }
 
       delete user.password;
-      
+
       res.json({
         message: "Login berhasil",
-        user: user
+        user
       });
     });
 
   } catch (error) {
     console.error("Server error:", error);
-    res.status(500).json({ 
-      message: "Terjadi kesalahan, coba lagi nanti" 
+    res.status(500).json({
+      message: "Terjadi kesalahan, coba lagi nanti"
     });
   }
 };

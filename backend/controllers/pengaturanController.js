@@ -11,12 +11,31 @@ exports.getAllPengaturan = (req, res) => {
   });
 };
 
-exports.updatePengaturan = (req, res) => {
-  const { id_pengaturan, batas_waktu_pinjam, tarif_denda_per_jam, informasi_kontak_darurat, batas_wilayah_gps } = req.body;
+exports.getPengaturanById = (req, res) => {
+  const { id } = req.params;
 
-  if (!id_pengaturan) {
-    return res.status(400).json({ message: 'ID pengaturan diperlukan' });
-  }
+  Pengaturan.getById(id, (err, rows) => {
+    if (err) {
+      console.error('❌ Gagal ambil pengaturan:', err);
+      return res.status(500).json({ message: 'Gagal ambil pengaturan' });
+    }
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: 'Pengaturan tidak ditemukan' });
+    }
+
+    res.json(rows[0]);
+  });
+};
+
+exports.updatePengaturan = (req, res) => {
+  const { id } = req.params; // AMBIL DARI URL, BUKAN BODY
+  const {
+    batas_waktu_pinjam,
+    tarif_denda_per_jam,
+    informasi_kontak_darurat,
+    batas_wilayah_gps
+  } = req.body;
 
   const data = {
     batas_waktu_pinjam,
@@ -25,29 +44,12 @@ exports.updatePengaturan = (req, res) => {
     batas_wilayah_gps
   };
 
-  Pengaturan.update(id_pengaturan, data, (err, result) => {
+  Pengaturan.update(id, data, (err, result) => {
     if (err) {
       console.error('❌ Gagal update pengaturan:', err);
       return res.status(500).json({ message: 'Gagal update pengaturan' });
     }
 
-    res.json({ message: 'Pengaturan berhasil diperbarui', id_pengaturan });
-  });
-};
-
-exports.getPengaturanById = (req, res) => {
-  const { id } = req.params;
-
-  Pengaturan.getById(id, (err, row) => {
-    if (err) {
-      console.error('❌ Gagal ambil pengaturan:', err);
-      return res.status(500).json({ message: 'Gagal ambil pengaturan' });
-    }
-
-    if (!row) {
-      return res.status(404).json({ message: 'Pengaturan tidak ditemukan' });
-    }
-
-    res.json(row);
+    res.json({ message: 'Pengaturan berhasil diperbarui', id_pengaturan: id });
   });
 };

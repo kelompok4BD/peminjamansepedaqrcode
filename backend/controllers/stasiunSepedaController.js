@@ -25,15 +25,33 @@ exports.getStasiunById = (req, res) => {
 
 exports.createStasiun = (req, res) => {
   const { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps } = req.body || {};
+
   if (!nama_stasiun) {
     return res.status(400).json({ message: 'Nama stasiun wajib diisi' });
   }
-  Stasiun.create({ nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, (err, result) => {
+
+  const payload = {
+    nama_stasiun,
+    alamat_stasiun,
+    kapasitas_dock: kapasitas_dock ? parseInt(kapasitas_dock) : null,
+    koordinat_gps
+  };
+
+  Stasiun.create(payload, (err, result) => {
     if (err) {
       console.error('❌ Gagal menambah stasiun:', err);
       return res.status(500).json({ message: 'Gagal menambah stasiun', error: err });
     }
-    res.status(201).json({ success: true, data: { id_stasiun: result.insertId, nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, message: 'Stasiun berhasil ditambahkan' });
+
+    res.status(201).json({
+      success: true,
+      data: { 
+        id_stasiun: result.insertId,
+        ...payload
+      },
+      message: 'Stasiun berhasil ditambahkan'
+    });
+
     logActivity(req, 'Create Stasiun', `Menambahkan stasiun id=${result.insertId} nama=${nama_stasiun}`);
   });
 };
@@ -41,27 +59,49 @@ exports.createStasiun = (req, res) => {
 exports.updateStasiun = (req, res) => {
   const { id } = req.params;
   const { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps } = req.body || {};
+
   if (!nama_stasiun) {
     return res.status(400).json({ message: 'Nama stasiun wajib diisi' });
   }
-  Stasiun.update(id, { nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, (err, result) => {
+
+  const payload = {
+    nama_stasiun,
+    alamat_stasiun,
+    kapasitas_dock: kapasitas_dock ? parseInt(kapasitas_dock) : null,
+    koordinat_gps
+  };
+
+  Stasiun.update(id, payload, (err, result) => {
     if (err) {
       console.error('❌ Gagal update stasiun:', err);
       return res.status(500).json({ message: 'Gagal update stasiun', error: err });
     }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Stasiun tidak ditemukan" });
+    }
+
     res.json({ success: true, message: 'Stasiun berhasil diperbarui' });
+
     logActivity(req, 'Update Stasiun', `Update stasiun id=${id} nama=${nama_stasiun}`);
   });
 };
 
 exports.deleteStasiun = (req, res) => {
   const { id } = req.params;
-  Stasiun.delete(id, (err) => {
+
+  Stasiun.delete(id, (err, result) => {
     if (err) {
       console.error('❌ Gagal hapus stasiun:', err);
       return res.status(500).json({ message: 'Gagal hapus stasiun', error: err });
     }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Stasiun tidak ditemukan" });
+    }
+
     res.json({ success: true, message: 'Stasiun berhasil dihapus' });
+
     logActivity(req, 'Delete Stasiun', `Hapus stasiun id=${id}`);
   });
 };

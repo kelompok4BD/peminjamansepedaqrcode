@@ -1,12 +1,15 @@
 const Riwayat = require('../models/riwayatPemeliharaan');
 
-exports.getAllRiwayat = (req, res) => {
-  Riwayat.getAll((err, rows) => {
-    if (err) {
-      console.error('❌ Gagal ambil riwayat pemeliharaan:', err);
-      return res.status(500).json({ message: 'Gagal ambil riwayat pemeliharaan' });
-    }
-
-    res.json(rows);
-  });
+exports.getAllRiwayat = async (req, res) => {
+  try {
+    const data = await Riwayat.getAll();
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('❌ Gagal ambil riwayat pemeliharaan:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Gagal ambil riwayat pemeliharaan',
+      error: err.message 
+    });
+  }
 };

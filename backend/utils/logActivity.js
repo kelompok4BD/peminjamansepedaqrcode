@@ -1,9 +1,9 @@
 const LogAktivitas = require("../models/logAktivitas");
 
-async function logActivity({ id_pegawai, jenis_aktivitas, deskripsi_aktivitas }) {
+async function logActivity(req, jenis_aktivitas, deskripsi_aktivitas) {
   try {
     const data = {
-      id_pegawai: id_pegawai || null,
+      id_pegawai: req.user?.id_pegawai || null, // aman walau null
       waktu_aktivitas: new Date(),
       jenis_aktivitas,
       deskripsi_aktivitas,

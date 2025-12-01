@@ -2,11 +2,11 @@ const db = require("../config/db");
 
 const User = {
   getAll: (callback) => {
-    db.query("SELECT * FROM user", callback);
+    db.query("SELECT * FROM `user`", callback);
   },
 
   findById: (id, callback) => {
-    db.query("SELECT * FROM user WHERE id_NIM_NIP = ?", [id], callback);
+    db.query("SELECT * FROM `user` WHERE id_NIM_NIP = ?", [id], callback);
   },
 
   findForLogin: (id, callback) => {
@@ -19,7 +19,7 @@ const User = {
         email_kampus,
         no_hp_pengguna,
         password 
-      FROM user 
+      FROM \`user\`
       WHERE id_NIM_NIP = ?
     `;
     db.query(sql, [id], callback);
@@ -27,7 +27,7 @@ const User = {
 
   create: (data, callback) => {
     const sql = `
-      INSERT INTO user (
+      INSERT INTO \`user\` (
         id_NIM_NIP, 
         nama, 
         email_kampus, 
@@ -56,15 +56,20 @@ const User = {
 
   update: (id, data, callback) => {
     const sql = `
-      UPDATE user 
+      UPDATE \`user\`
       SET password = ?, status_akun = ?
       WHERE id_NIM_NIP = ?
     `;
-    db.query(sql, [data.password, data.status_akun, id], callback);
+
+    db.query(sql, [
+      data.password || null,
+      data.status_akun || "aktif",
+      id
+    ], callback);
   },
 
   delete: (id, callback) => {
-    db.query("DELETE FROM user WHERE id_NIM_NIP = ?", [id], callback);
+    db.query("DELETE FROM `user` WHERE id_NIM_NIP = ?", [id], callback);
   },
 };
 
