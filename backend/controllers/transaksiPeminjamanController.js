@@ -1,5 +1,5 @@
 const QRCode = require("qrcode");
-const db = require("../config/db").promise();
+const { promise: db } = require("../config/db"); 
 const TransaksiModel = require("../models/transaksiPeminjaman");
 const logActivity = require("../utils/logActivity");
 

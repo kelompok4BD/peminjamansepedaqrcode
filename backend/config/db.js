@@ -36,8 +36,8 @@ setInterval(() => {
   });
 }, 30000);
 
-// Export: callback + promise
-const db = pool;        // alias
-db.promise = pool.promise();  // inject promise API ke object
-
-module.exports = db;
+// ❗ FIX: export sebagai object
+module.exports = {
+  pool,             // callback style
+  promise: pool.promise(),  // promise style
+};
