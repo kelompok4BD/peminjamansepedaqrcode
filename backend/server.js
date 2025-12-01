@@ -31,13 +31,13 @@ app.use("/api/sepeda", sepedaRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/transaksi_peminjaman", transaksiPeminjamanRoutes);
 app.use("/api/transaksi-peminjaman", transaksiPeminjamanRoutes); // Alias
-app.use("/api", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/pengaturan", pengaturanRoutes);
 app.use("/api/stasiun_sepeda", stasiunSepedaRoutes);
 app.use("/api/riwayat_pemeliharaan", riwayatPemeliharaanRoutes);
-app.use("/api", laporanKerusakanRoutes);
-app.use("/api", pegawaiRoutes);
-app.use("/api", logAktivitasRoutes);
+app.use("/api/laporan_kerusakan", laporanKerusakanRoutes);
+app.use("/api/pegawai", pegawaiRoutes);
+app.use("/api/log_aktivitas", logAktivitasRoutes);
 
 // Route tes
 app.get("/", (req, res) => {
