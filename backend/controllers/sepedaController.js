@@ -1,5 +1,5 @@
 const Sepeda = require("../models/sepeda");
-const db = require("../config/db");
+const { promise: db } = require("../config/db");
 const logActivity = require('../utils/logActivity');
 
 // =========================

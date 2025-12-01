@@ -1,4 +1,4 @@
-const db = require("../config/db").promise();
+const db = require("../config/db").promise;
 
 const TransaksiPeminjaman = {
   getAll: async () => {

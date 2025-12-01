@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const { promise: db } = require("../config/db");
 
 const Sepeda = {
   // Ambil semua sepeda

@@ -3,6 +3,7 @@ const db = require("../config/db");
 const Stasiun = {
   getAll: (callback) => {
     const sql = "SELECT * FROM stasiun_sepeda";
+    const { pool: db } = require('../config/db');
     db.query(sql, (err, results) => {
       if (err) return callback(err);
       callback(null, results);
