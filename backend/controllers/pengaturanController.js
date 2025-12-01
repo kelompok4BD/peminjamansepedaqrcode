@@ -1,4 +1,4 @@
-const Pengaturan = require('../models/Pengaturan');
+const Pengaturan = require('../models/pengaturan');
 
 exports.getAllPengaturan = (req, res) => {
   Pengaturan.getAll((err, rows) => {
