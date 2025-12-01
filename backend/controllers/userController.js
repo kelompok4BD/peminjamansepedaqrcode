@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const logActivity = require('../utils/logActivity');
 
 exports.getAllUser = (req, res) => {
   User.getAll((err, rows) => {
@@ -21,6 +22,7 @@ exports.updateUser = (req, res) => {
       return res.status(500).json({ message: "Gagal update user", error: err });
     }
     res.json({ success: true, message: "User berhasil diperbarui!" });
+    logActivity(req, 'Update User', `Update user id=${id_NIM_NIP}`);
   });
 };
 
@@ -30,5 +32,6 @@ exports.deleteUser = (req, res) => {
   User.delete(id_NIM_NIP, (err, result) => {
     if (err) return res.status(500).json({ message: "Gagal hapus user", error: err });
     res.json({ success: true, message: "User berhasil dihapus!" });
+    logActivity(req, 'Delete User', `Hapus user id=${id_NIM_NIP}`);
   });
 };

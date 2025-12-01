@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import 'login_page.dart';
 import 'pengaturan_user_page.dart';
 import 'detail_pinjam_page.dart';
@@ -86,22 +87,22 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
   Color _getCardColor(String status) {
     switch (status.toLowerCase()) {
       case 'tersedia':
-        return Colors.green[50]!;
+        return const Color(0xFF1B5E20); // dark green
       case 'dipinjam':
-        return Colors.red[50]!;
+        return const Color(0xFF5F0000); // dark red
       default:
-        return Colors.grey[100]!;
+        return const Color(0xFF1A1A2E); // dark gray
     }
   }
 
   Color _getIconColor(String status) {
     switch (status.toLowerCase()) {
       case 'tersedia':
-        return Colors.green;
+        return const Color(0xFF4CAF50); // lighter green for icon
       case 'dipinjam':
-        return Colors.redAccent;
+        return const Color(0xFFEF5350); // lighter red for icon
       default:
-        return Colors.grey;
+        return const Color(0xFF90A4AE); // lighter gray for icon
     }
   }
 
@@ -179,24 +180,30 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
+                                    'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}',
+                                    style: const TextStyle(
+                                        color: AppColors.textSecondary)),
                                 Text(
-                                    'Perawatan: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
-                                Text('Status: $status'),
+                                    'Perawatan: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}',
+                                    style: const TextStyle(
+                                        color: AppColors.textSecondary)),
+                                Text('Status: $status',
+                                    style: const TextStyle(
+                                        color: AppColors.textPrimary)),
                               ],
                             ),
                             trailing: status.toLowerCase() == 'tersedia'
                                 ? ElevatedButton(
                                     onPressed: () => handlePinjam(sepeda),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: AppColors.success,
                                     ),
                                     child: const Text('Pinjam'),
                                   )
                                 : const Text(
                                     'Dipinjam',
                                     style: TextStyle(
-                                      color: Colors.redAccent,
+                                      color: AppColors.error,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

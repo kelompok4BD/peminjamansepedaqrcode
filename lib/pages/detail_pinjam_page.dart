@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import 'qr_page.dart';
 
 class DetailPinjamPage extends StatefulWidget {
@@ -132,6 +133,7 @@ class _PinjamPageState extends State<DetailPinjamPage> {
         ),
         padding: const EdgeInsets.all(20),
         child: Card(
+          color: const Color(0xFF1A1A2E),
           elevation: 3,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -143,21 +145,31 @@ class _PinjamPageState extends State<DetailPinjamPage> {
                 Text(
                   sepeda['merk_model'] ?? sepeda['merk'] ?? 'Sepeda',
                   style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                    'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}'),
+                    'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}',
+                    style: const TextStyle(color: AppColors.textSecondary)),
                 Text(
-                    'Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}'),
+                    'Kondisi: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}',
+                    style: const TextStyle(color: AppColors.textSecondary)),
                 Text(
-                    'Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}'),
+                    'Status: ${sepeda['status_saat_ini'] ?? sepeda['status'] ?? '-'}',
+                    style: const TextStyle(color: AppColors.textSecondary)),
                 if (sepeda['kode_qr_sepeda'] != null)
-                  Text('Kode QR: ${sepeda['kode_qr_sepeda']}'),
-                const Divider(height: 32, thickness: 1.2),
+                  Text('Kode QR: ${sepeda['kode_qr_sepeda']}',
+                      style: const TextStyle(color: AppColors.textSecondary)),
+                const Divider(
+                    height: 32, thickness: 1.2, color: Color(0xFF424242)),
                 const Text(
                   'Pilih Metode Jaminan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                 ),
                 RadioListTile<String>(
                   title: const Text('KTP'),

@@ -1,4 +1,5 @@
 const Stasiun = require("../models/StasiunSepeda");
+const logActivity = require('../utils/logActivity');
 
 exports.getAllStasiun = (req, res) => {
   Stasiun.getAll((err, data) => {
@@ -33,6 +34,7 @@ exports.createStasiun = (req, res) => {
       return res.status(500).json({ message: 'Gagal menambah stasiun', error: err });
     }
     res.status(201).json({ success: true, data: { id_stasiun: result.insertId, nama_stasiun, alamat_stasiun, kapasitas_dock, koordinat_gps }, message: 'Stasiun berhasil ditambahkan' });
+    logActivity(req, 'Create Stasiun', `Menambahkan stasiun id=${result.insertId} nama=${nama_stasiun}`);
   });
 };
 
@@ -48,6 +50,7 @@ exports.updateStasiun = (req, res) => {
       return res.status(500).json({ message: 'Gagal update stasiun', error: err });
     }
     res.json({ success: true, message: 'Stasiun berhasil diperbarui' });
+    logActivity(req, 'Update Stasiun', `Update stasiun id=${id} nama=${nama_stasiun}`);
   });
 };
 
@@ -59,5 +62,6 @@ exports.deleteStasiun = (req, res) => {
       return res.status(500).json({ message: 'Gagal hapus stasiun', error: err });
     }
     res.json({ success: true, message: 'Stasiun berhasil dihapus' });
+    logActivity(req, 'Delete Stasiun', `Hapus stasiun id=${id}`);
   });
 };

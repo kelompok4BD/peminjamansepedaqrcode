@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'admin_dashboard.dart';
 import 'user_dashboard.dart';
-import 'register_page.dart';
+import 'register_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,13 +33,15 @@ class _LoginPageState extends State<LoginPage> {
           : <String, dynamic>{};
       final jenis = (user['jenis_pengguna'] ?? '').toString().toLowerCase();
 
-      // Log aktivitas login
-      await api.createLogAktivitas(
-        null,
-        'Login',
-        'User ${nimController.text} ($jenis) login ke sistem',
-      );
+      try {
+        await api.createLogAktivitas(
+          null,
+          'Login',
+          'User ${nimController.text} ($jenis) login ke sistem',
+        );
+      } catch (_) {}
 
+      if (!mounted) return;
       if (jenis.contains('admin')) {
         Navigator.pushReplacement(
           context,
@@ -54,9 +56,17 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
+  }
+
+  @override
+  void dispose() {
+    nimController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -74,17 +84,19 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 24),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
                           'assets/images/logo.png',
-                          width: 80,
-                          height: 80,
+                          width: 64,
+                          height: 64,
                         ),
                         const SizedBox(width: 12),
                         Column(
@@ -110,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 18),
                     const Text(
                       'Login',
@@ -119,179 +132,182 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.white.withOpacity(0.12),
-                            Colors.white.withOpacity(0.05)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        border: Border.all(
-                            color: Colors.white.withOpacity(0.15), width: 1.5),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
+                    const SizedBox(height: 18),
+
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withOpacity(0.12),
+                              Colors.white.withOpacity(0.05),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(28),
-                        child: Column(
-                          children: [
-                            // Username field
-                            TextField(
-                              controller: nimController,
-                              style: const TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                labelText: 'NIM/NIP',
-                                labelStyle:
-                                    const TextStyle(color: Colors.white70),
-                                prefixIcon: const Icon(Icons.person,
-                                    color: Colors.white70),
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.08),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.2),
-                                      width: 1),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.2),
-                                      width: 1),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: const BorderSide(
-                                      color: Colors.teal, width: 2),
-                                ),
-                              ),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.15), width: 1.5),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
-                            const SizedBox(height: 18),
-                            // Password field
-                            TextField(
-                              controller: passwordController,
-                              obscureText: obscurePassword,
-                              style: const TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle:
-                                    const TextStyle(color: Colors.white70),
-                                prefixIcon: const Icon(Icons.lock,
-                                    color: Colors.white70),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    obscurePassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.white70,
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(28),
+                          child: Column(
+                            children: [
+                              TextField(
+                                controller: nimController,
+                                style: const TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                  labelText: 'NIM/NIP',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.white70),
+                                  prefixIcon:
+                                      const Icon(Icons.person, color: Colors.white70),
+                                  filled: true,
+                                  fillColor: Colors.white.withOpacity(0.08),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 1),
                                   ),
-                                  onPressed: () => setState(
-                                      () => obscurePassword = !obscurePassword),
-                                ),
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.08),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.2),
-                                      width: 1),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.2),
-                                      width: 1),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: const BorderSide(
-                                      color: Colors.teal, width: 2),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide:
+                                        const BorderSide(color: Colors.teal, width: 2),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 24),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 48,
-                              child: loading
-                                  ? const Center(
-                                      child: CircularProgressIndicator(
-                                          color: Colors.white))
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.teal.shade600,
-                                            Colors.teal.shade700
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        ),
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: ElevatedButton(
-                                        onPressed: login,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shadowColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'LOGIN',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            letterSpacing: 1,
-                                          ),
-                                        ),
-                                      ),
+                              const SizedBox(height: 18),
+
+                              TextField(
+                                controller: passwordController,
+                                obscureText: obscurePassword,
+                                style: const TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.white70),
+                                  prefixIcon:
+                                      const Icon(Icons.lock, color: Colors.white70),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      obscurePassword
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.white70,
                                     ),
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Lupa password?',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 13),
+                                    onPressed: () => setState(() =>
+                                        obscurePassword = !obscurePassword),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white.withOpacity(0.08),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 1),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide:
+                                        const BorderSide(color: Colors.teal, width: 2),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const RegisterPage(),
+                              ),
+                              const SizedBox(height: 24),
+
+                              SizedBox(
+                                width: double.infinity,
+                                height: 48,
+                                child: loading
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                            color: Colors.white))
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.teal.shade600,
+                                              Colors.teal.shade700
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: login,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'LOGIN',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: const Text('Lupa password?',
+                                        style: TextStyle(
+                                            color: Colors.white70, fontSize: 13)),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 10),
+                              TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (ctx) => const RegisterDialog(),
+                                  );
+                                },
+                                child: const Text('Belum Punya Akun? Daftar',
+                                    style:
+                                        TextStyle(color: Colors.white70, fontSize: 14)),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                      child: const Text(
-                        "Belum Punya Akun? Daftar",
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
                       ),
                     ),
                   ],

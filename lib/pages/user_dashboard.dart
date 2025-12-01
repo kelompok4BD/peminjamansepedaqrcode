@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import 'user_stasiun_select_page.dart';
 import 'pengaturan_user_page.dart';
 import 'login_page.dart';
@@ -74,14 +75,14 @@ class _UserDashboardState extends State<UserDashboard> {
                     const SizedBox(height: 6),
                     Text(
                       'ID: ${widget.userData['id_NIM_NIP'] ?? '-'}',
-                      style: const TextStyle(color: Colors.black54),
+                      style: const TextStyle(color: AppColors.textSecondary),
                     ),
                     const SizedBox(height: 12),
                     const Divider(),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(Icons.email, color: Colors.black54),
+                        const Icon(Icons.email, color: AppColors.textSecondary),
                         const SizedBox(width: 12),
                         Expanded(
                             child:
@@ -91,7 +92,7 @@ class _UserDashboardState extends State<UserDashboard> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Icon(Icons.phone, color: Colors.black54),
+                        const Icon(Icons.phone, color: AppColors.textSecondary),
                         const SizedBox(width: 12),
                         Expanded(
                             child: Text(

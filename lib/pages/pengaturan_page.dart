@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class PengaturanPage extends StatefulWidget {
   const PengaturanPage({super.key});
@@ -68,7 +69,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
           ),
         ),
         child: _loading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : (_error != null)
                 ? Center(
                     child: Padding(
@@ -77,21 +79,32 @@ class _PengaturanPageState extends State<PengaturanPage> {
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                            colors: [
+                              Colors.white.withOpacity(0.12),
+                              Colors.white.withOpacity(0.05)
+                            ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.15),
+                              width: 1.5),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                            const Icon(Icons.error_outline,
+                                size: 48, color: Colors.red),
                             const SizedBox(height: 8),
-                            const Text('Gagal memuat pengaturan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                            const Text('Gagal memuat pengaturan',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                             const SizedBox(height: 6),
-                            Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+                            Text(_error!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white70)),
                             const SizedBox(height: 12),
                             ElevatedButton.icon(
                               onPressed: loadPengaturan,
@@ -100,7 +113,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF6366F1),
                                 foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ],
@@ -116,21 +130,33 @@ class _PengaturanPageState extends State<PengaturanPage> {
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                colors: [
+                                  Colors.white.withOpacity(0.12),
+                                  Colors.white.withOpacity(0.05)
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.15),
+                                  width: 1.5),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.info_outline, size: 48, color: Colors.amber.shade700),
+                                Icon(Icons.info_outline,
+                                    size: 48, color: Colors.amber.shade700),
                                 const SizedBox(height: 8),
-                                const Text('Belum ada data pengaturan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                const Text('Belum ada data pengaturan',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
                                 const SizedBox(height: 6),
-                                const Text('Data pengaturan sistem belum dimasukkan ke database.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+                                const Text(
+                                    'Data pengaturan sistem belum dimasukkan ke database.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white70)),
                                 const SizedBox(height: 12),
                                 ElevatedButton.icon(
                                   onPressed: loadPengaturan,
@@ -139,7 +165,9 @@ class _PengaturanPageState extends State<PengaturanPage> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF6366F1),
                                     foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                   ),
                                 ),
                               ],
@@ -158,11 +186,16 @@ class _PengaturanPageState extends State<PengaturanPage> {
                               margin: const EdgeInsets.only(bottom: 14),
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                  colors: [
+                                    Colors.white.withOpacity(0.12),
+                                    Colors.white.withOpacity(0.05)
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
-                                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                                border: Border.all(
+                                    color: Colors.white.withOpacity(0.15),
+                                    width: 1.5),
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
@@ -177,7 +210,12 @@ class _PengaturanPageState extends State<PengaturanPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Pengaturan #${p['id_pengaturan'] ?? i + 1}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18)),
+                                    Text(
+                                        'Pengaturan #${p['id_pengaturan'] ?? i + 1}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 18)),
                                     const SizedBox(height: 8),
                                     _infoRow(
                                       Icons.person,
@@ -200,7 +238,9 @@ class _PengaturanPageState extends State<PengaturanPage> {
                                     _infoRow(
                                       Icons.phone,
                                       'Kontak darurat',
-                                      p['informasi_kontak_darurat']?.toString() ?? '-',
+                                      p['informasi_kontak_darurat']
+                                              ?.toString() ??
+                                          '-',
                                     ),
                                     const SizedBox(height: 6),
                                     _infoRow(
@@ -224,19 +264,19 @@ class _PengaturanPageState extends State<PengaturanPage> {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: Colors.grey[700]),
+          Icon(icon, size: 18, color: AppColors.textSecondary),
           const SizedBox(width: 6),
           Text(
             "$label: ",
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: AppColors.textPrimary,
             ),
           ),
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(color: Colors.black87),
+              style: const TextStyle(color: AppColors.textSecondary),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -259,14 +299,19 @@ class _PengaturanPageState extends State<PengaturanPage> {
   String _formatCurrency(dynamic v) {
     if (v == null) return '-';
     try {
-      final num value = (v is num) ? v : num.parse(v.toString().replaceAll(',', '.'));
+      final num value =
+          (v is num) ? v : num.parse(v.toString().replaceAll(',', '.'));
       final s = value.toInt().toString();
       String rev = s.split('').reversed.join();
       final parts = <String>[];
       for (int i = 0; i < rev.length; i += 3) {
         parts.add(rev.substring(i, (i + 3).clamp(0, rev.length)));
       }
-      final joined = parts.map((p) => p.split('').reversed.join()).toList().reversed.join('.');
+      final joined = parts
+          .map((p) => p.split('').reversed.join())
+          .toList()
+          .reversed
+          .join('.');
       return 'Rp $joined';
     } catch (_) {
       return v.toString();

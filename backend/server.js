@@ -6,6 +6,8 @@ const db = require("./config/db");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+// extract admin id and client info for logging
+app.use(require('./middleware/extractAdmin'));
 
 // Import routes
 const sepedaRoutes = require("./routes/sepedaRoutes");

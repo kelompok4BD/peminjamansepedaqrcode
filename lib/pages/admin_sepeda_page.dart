@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class AdminSepedaPage extends StatefulWidget {
   const AdminSepedaPage({super.key});
@@ -447,8 +448,8 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
             width: 120,
             child: Text(
               label,
-              style: TextStyle(
-                color: Colors.grey[600],
+              style: const TextStyle(
+                color: AppColors.textSecondary,
                 fontSize: 14,
               ),
             ),
@@ -459,6 +460,7 @@ class _AdminSepedaPageState extends State<AdminSepedaPage> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
+                color: AppColors.textPrimary,
               ),
             ),
           ),

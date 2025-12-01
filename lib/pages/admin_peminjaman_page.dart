@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class AdminPeminjamanPage extends StatefulWidget {
   const AdminPeminjamanPage({super.key});
@@ -41,26 +42,26 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'selesai':
-        return Colors.green[100]!;
+        return Colors.green[900]!;
       case 'dipinjam':
-        return Colors.orange[100]!;
+        return Colors.orange[900]!;
       case 'batal':
-        return Colors.red[100]!;
+        return Colors.red[900]!;
       default:
-        return Colors.grey[200]!;
+        return Colors.grey[800]!;
     }
   }
 
   Color getStatusTextColor(String status) {
     switch (status.toLowerCase()) {
       case 'selesai':
-        return Colors.green[800]!;
+        return Colors.green[200]!;
       case 'dipinjam':
-        return Colors.orange[800]!;
+        return Colors.orange[200]!;
       case 'batal':
-        return Colors.red[800]!;
+        return Colors.red[200]!;
       default:
-        return Colors.grey[700]!;
+        return Colors.grey[300]!;
     }
   }
 
@@ -69,7 +70,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Transaksi Peminjaman', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        title: const Text('Transaksi Peminjaman',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         backgroundColor: const Color(0xFF1a237e),
         elevation: 0,
         flexibleSpace: Container(
@@ -91,9 +93,12 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
           ),
         ),
         child: loading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : peminjaman.isEmpty
-                ? const Center(child: Text('Belum ada transaksi peminjaman', style: TextStyle(color: Colors.white70)))
+                ? const Center(
+                    child: Text('Belum ada transaksi peminjaman',
+                        style: TextStyle(color: Colors.white70)))
                 : RefreshIndicator(
                     onRefresh: loadPeminjaman,
                     child: ListView.builder(
@@ -105,19 +110,27 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                         final idSepeda = p['id_sepeda'] ?? '-';
                         final waktuPinjam = formatDate(p['waktu_pinjam']);
                         final waktuKembali = formatDate(p['waktu_kembali']);
-                        final durasi = p['durasi']?.toString() ?? 'Tidak diketahui';
-                        final metodeJaminan = p['metode_jaminan'] ?? 'Tidak ada';
-                        final status = p['status_transaksi'] ?? 'Tidak diketahui';
+                        final durasi =
+                            p['durasi']?.toString() ?? 'Tidak diketahui';
+                        final metodeJaminan =
+                            p['metode_jaminan'] ?? 'Tidak ada';
+                        final status =
+                            p['status_transaksi'] ?? 'Tidak diketahui';
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 14),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                              colors: [
+                                Colors.white.withOpacity(0.12),
+                                Colors.white.withOpacity(0.05)
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                            border: Border.all(
+                                color: Colors.white.withOpacity(0.15),
+                                width: 1.5),
                             borderRadius: BorderRadius.circular(18),
                             boxShadow: [
                               BoxShadow(
@@ -134,12 +147,18 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.pedal_bike, color: Color(0xFF6366F1)),
+                                    const Icon(Icons.pedal_bike,
+                                        color: Color(0xFF6366F1)),
                                     const SizedBox(width: 8),
-                                    Text('Transaksi #$idTransaksi', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                                    Text('Transaksi #$idTransaksi',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white)),
                                     const Spacer(),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: getStatusColor(status),
                                         borderRadius: BorderRadius.circular(10),
@@ -154,7 +173,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
                                     ),
                                   ],
                                 ),
-                                const Divider(height: 20, color: Colors.white24),
+                                const Divider(
+                                    height: 20, color: Colors.white24),
                                 _infoRow('ID Sepeda', idSepeda.toString()),
                                 _infoRow('Durasi (menit)', durasi),
                                 _infoRow('Metode Jaminan', metodeJaminan),
@@ -182,8 +202,8 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
             width: 130,
             child: Text(
               label,
-              style: TextStyle(
-                color: Colors.grey[600],
+              style: const TextStyle(
+                color: AppColors.textSecondary,
                 fontSize: 14,
               ),
             ),
@@ -194,6 +214,7 @@ class _AdminPeminjamanPageState extends State<AdminPeminjamanPage> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
+                color: AppColors.textPrimary,
               ),
             ),
           ),

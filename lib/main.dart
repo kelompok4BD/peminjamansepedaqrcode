@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/login_page.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(const PeminjamanSepedaApp());
@@ -14,8 +15,12 @@ class PeminjamanSepedaApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Peminjaman Sepeda Kampus',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[100],
+        useMaterial3: false,
+        primaryColor: AppColors.primary,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        scaffoldBackgroundColor: AppColors.backgroundStart,
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent, elevation: 0),
       ),
       home: const LoginPage(),
     );

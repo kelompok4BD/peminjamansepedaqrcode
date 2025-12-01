@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import 'user_peminjaman_page.dart';
 
 class UserStasiunSelectPage extends StatefulWidget {
@@ -59,15 +60,11 @@ class _UserStasiunSelectPageState extends State<UserStasiunSelectPage> {
         automaticallyImplyLeading: false,
         title: const Text('Pilih Stasiun',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        backgroundColor: const Color(0xFF1a237e),
+        backgroundColor: AppColors.primaryDark,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+          decoration: BoxDecoration(
+            gradient: AppColors.primaryGradient,
           ),
         ),
       ),

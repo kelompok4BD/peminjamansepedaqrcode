@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class AdminLogAktivitasPage extends StatefulWidget {
   const AdminLogAktivitasPage({super.key});
@@ -151,31 +152,31 @@ class _AdminLogAktivitasPageState extends State<AdminLogAktivitasPage> {
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.access_time,
                                       size: 12,
-                                      color: Colors.grey[600],
+                                      color: AppColors.textSecondary,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
                                       _formatDateTime(waktu),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 11,
-                                        color: Colors.grey[600],
+                                        color: AppColors.textSecondary,
                                       ),
                                     ),
                                     const SizedBox(width: 12),
-                                    Icon(
+                                    const Icon(
                                       Icons.person,
                                       size: 12,
-                                      color: Colors.grey[600],
+                                      color: AppColors.textSecondary,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
                                       'ID: $idPegawai',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 11,
-                                        color: Colors.grey[600],
+                                        color: AppColors.textSecondary,
                                       ),
                                     ),
                                   ],

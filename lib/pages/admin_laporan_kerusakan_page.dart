@@ -5,7 +5,8 @@ class AdminLaporanKerusakanPage extends StatefulWidget {
   const AdminLaporanKerusakanPage({super.key});
 
   @override
-  State<AdminLaporanKerusakanPage> createState() => _AdminLaporanKerusakanPageState();
+  State<AdminLaporanKerusakanPage> createState() =>
+      _AdminLaporanKerusakanPageState();
 }
 
 class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
@@ -41,10 +42,12 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
   Future<void> _updateStatus(int idLaporan, String newStatus) async {
     final res = await api.updateLaporanKerusakanStatus(idLaporan, newStatus);
     if (res['success'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('✅ Status diperbarui')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('✅ Status diperbarui')));
       loadLaporan();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('❌ ${res['message']}')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('❌ ${res['message']}')));
     }
   }
 
@@ -66,35 +69,48 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
               children: [
                 TextField(
                   controller: idSepedaCtrl,
-                  decoration: const InputDecoration(labelText: 'ID Sepeda', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                      labelText: 'ID Sepeda', border: OutlineInputBorder()),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: idPegawaiCtrl,
-                  decoration: const InputDecoration(labelText: 'ID Pegawai', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                      labelText: 'ID Pegawai', border: OutlineInputBorder()),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: deskripsiCtrl,
-                  decoration: const InputDecoration(labelText: 'Deskripsi Kerusakan', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                      labelText: 'Deskripsi Kerusakan',
+                      border: OutlineInputBorder()),
                   maxLines: 3,
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   value: statusPerbaikan,
-                  onChanged: (val) => setDialogState(() => statusPerbaikan = val ?? 'Belum Diperbaiki'),
-                  items: ['Belum Diperbaiki', 'Sedang Diperbaiki', 'Sudah Diperbaiki']
+                  onChanged: (val) => setDialogState(
+                      () => statusPerbaikan = val ?? 'Belum Diperbaiki'),
+                  items: [
+                    'Belum Diperbaiki',
+                    'Sedang Diperbaiki',
+                    'Sudah Diperbaiki'
+                  ]
                       .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                       .toList(),
-                  decoration: const InputDecoration(labelText: 'Status Perbaikan', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                      labelText: 'Status Perbaikan',
+                      border: OutlineInputBorder()),
                 ),
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Batal')),
             ElevatedButton(
               onPressed: isLoading
                   ? null
@@ -103,23 +119,32 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                       final idPegawai = int.tryParse(idPegawaiCtrl.text) ?? 0;
                       final deskripsi = deskripsiCtrl.text.trim();
 
-                      if (idSepeda == 0 || idPegawai == 0 || deskripsi.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Semua field wajib diisi')));
+                      if (idSepeda == 0 ||
+                          idPegawai == 0 ||
+                          deskripsi.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Semua field wajib diisi')));
                         return;
                       }
 
                       setDialogState(() => isLoading = true);
-                      final res = await api.createLaporanKerusakan(idSepeda, idPegawai, deskripsi, statusPerbaikan);
+                      final res = await api.createLaporanKerusakan(
+                          idSepeda, idPegawai, deskripsi, statusPerbaikan);
                       if (res['success'] == true) {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('✅ Laporan ditambahkan')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('✅ Laporan ditambahkan')));
                         loadLaporan();
                       } else {
                         setDialogState(() => isLoading = false);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('❌ ${res['message']}')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('❌ ${res['message']}')));
                       }
                     },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF002D72)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF002D72)),
               child: const Text('Simpan'),
             ),
           ],
@@ -155,7 +180,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Laporan Kerusakan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        title: const Text('Laporan Kerusakan',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         backgroundColor: const Color(0xFF1a237e),
         elevation: 0,
         flexibleSpace: Container(
@@ -167,6 +193,20 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
             ),
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ElevatedButton.icon(
+              onPressed: _showAddModal,
+              icon: const Icon(Icons.add),
+              label: const Text('Tambah Laporan'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF7C3AED),
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -177,7 +217,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
           ),
         ),
         child: _loading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             : (_error != null)
                 ? Center(
                     child: Padding(
@@ -186,21 +227,32 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                            colors: [
+                              Colors.white.withOpacity(0.12),
+                              Colors.white.withOpacity(0.05)
+                            ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.15),
+                              width: 1.5),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                            const Icon(Icons.error_outline,
+                                size: 48, color: Colors.red),
                             const SizedBox(height: 8),
-                            const Text('Gagal memuat laporan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                            const Text('Gagal memuat laporan',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                             const SizedBox(height: 6),
-                            Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+                            Text(_error!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white70)),
                             const SizedBox(height: 12),
                             ElevatedButton.icon(
                               onPressed: loadLaporan,
@@ -209,7 +261,8 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF6366F1),
                                 foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ],
@@ -225,21 +278,33 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                colors: [
+                                  Colors.white.withOpacity(0.12),
+                                  Colors.white.withOpacity(0.05)
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.15),
+                                  width: 1.5),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.info_outline, size: 48, color: Colors.amber.shade700),
+                                Icon(Icons.info_outline,
+                                    size: 48, color: Colors.amber.shade700),
                                 const SizedBox(height: 8),
-                                const Text('Belum ada laporan kerusakan', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                                const Text('Belum ada laporan kerusakan',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
                                 const SizedBox(height: 6),
-                                const Text('Tambahkan laporan kerusakan baru dengan tombol di bawah.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+                                const Text(
+                                    'Tambahkan laporan kerusakan baru dengan tombol di bawah.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white70)),
                               ],
                             ),
                           ),
@@ -252,17 +317,24 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                           itemCount: laporan.length,
                           itemBuilder: (_, i) {
                             final l = laporan[i];
-                            final status = (l['status_perbaikan'] ?? 'Belum Diperbaiki').toString();
+                            final status =
+                                (l['status_perbaikan'] ?? 'Belum Diperbaiki')
+                                    .toString();
                             final tglLaporan = l['tanggal_laporan'] ?? '-';
                             return Container(
                               margin: const EdgeInsets.only(bottom: 14),
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Colors.white.withOpacity(0.12), Colors.white.withOpacity(0.05)],
+                                  colors: [
+                                    Colors.white.withOpacity(0.12),
+                                    Colors.white.withOpacity(0.05)
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
-                                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+                                border: Border.all(
+                                    color: Colors.white.withOpacity(0.15),
+                                    width: 1.5),
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
@@ -278,13 +350,23 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
-                                          child: Text('Laporan #${l['id_laporan'] ?? i + 1}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
+                                          child: Text(
+                                              'Laporan #${l['id_laporan'] ?? i + 1}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.white)),
                                         ),
                                         Chip(
-                                          label: Text(status, style: TextStyle(color: _getStatusTextColor(status), fontWeight: FontWeight.w600)),
+                                          label: Text(status,
+                                              style: TextStyle(
+                                                  color: _getStatusTextColor(
+                                                      status),
+                                                  fontWeight: FontWeight.w600)),
                                           backgroundColor: Colors.white70,
                                         ),
                                       ],
@@ -292,25 +374,39 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                     const SizedBox(height: 10),
                                     Row(
                                       children: [
-                                        const Icon(Icons.pedal_bike, size: 18, color: Colors.white70),
+                                        const Icon(Icons.pedal_bike,
+                                            size: 18, color: Colors.white70),
                                         const SizedBox(width: 6),
-                                        Expanded(child: Text('Sepeda ID: ${l['id_sepeda'] ?? '-'}', style: TextStyle(color: Colors.white70))),
+                                        Expanded(
+                                            child: Text(
+                                                'Sepeda ID: ${l['id_sepeda'] ?? '-'}',
+                                                style: TextStyle(
+                                                    color: Colors.white70))),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.person, size: 18, color: Colors.white70),
+                                        const Icon(Icons.person,
+                                            size: 18, color: Colors.white70),
                                         const SizedBox(width: 6),
-                                        Expanded(child: Text('Pegawai ID: ${l['id_pegawai'] ?? '-'}', style: TextStyle(color: Colors.white70))),
+                                        Expanded(
+                                            child: Text(
+                                                'Pegawai ID: ${l['id_pegawai'] ?? '-'}',
+                                                style: TextStyle(
+                                                    color: Colors.white70))),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.calendar_today, size: 18, color: Colors.white70),
+                                        const Icon(Icons.calendar_today,
+                                            size: 18, color: Colors.white70),
                                         const SizedBox(width: 6),
-                                        Expanded(child: Text('Tanggal: $tglLaporan', style: TextStyle(color: Colors.white70))),
+                                        Expanded(
+                                            child: Text('Tanggal: $tglLaporan',
+                                                style: TextStyle(
+                                                    color: Colors.white70))),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -320,27 +416,44 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                                         color: Colors.white.withOpacity(0.18),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
-                                      child: Text('Deskripsi: ${l['deskripsi_kerusakan'] ?? '-'}', style: const TextStyle(color: Colors.white)),
+                                      child: Text(
+                                          'Deskripsi: ${l['deskripsi_kerusakan'] ?? '-'}',
+                                          style: const TextStyle(
+                                              color: Colors.white)),
                                     ),
                                     const SizedBox(height: 12),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Expanded(
                                           child: OutlinedButton.icon(
-                                            onPressed: () => _updateStatus(l['id_laporan'] ?? 0, 'Sedang Diperbaiki'),
-                                            icon: const Icon(Icons.build, size: 16, color: Colors.orange),
-                                            label: const Text('Perbaiki', style: TextStyle(color: Colors.orange)),
-                                            style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.orange)),
+                                            onPressed: () => _updateStatus(
+                                                l['id_laporan'] ?? 0,
+                                                'Sedang Diperbaiki'),
+                                            icon: const Icon(Icons.build,
+                                                size: 16, color: Colors.orange),
+                                            label: const Text('Perbaiki',
+                                                style: TextStyle(
+                                                    color: Colors.orange)),
+                                            style: OutlinedButton.styleFrom(
+                                                side: const BorderSide(
+                                                    color: Colors.orange)),
                                           ),
                                         ),
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: ElevatedButton.icon(
-                                            onPressed: () => _updateStatus(l['id_laporan'] ?? 0, 'Sudah Diperbaiki'),
-                                            icon: const Icon(Icons.check_circle, size: 16, color: Colors.white),
-                                            label: const Text('Selesai', style: TextStyle(color: Colors.white)),
-                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                            onPressed: () => _updateStatus(
+                                                l['id_laporan'] ?? 0,
+                                                'Sudah Diperbaiki'),
+                                            icon: const Icon(Icons.check_circle,
+                                                size: 16, color: Colors.white),
+                                            label: const Text('Selesai',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green),
                                           ),
                                         ),
                                       ],
@@ -352,12 +465,6 @@ class _AdminLaporanKerusakanPageState extends State<AdminLaporanKerusakanPage> {
                           },
                         ),
                       ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showAddModal,
-        backgroundColor: const Color(0xFF6366F1),
-        icon: const Icon(Icons.add),
-        label: const Text('Tambah Laporan'),
       ),
     );
   }

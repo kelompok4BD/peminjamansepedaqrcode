@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class StasiunPage extends StatefulWidget {
   const StasiunPage({super.key});
@@ -195,7 +196,7 @@ class _StasiunPageState extends State<StasiunPage> {
                   'Tidak ada data stasiun',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white70,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

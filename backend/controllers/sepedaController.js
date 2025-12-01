@@ -1,5 +1,6 @@
 const Sepeda = require("../models/Sepeda");
 const db = require("../config/db");
+const logActivity = require('../utils/logActivity');
 
 // ✅ GET semua sepeda
 exports.getAllSepeda = (req, res) => {
@@ -68,6 +69,8 @@ exports.createSepeda = (req, res) => {
         },
         message: "Sepeda berhasil ditambahkan",
       });
+      // Catat aktivitas (non-blocking)
+      logActivity(req, 'Create Sepeda', `Menambahkan sepeda id=${result?.insertId || 'unknown'} merk=${finalMerk}`);
     }
   );
 };
@@ -90,6 +93,8 @@ exports.updateStatus = (req, res) => {
       success: true,
       message: "Status sepeda diperbarui!",
     });
+    // Catat aktivitas (non-blocking)
+    logActivity(req, 'Update Status Sepeda', `Update status sepeda id=${id} => ${status}`);
   });
 };
 
@@ -106,6 +111,8 @@ exports.deleteSepeda = (req, res) => {
       success: true,
       message: "Sepeda berhasil dihapus!",
     });
+    // Catat aktivitas (non-blocking)
+    logActivity(req, 'Delete Sepeda', `Hapus sepeda id=${id}`);
   });
 };
 
@@ -138,6 +145,8 @@ exports.updateSepeda = (req, res) => {
         success: true,
         message: "Data sepeda berhasil diperbarui!",
       });
+      // Catat aktivitas (non-blocking)
+      logActivity(req, 'Update Sepeda', `Update data sepeda id=${id}`);
     }
   );
 };
@@ -197,6 +206,8 @@ exports.pinjamSepeda = (req, res) => {
             kode_qr: qrCode,
           },
         });
+        // Catat aktivitas (non-blocking)
+        logActivity(req, 'Pinjam Sepeda', `User id=${id_user} meminjam sepeda id=${id_sepeda} transaksi=${result.insertId}`);
       });
     });
   });
