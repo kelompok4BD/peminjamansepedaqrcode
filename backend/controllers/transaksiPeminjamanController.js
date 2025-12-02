@@ -78,10 +78,12 @@ exports.create = async (req, res) => {
     const qrData = `SEPEDA_${numIdSepeda}_TRANSAKSI_${transactionId}_USER_${numIdUser}_${Date.now()}`;
     const qrImageBase64 = await QRCode.toDataURL(qrData); // base64 data URL
 
-    // 6) Simpan ke tabel qr_code (simpan kedua: kode_qr (text) & qr_image (base64))
+    // 6) Simpan ke tabel qr_code (simpan kode_qr). Some schemas don't have qr_image column,
+    // so only insert existing columns to avoid ER_BAD_FIELD_ERROR.
+    // If you want to persist the base64 image, add a 'qr_image' column to the db or store it elsewhere.
     const [insertQr] = await conn.query(
-      `INSERT INTO qr_code (id_sepeda, waktu_generate, status_qr, kode_qr, qr_image) VALUES (?, NOW(), ?, ?, ?)`,
-      [numIdSepeda, "Aktif", qrData, qrImageBase64]
+      `INSERT INTO qr_code (id_sepeda, waktu_generate, status_qr, kode_qr) VALUES (?, NOW(), ?, ?)`,
+      [numIdSepeda, "Aktif", qrData]
     );
 
     await conn.commit();
@@ -97,6 +99,7 @@ exports.create = async (req, res) => {
         id_sepeda: numIdSepeda,
         id_user: numIdUser,
         qr_data: qrData,
+        // include base64 in response (not persisted) so client can display it immediately
         qr_image: qrImageBase64,
         id_qr: insertQr.insertId
       }

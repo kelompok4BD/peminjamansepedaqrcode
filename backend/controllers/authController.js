@@ -31,6 +31,7 @@ exports.register = async (req, res) => {
       }
 
       console.log("✅ Query hasil:", results?.length || 0, "records found");
+      console.log("🔎 records:", JSON.stringify(results, null, 2));
 
       if (results && results.length > 0) {
         console.warn("⚠️ NIM/NIP sudah terdaftar", id_NIM_NIP);

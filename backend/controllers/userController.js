@@ -8,6 +8,22 @@ exports.getAllUser = (req, res) => {
   });
 };
 
+exports.getUserById = (req, res) => {
+  const { id_NIM_NIP } = req.params;
+  if (!id_NIM_NIP) return res.status(400).json({ success: false, message: 'ID wajib disertakan' });
+
+  User.findById(id_NIM_NIP, (err, rows) => {
+    if (err) return res.status(500).json({ success: false, message: 'Gagal query user', error: err });
+    if (!rows || rows.length === 0) return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+
+    // hide password
+    const user = { ...rows[0] };
+    if (user.password) delete user.password;
+
+    res.json({ success: true, data: user });
+  });
+};
+
 exports.updateUser = (req, res) => {
   const { id_NIM_NIP } = req.params;
   const data = req.body;

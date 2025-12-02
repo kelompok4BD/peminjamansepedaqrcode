@@ -5,7 +5,19 @@ const db = require("./config/db");
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+// Increase JSON body size slightly and preserve raw body for debugging
+app.use(bodyParser.json({ limit: '2mb' }));
+
+// Simple request logger to help diagnose admin CRUD failures on Render
+app.use((req, res, next) => {
+  try {
+    const safeBody = req.body && Object.keys(req.body).length ? JSON.stringify(req.body) : null;
+    console.log(`➡️ ${req.method} ${req.path} body=${safeBody}`);
+  } catch (e) {
+    console.log(`➡️ ${req.method} ${req.path} body=<unserializable>`);
+  }
+  next();
+});
 
 // Optional: middleware logging admin
 try {
@@ -13,6 +25,27 @@ try {
 } catch (err) {
   console.warn("⚠️ Middleware extractAdmin tidak ditemukan, dilewati.");
 }
+
+// Response wrapper: ensure consistent JSON shape (adds `success` when missing)
+app.use((req, res, next) => {
+  const oldJson = res.json;
+  res.json = function (body) {
+    try {
+      if (typeof body === 'object' && body !== null) {
+        if (res.statusCode >= 400) {
+          if (body.success === undefined) body.success = false;
+        } else {
+          if (body.success === undefined) body.success = true;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+    try { console.log(`⬅️ ${req.method} ${req.path} status=${res.statusCode} response=${JSON.stringify(body)}`); } catch(e){}
+    return oldJson.call(this, body);
+  };
+  next();
+});
 
 // Import routes
 const sepedaRoutes = require("./routes/sepedaRoutes");
@@ -46,6 +79,17 @@ app.use("/api/log-aktivitas", logAktivitasRoutes); // Alias (dash)
 // Route tes
 app.get("/", (req, res) => {
   res.send("🚴‍♂️ Backend Peminjaman Sepeda Kampus Aktif!");
+});
+
+// 404 handler
+app.use((req, res, next) => {
+  res.status(404).json({ success: false, message: 'Endpoint tidak ditemukan' });
+});
+
+// Global error handler (ensure we log full stack traces)
+app.use((err, req, res, next) => {
+  console.error('🔥 Unhandled error on', req.method, req.path, err.stack || err);
+  res.status(500).json({ success: false, message: 'Internal server error', error: err.message || err });
 });
 
 // Pastikan pakai PORT dari Render
