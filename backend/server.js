@@ -58,6 +58,7 @@ const riwayatPemeliharaanRoutes = require("./routes/riwayatPemeliharaanRoutes");
 const laporanKerusakanRoutes = require("./routes/laporanKerusakanRoutes");
 const pegawaiRoutes = require("./routes/pegawaiRoutes");
 const logAktivitasRoutes = require("./routes/logAktivitasRoutes");
+const migrationRoutes = require("./routes/migrationRoutes");
 
 // Gunakan routes
 app.use("/api/sepeda", sepedaRoutes);
@@ -75,6 +76,7 @@ app.use("/api/laporan-kerusakan", laporanKerusakanRoutes); // Alias (dash)
 app.use("/api/pegawai", pegawaiRoutes);
 app.use("/api/log_aktivitas", logAktivitasRoutes);
 app.use("/api/log-aktivitas", logAktivitasRoutes); // Alias (dash)
+app.use("/api/migration", migrationRoutes); // Database migration endpoints
 
 // Route tes
 app.get("/", (req, res) => {
