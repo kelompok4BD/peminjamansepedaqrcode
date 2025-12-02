@@ -34,7 +34,13 @@ exports.register = async (req, res) => {
       console.log("🔎 records:", JSON.stringify(results, null, 2));
 
       // Check if ANY result exactly matches the id_NIM_NIP being registered
-      const matchingUser = results && results.find(r => String(r.id_NIM_NIP) === String(id_NIM_NIP));
+      // Filter out admin records (id_NIM_NIP = 0) - those are system accounts
+      const matchingUser = results && results.find(r => 
+        String(r.id_NIM_NIP).trim() === String(id_NIM_NIP).trim() && 
+        r.id_NIM_NIP !== 0 && 
+        r.id_NIM_NIP !== '0'
+      );
+      
       if (matchingUser) {
         console.warn("⚠️ NIM/NIP sudah terdaftar", id_NIM_NIP, "matched:", matchingUser.id_NIM_NIP);
         return res.status(409).json({
@@ -60,11 +66,22 @@ exports.register = async (req, res) => {
         if (err) {
           console.error("❌ DB create error:", err?.code, err?.message);
           console.error("🔍 Full error:", JSON.stringify(err, null, 2));
+          
           // handle duplicate entry gracefully
           if (err.code === 'ER_DUP_ENTRY') {
+            // Check if it's the admin record (0) causing the issue
+            if (err.message?.includes("'0'")) {
+              console.error("⚠️ Database schema issue: id_NIM_NIP column should be VARCHAR not INT. Admin record using 0 is blocking string IDs.");
+              return res.status(500).json({ 
+                success: false, 
+                message: 'Sistem error: Hubungi admin untuk fix database schema',
+                error: 'id_NIM_NIP column type error'
+              });
+            }
             console.warn("⚠️ Duplicate entry error - NIM/NIP already exists in DB");
-            return res.status(409).json({ success: false, message: 'NIM/NIP sudah terdaftar (duplicate)', error: err.message });
+            return res.status(409).json({ success: false, message: 'NIM/NIP sudah terdaftar (duplicate)' });
           }
+          
           return res.status(500).json({
             success: false,
             message: "Gagal mendaftar: " + err.message
