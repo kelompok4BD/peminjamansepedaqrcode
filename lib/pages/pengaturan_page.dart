@@ -115,10 +115,10 @@ class _PengaturanPageState extends State<PengaturanPage> {
       final index = pengaturan.indexWhere((p) => p['id_pengaturan'] == id);
       if (index != -1) {
         setState(() {
-          pengaturan[index] = {
-            ...pengaturan[index],
-            ...dataToSend,
-          };
+          // Convert LinkedMap to regular Map to avoid type errors
+          final updatedItem = Map<String, dynamic>.from(pengaturan[index])
+            ..addAll(dataToSend);
+          pengaturan[index] = updatedItem;
           _editingMode[id] = false;
           _editedData[id] = {};
         });
@@ -161,7 +161,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'Pengaturan Sistem',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -175,7 +176,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
           ),
         ),
       ),
-      
+
       // Body Gradient Hitam ke Cherry Gelap
       body: Container(
         decoration: BoxDecoration(
@@ -205,13 +206,15 @@ class _PengaturanPageState extends State<PengaturanPage> {
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+            border:
+                Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
+              const Icon(Icons.error_outline,
+                  size: 48, color: Colors.redAccent),
               const SizedBox(height: 8),
               const Text('Gagal memuat pengaturan',
                   style: TextStyle(
@@ -248,7 +251,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.05),
-            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
+            border:
+                Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -480,7 +484,8 @@ class _PengaturanPageState extends State<PengaturanPage> {
                 borderSide: BorderSide(color: pinkNeon, width: 2), // Focus Pink
               ),
               filled: true,
-              fillColor: Colors.black.withOpacity(0.3), // Background Input Gelap
+              fillColor:
+                  Colors.black.withOpacity(0.3), // Background Input Gelap
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             ),

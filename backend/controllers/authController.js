@@ -33,8 +33,10 @@ exports.register = async (req, res) => {
       console.log("✅ Query hasil:", results?.length || 0, "records found");
       console.log("🔎 records:", JSON.stringify(results, null, 2));
 
-      if (results && results.length > 0) {
-        console.warn("⚠️ NIM/NIP sudah terdaftar", id_NIM_NIP);
+      // Check if ANY result exactly matches the id_NIM_NIP being registered
+      const matchingUser = results && results.find(r => String(r.id_NIM_NIP) === String(id_NIM_NIP));
+      if (matchingUser) {
+        console.warn("⚠️ NIM/NIP sudah terdaftar", id_NIM_NIP, "matched:", matchingUser.id_NIM_NIP);
         return res.status(409).json({
           success: false,
           message: "NIM/NIP sudah terdaftar!"

@@ -17,6 +17,8 @@ exports.getAllLaporan = (req, res) => {
 exports.createLaporan = (req, res) => {
   const { id_sepeda, id_pegawai, deskripsi_kerusakan } = req.body;
 
+  console.log("📝 createLaporan request body:", JSON.stringify(req.body, null, 2));
+
   if (!id_sepeda || !id_pegawai || !deskripsi_kerusakan) {
     return res.status(400).json({
       success: false,
@@ -26,10 +28,10 @@ exports.createLaporan = (req, res) => {
 
   LaporanKerusakan.create(req.body, (err, result) => {
     if (err) {
-      console.error("❌ createLaporan error:", err);
+      console.error("❌ createLaporan error:", err?.message || err, "full:", err);
       return res.status(500).json({
         success: false,
-        message: "Gagal menambah laporan kerusakan"
+        message: "Gagal menambah laporan kerusakan: " + (err?.message || err)
       });
     }
 

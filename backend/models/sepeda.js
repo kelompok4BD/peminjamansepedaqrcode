@@ -69,12 +69,17 @@ const Sepeda = {
     }
   },
 
-  // Hapus sepeda
+  // Hapus sepeda (cascade: delete qr_code references first)
   delete: async (id) => {
-    const sql = "DELETE FROM sepeda WHERE id_sepeda = ?";
-
     try {
+      // 1. Delete all QR codes referencing this sepeda
+      await db.query("DELETE FROM qr_code WHERE id_sepeda = ?", [id]);
+      console.log(`🗑️ Deleted QR codes for sepeda ${id}`);
+
+      // 2. Delete the sepeda
+      const sql = "DELETE FROM sepeda WHERE id_sepeda = ?";
       const [result] = await db.query(sql, [id]);
+      console.log(`✅ Deleted sepeda ${id}`);
       return result;
     } catch (err) {
       throw err;
