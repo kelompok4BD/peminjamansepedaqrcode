@@ -36,12 +36,22 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
     final allSepeda = await api.getAllSepeda();
 
     // Filter by stasiun if stasiunId is provided
+    List<Map<String, dynamic>> filtered = [];
     if (widget.stasiunId != null) {
-      sepedaList =
+      filtered =
           allSepeda.where((s) => s['id_stasiun'] == widget.stasiunId).toList();
     } else {
-      sepedaList = allSepeda;
+      filtered = allSepeda;
     }
+
+    // Only show bikes with status "Tersedia"
+    sepedaList = filtered
+        .where((s) =>
+            (s['status_saat_ini'] ?? s['status'] ?? '')
+                .toString()
+                .toLowerCase() ==
+            'tersedia')
+        .toList();
 
     setState(() => isLoading = false);
   }
@@ -123,9 +133,13 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
       // AppBar Gradient Hitam ke Pink Gelap
       appBar: AppBar(
         automaticallyImplyLeading: widget.stasiunId != null,
-        iconTheme: const IconThemeData(color: Colors.white), // Tombol back putih
+        iconTheme:
+            const IconThemeData(color: Colors.white), // Tombol back putih
         title: Text(titleText,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -138,7 +152,7 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
           ),
         ),
       ),
-      
+
       // Body Gradient Hitam ke Cherry Gelap
       body: Container(
         decoration: BoxDecoration(
@@ -149,10 +163,12 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
           ),
         ),
         child: isLoading
-            ? Center(child: CircularProgressIndicator(color: pinkNeon)) // Loading Pink
+            ? Center(
+                child:
+                    CircularProgressIndicator(color: pinkNeon)) // Loading Pink
             : sepedaList.isEmpty
                 ? const Center(
-                    child: Text('Tidak ada data sepeda', 
+                    child: Text('Tidak ada data sepeda',
                         style: TextStyle(color: Colors.white70)))
                 : RefreshIndicator(
                     onRefresh: fetchSemuaSepeda,
@@ -175,7 +191,8 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                             color: Colors.white.withOpacity(0.05), // Transparan
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: _getCardBorderColor(status).withOpacity(0.3),
+                              color:
+                                  _getCardBorderColor(status).withOpacity(0.3),
                               width: 1.5,
                             ),
                             boxShadow: [
@@ -215,17 +232,18 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                                 const SizedBox(height: 4),
                                 Text(
                                     'Tahun: ${sepeda['tahun_pembelian'] ?? sepeda['tahun'] ?? '-'}',
-                                    style: const TextStyle(
-                                        color: Colors.white70)),
+                                    style:
+                                        const TextStyle(color: Colors.white70)),
                                 Text(
                                     'Perawatan: ${sepeda['status_perawatan'] ?? sepeda['kondisi'] ?? '-'}',
-                                    style: const TextStyle(
-                                        color: Colors.white70)),
+                                    style:
+                                        const TextStyle(color: Colors.white70)),
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    const Text('Status: ', 
-                                        style: TextStyle(color: Colors.white70)),
+                                    const Text('Status: ',
+                                        style:
+                                            TextStyle(color: Colors.white70)),
                                     Text(
                                       status,
                                       style: TextStyle(
@@ -241,7 +259,8 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                                 ? ElevatedButton(
                                     onPressed: () => handlePinjam(sepeda),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green, // Tombol Pinjam Hijau
+                                      backgroundColor:
+                                          Colors.green, // Tombol Pinjam Hijau
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
@@ -253,10 +272,12 @@ class _UserPeminjamanPageState extends State<UserPeminjamanPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: Colors.redAccent.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Colors.redAccent.withOpacity(0.5))
-                                    ),
+                                        color:
+                                            Colors.redAccent.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            color: Colors.redAccent
+                                                .withOpacity(0.5))),
                                     child: const Text(
                                       'Dipinjam',
                                       style: TextStyle(

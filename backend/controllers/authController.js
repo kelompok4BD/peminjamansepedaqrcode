@@ -58,14 +58,16 @@ exports.register = async (req, res) => {
       // Simpan ke DB
       User.create(userData, (err, result) => {
         if (err) {
-          console.error("❌ DB create error:", err);
+          console.error("❌ DB create error:", err?.code, err?.message);
+          console.error("🔍 Full error:", JSON.stringify(err, null, 2));
           // handle duplicate entry gracefully
           if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ success: false, message: 'NIM/NIP sudah terdaftar (duplicate)'});
+            console.warn("⚠️ Duplicate entry error - NIM/NIP already exists in DB");
+            return res.status(409).json({ success: false, message: 'NIM/NIP sudah terdaftar (duplicate)', error: err.message });
           }
           return res.status(500).json({
             success: false,
-            message: "Gagal mendaftar, coba lagi nanti"
+            message: "Gagal mendaftar: " + err.message
           });
         }
 
